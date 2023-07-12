@@ -3,6 +3,7 @@ from enum import Enum
 
 
 class GameStatus(Enum):
+    UNPLAYED = 'Unplayed'
     UNFINISHED = 'Unfinished'
     BEATEN = 'Beaten'
     COMPLETED = 'Completed'

@@ -15,3 +15,7 @@ def seed_user_entries():
 
     db.session.execute(user_entry.insert().values(join_data))
     db.session.commit()
+
+def undo_user_entries():
+    db.session.execute(user_entry.delete())
+    db.session.commit()

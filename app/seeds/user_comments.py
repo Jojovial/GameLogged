@@ -15,3 +15,7 @@ def seed_user_comments():
 
     db.session.execute(user_comment.insert().values(join_data))
     db.session.commit()
+
+def undo_user_comments():
+    db.session.execute(user_comment.delete())
+    db.session.commit()

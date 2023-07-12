@@ -16,3 +16,7 @@ def seed_user_reviews():
 
     db.session.execute(user_review.insert().values(join_data))
     db.session.commit()
+
+def undo_user_reviews():
+    db.session.execute(user_review.delete())
+    db.session.commit()

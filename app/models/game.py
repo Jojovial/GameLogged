@@ -213,8 +213,14 @@ class System(Enum):
 
 
 
-
-
+class Region(Enum):
+    NAM = 'NAM'
+    JP= 'JP'
+    PAL = 'PAL'
+    CN = 'CN'
+    KR= 'KR'
+    BR = 'BR'
+    OTHER = 'Other'
 
 class Game(db.Model):
     __tablename__ = 'games'
@@ -225,7 +231,7 @@ class Game(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     system = db.Column(db.Enum(System), nullable=False)
-
+    region = db.Column(db.Enum(Region), nullable=False)
 
     #Relationships
     game = db.relationship('Entry', back_populates='game_entries', cascade='all, delete-orphan')
@@ -237,5 +243,6 @@ class Game(db.Model):
         return {
             'id': self.id,
             'name': self.name,
-            'system': self.system.value
+            'system': self.system.value,
+            'region': self.region.value
         }

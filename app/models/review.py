@@ -11,8 +11,8 @@ class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
     game_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('games.id')), nullable=False)
-    rating = db.Column(db.Integer, nullable=False)
-    review_text = db.Column(db.String(300), nullable=False)
+    rating = db.Column(db.Integer, nullable=True)
+    review_text = db.Column(db.String(300), nullable=True)
 
 
     #Relationships
