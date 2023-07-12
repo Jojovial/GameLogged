@@ -13,7 +13,15 @@ def seed_user_entries():
         for entry in entries
     ]
 
-    db.session.execute(user_entry.insert().values(join_data))
+    unique_join_data = []
+    seen_entry_ids = set()
+    for data in join_data:
+        entry_id = data['entry_id']
+        if entry_id not in seen_entry_ids:
+            unique_join_data.append(data)
+            seen_entry_ids.add(entry_id)
+
+    db.session.execute(user_entry.insert().values(unique_join_data))
     db.session.commit()
 
 def undo_user_entries():

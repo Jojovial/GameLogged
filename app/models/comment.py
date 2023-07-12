@@ -14,7 +14,7 @@ class Comment(db.Model):
 
     #Relationships
 
-    users = db.relationship('User', secondary=user_comment, back_populates='users', lazy=True)
+    users = db.relationship('User', secondary=user_comment, back_populates='comments')
 
 
     def to_dict(self):

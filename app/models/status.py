@@ -3,10 +3,10 @@ from enum import Enum
 
 
 class GameStatus(Enum):
-    UNPLAYED = 'Unplayed'
-    UNFINISHED = 'Unfinished'
-    BEATEN = 'Beaten'
-    COMPLETED = 'Completed'
+    Unplayed = 'Unplayed'
+    Unfinished = 'Unfinished'
+    Beaten = 'Beaten'
+    Completed = 'Completed'
 
 class Status(db.Model):
     __tablename__ = 'statuses'

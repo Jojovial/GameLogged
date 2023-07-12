@@ -21,6 +21,6 @@ def undo_statuses():
     if environment == "production":
         db.session.execute(f"TRUNCATE table {SCHEMA}.statuses RESTART IDENTITY CASCADE;")
     else:
-        db.session.execute(text("DELETE FROM stauses"))
+        db.session.execute(text("DELETE FROM statuses"))
 
     db.session.commit()

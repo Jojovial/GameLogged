@@ -19,10 +19,10 @@ class User(db.Model, UserMixin):
 
 
     #Relationships
-    entries = db.relationship('Entry', secondary=user_entry, back_populates='users', cascade='all, delete-orphan')
-    reviews = db.relationship('Review', secondary=user_review, back_populates='users', cascade='all, delete-orphan')
+    entries = db.relationship('Entry', secondary=user_entry, back_populates='users')
+    reviews = db.relationship('Review', secondary=user_review, back_populates='users')
     logs = db.relationship('MemoryCard', back_populates='user_logs', cascade='all, delete-orphan')
-    comments = db.relationship('Comment', secondary=user_comment, back_populates='user_comments', cascade='all, delete-orphan')
+    comments = db.relationship('Comment', secondary=user_comment, back_populates='users')
     @property
     def password(self):
         return self.hashed_password

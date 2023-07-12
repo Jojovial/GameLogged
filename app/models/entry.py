@@ -3,10 +3,10 @@ from .user_entry import user_entry
 from enum import Enum
 
 class Progress(Enum):
-    UNPLAYED = 'Unplayed'
-    UNFINISHED = 'Unfinished'
-    BEATEN = 'Beaten'
-    COMPLETED = 'Completed'
+    Unplayed = 'Unplayed'
+    Unfinished = 'Unfinished'
+    Beaten = 'Beaten'
+    Completed = 'Completed'
 
 class Entry(db.Model):
     __tablename__ = 'entries'
@@ -24,8 +24,10 @@ class Entry(db.Model):
     wishlist = db.Column(db.Boolean)
 
     # Relationships
-    users = db.relationship('User', secondary=user_entry, back_populates="entries", cascade="all, delete-orphan")
-    game_entries = db.relationship('Game', back_populates="entries", cascade="all, delete-orphan" )
+    users = db.relationship('User', secondary=user_entry, back_populates="entries")
+    game_entries = db.relationship('Game', back_populates="entries")
+    logs = db.relationship('MemoryCard', back_populates="entry_logs")
+    status = db.relationship('Status', back_populates="entry_status")
 
     def to_dict(self):
         return {

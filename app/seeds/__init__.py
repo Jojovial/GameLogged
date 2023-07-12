@@ -26,9 +26,19 @@ def seed():
         # the schema name (see comment in users.py undo_users function).
         # Make sure to add all your other model's undo functions below
         undo_users()
+        undo_comments()
+        undo_entries()
+        undo_games()
+        undo_memory_cards()
+        undo_reviews()
+        undo_statuses()
+        undo_user_comments()
+        undo_user_entries()
+        undo_user_reviews()
+
     seed_users()
-    # Add other seed functions here
     seed_comments()
+    # Add other seed functions here
     seed_entries()
     seed_games()
     seed_memory_cards()

@@ -11,9 +11,12 @@ def seed_user_comments():
         {'user_id': user.id, 'comment_id': comment.id}
         for user in users
         for comment in comments
+
     ]
 
+
     db.session.execute(user_comment.insert().values(join_data))
+
     db.session.commit()
 
 def undo_user_comments():

@@ -13,8 +13,8 @@ class MemoryCard(db.Model):
 
 
     #Relationship
-    user_logs = db.relationship('User', back_populates='logs', cascade='all, delete-orphan', lazy=True)
-    entry_logs = db.relationship('Entry', back_populates='logs', cascade='all, delete-orphan', lazy=True)
+    user_logs = db.relationship('User', back_populates='logs',lazy=True)
+    entry_logs = db.relationship('Entry', back_populates='logs',lazy=True)
 
 
     def to_dict(self):
