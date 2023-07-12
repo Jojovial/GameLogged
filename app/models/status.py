@@ -19,4 +19,11 @@ class Status(db.Model):
 
 
     #Relationships
-    
+    entry_status = db.relationship('Entry', back_populates='status', lazy=True)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'entry_id': self.entry_id,
+            'game_status': self.game_status
+        }

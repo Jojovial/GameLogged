@@ -1,4 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
+from .user_entry import user_entry
 from enum import Enum
 
 class Progress(Enum):
@@ -23,7 +24,7 @@ class Entry(db.Model):
     wishlist = db.Column(db.Boolean)
 
     # Relationships
-    user_entries = db.relationship('User', back_populates="entries", cascade="all, delete-orphan")
+    users = db.relationship('User', secondary=user_entry, back_populates="entries", cascade="all, delete-orphan")
     game_entries = db.relationship('Game', back_populates="entries", cascade="all, delete-orphan" )
 
     def to_dict(self):

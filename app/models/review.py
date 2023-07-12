@@ -1,4 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
+from .user_review import user_review
 
 
 class Review(db.Model):
@@ -15,7 +16,7 @@ class Review(db.Model):
 
 
     #Relationships
-    user_reviews = db.relationship('User', back_populates='reviews', lazy=True)
+    users = db.relationship('User', secondary=user_review, back_populates='reviews', lazy=True)
     game_reviews = db.relationship('Game', back_populates='reviews', lazy=True)
 
 

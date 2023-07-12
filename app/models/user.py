@@ -1,4 +1,7 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
+from .user_entry import user_entry
+from .user_review import user_review
+from .user_comment import user_comment
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
@@ -16,10 +19,10 @@ class User(db.Model, UserMixin):
 
 
     #Relationships
-    entries = db.relationship('Entry', backpopulates='user_entries', cascade='all, delete-orphan')
-    reviews = db.relationship('Review', backpopulates='user_reviews', cascade='all, delete-orphan')
-    logs = db.relationship('MemoryCard', backpopulates='user_logs', cascade='all, delete-orphan')
-    comments = db.relationship('Comment', backpopulates='user_comments', cascade='all, delete-orphan')
+    entries = db.relationship('Entry', secondary=user_entry, back_populates='users', cascade='all, delete-orphan')
+    reviews = db.relationship('Review', secondary=user_review, back_populates='users', cascade='all, delete-orphan')
+    logs = db.relationship('MemoryCard', back_populates='user_logs', cascade='all, delete-orphan')
+    comments = db.relationship('Comment', secondary=user_comment, back_populates='user_comments', cascade='all, delete-orphan')
     @property
     def password(self):
         return self.hashed_password
