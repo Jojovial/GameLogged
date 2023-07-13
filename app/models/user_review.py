@@ -1,10 +1,8 @@
-from .db import db, SCHEMA, environment
+from .db import db, SCHEMA, environment, add_prefix_for_prod
 
 user_review = db.Table(
-    'user_review',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
-    db.Column('review_id', db.Integer, db.ForeignKey('reviews.id'), primary_key=True)
+    add_prefix_for_prod('user_review'),
+    db.Column('user_id', db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), primary_key=True),
+    db.Column('review_id', db.Integer, db.ForeignKey(add_prefix_for_prod('reviews.id')), primary_key=True)
 )
 
-if environment == "production":
-   user_review.schema = SCHEMA
