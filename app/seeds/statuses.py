@@ -1,15 +1,15 @@
-from app.models.status import db, Status, environment, SCHEMA
+from app.models.status import db, Status, environment, SCHEMA, GameStatus
 from sqlalchemy.sql import text
 
 def seed_statuses():
     status_1 = Status(
-        entry_id = 1, game_status ='Unplayed'
+        entry_id = 1, game_status =GameStatus.Unplayed
     )
     status_2 = Status(
-        entry_id = 2, game_status = 'Unfinished'
+        entry_id = 2, game_status = GameStatus.Unfinished
     )
     status_3 = Status(
-        entry_id = 3, game_status = 'Completed'
+        entry_id = 3, game_status = GameStatus.Completed
     )
 
     db.session.add(status_1)
