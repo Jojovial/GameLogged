@@ -9,8 +9,7 @@ def seed_user_comments():
 
     join_data = [
         {'user_id': user.id, 'comment_id': comment.id}
-        for user in users
-        for comment in comments
+        for user, comment in zip(users, comments)
 
     ]
 

@@ -9,8 +9,7 @@ def seed_user_reviews():
 
     join_data = [
         {'user_id': user.id, 'review_id': review.id}
-        for user in users
-        for review in reviews
+        for user, review in zip(users, reviews)
     ]
 
 
