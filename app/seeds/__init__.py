@@ -39,8 +39,8 @@ def seed():
     seed_users()
     seed_comments()
     # Add other seed functions here
-    seed_entries()
     seed_games()
+    seed_entries()
     seed_memory_cards()
     seed_reviews()
     seed_statuses()
@@ -52,14 +52,14 @@ def seed():
 # Creates the `flask seed undo` command
 @seed_commands.command('undo')
 def undo():
-    undo_users()
-    # Add other undo functions here
-    undo_comments()
-    undo_entries()
-    undo_games()
-    undo_memory_cards()
-    undo_reviews()
-    undo_statuses()
     undo_user_comments()
+    # Add other undo fun ctions here
     undo_user_entries()
     undo_user_reviews()
+    undo_reviews()
+    undo_statuses()
+    undo_entries()
+    undo_memory_cards()
+    undo_games()
+    undo_comments()
+    undo_users()

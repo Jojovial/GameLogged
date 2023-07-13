@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: a05eb069b93b
+Revision ID: 1a05e1f65319
 Revises:
-Create Date: 2023-07-13 17:28:26.646365
+Create Date: 2023-07-13 17:50:59.535449
 
 """
 from alembic import op
@@ -14,7 +14,7 @@ SCHEMA = os.environ.get("SCHEMA")
 
 
 # revision identifiers, used by Alembic.
-revision = 'a05eb069b93b'
+revision = '1a05e1f65319'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -105,17 +105,6 @@ def upgrade():
     sa.PrimaryKeyConstraint('user_id', 'review_id')
     )
     # ### end Alembic commands ###
-    if environment == "production":
-        op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE games SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE comments SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE entries SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE reviews SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE memory_cards SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE statuses SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE user_comment SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE user_entry SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE user_review SET SCHEMA {SCHEMA};")
 
 
 def downgrade():
