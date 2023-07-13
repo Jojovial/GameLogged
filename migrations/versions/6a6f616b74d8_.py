@@ -1,13 +1,15 @@
 """empty message
 
 Revision ID: 6a6f616b74d8
-Revises: 
+Revises:
 Create Date: 2023-07-12 21:56:09.301737
 
 """
 from alembic import op
 import sqlalchemy as sa
-
+import os
+environment = os.getenv("FLASK_ENV")
+SCHEMA = os.environ.get("SCHEMA")
 
 # revision identifiers, used by Alembic.
 revision = '6a6f616b74d8'
@@ -101,6 +103,17 @@ def upgrade():
     sa.PrimaryKeyConstraint('user_id', 'review_id')
     )
     # ### end Alembic commands ###
+    if environment == "production":
+        op.execute(f"ALTER TABLE games SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE comments SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE entries SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE reviews SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE memory_cards SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE statuses SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE user_comment SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE user_entry SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE user_review SET SCHEMA {SCHEMA};")
 
 
 def downgrade():
