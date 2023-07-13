@@ -1,15 +1,15 @@
-from app.models.game import db, Game, environment, SCHEMA
+from app.models.game import db, Game, environment, SCHEMA, Region, System
 from sqlalchemy.sql import text
 
 def seed_games():
     game_1 = Game(
-        name = 'Tales of Symphonia', system = 'GameCube', region='NAM'
+        name = 'Tales of Symphonia', system = System.GameCube, region=Region.NAM
     )
     game_2 = Game(
-        name = 'Dragon Quest Monsters: Joker 3', system = 'Nintendo 3DS', region ='JP'
+        name = 'Dragon Quest Monsters: Joker 3', system = System.Nintendo_3DS, region =Region.JP
     )
     game_3 = Game(
-        name = 'Jelly Boy', system=  'Super Nintendo Entertainment System', region='PAL'
+        name = 'Jelly Boy', system= System.Super_Nintendo_Entertainment_System, region=Region.PAL
     )
 
 
