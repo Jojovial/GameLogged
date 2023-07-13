@@ -7,6 +7,3 @@ user_comment = db.Table(
     db.Column('comment_id', db.Integer, db.ForeignKey(add_prefix_for_prod('comments.id')), primary_key=True),
 
 )
-
-if environment == "production":
-    user_comment.schema = SCHEMA

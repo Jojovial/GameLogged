@@ -238,6 +238,7 @@ class Game(db.Model):
     reviews = db.relationship('Review', back_populates='game_reviews', cascade='all, delete-orphan')
 
 
+ 
 
     def to_dict(self):
         return {

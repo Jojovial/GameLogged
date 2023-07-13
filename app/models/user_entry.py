@@ -8,5 +8,4 @@ user_entry = db.Table(
 
 )
 
-if environment == "production":
-    user_entry.schema = SCHEMA
+

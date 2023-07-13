@@ -28,7 +28,7 @@ def seed_entries():
 
 def undo_entries():
         if environment == 'production':
-            db.session.execute(f'TRUNCATE table {SCHEMA}.entries RESTART IDENTITY CASCADE;')
+            db.session.execute(f"DELETE FROM {SCHEMA}.entries;")
         else:
             db.session.execute(text("DELETE FROM entries"))
         db.session.commit()

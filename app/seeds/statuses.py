@@ -19,7 +19,7 @@ def seed_statuses():
 
 def undo_statuses():
     if environment == "production":
-        db.session.execute(f"TRUNCATE table {SCHEMA}.statuses RESTART IDENTITY CASCADE;")
+        db.session.execute(f"DELETE FROM {SCHEMA}.statuses;")
     else:
         db.session.execute(text("DELETE FROM statuses"))
 

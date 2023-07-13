@@ -17,10 +17,12 @@ def seed_games():
     db.session.add(game_2)
     db.session.add(game_3)
 
+    db.session.commit()
+
 def undo_games():
     if environment == 'production':
-        db.session.execute(f'TRUNCATE table {SCHEMA}.games RESTART IDENTITY CASCADE;')
+        db.session.execute(f"DELETE FROM {SCHEMA}.games;")
     else:
-        db.session.execute(text("DELETE FROM comments"))
+        db.session.execute(text("DELETE FROM games"))
 
     db.session.commit()

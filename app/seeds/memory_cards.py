@@ -22,7 +22,7 @@ def seed_memory_cards():
 
 def undo_memory_cards():
     if environment == 'production':
-        db.session.execute(f"TRUNCATE table {SCHEMA}.memory_cards RESTART IDENTITY CASCADE;")
+        db.session.execute(f"DELETE FROM {SCHEMA}.memory_cards;")
     else:
         db.session.execute(text("DELETE FROM memory_cards"))
 
