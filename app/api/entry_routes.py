@@ -53,8 +53,11 @@ def get_entries():
 @login_required
 def create_entry():
     entry_form = EntryForm(request.form)
+    entry_form['csrf_token'].data = request.cookies['csrf_token']
     game_form = GameForm(request.form)
+    game_form['csrf_token'].data = request.cookies['csrf_token']
     review_form = ReviewForm(request.form)
+    review_form['csrf_token'].data = request.cookies['csrf_token']
 
     if entry_form.validate_on_submit() and game_form.vadliate_on_submit() and review_form.validate_on_submit():
         new_entry = Entry(
@@ -80,5 +83,16 @@ def create_entry():
         db.session.commit()
 
         new_review = Review(
+            user_id = current_user.id,
+            entry_id=new_entry.id,
+            game_id = new_game.id,
+            rating = review_form.rating.data,
+            comment = review_form.comment.data
 
         )
+        db.session.add(new_review)
+        db.session.commit()
+
+        return generate_success_response('Entry created!')
+    else:
+        return generate_error_response('Invalid form data.')

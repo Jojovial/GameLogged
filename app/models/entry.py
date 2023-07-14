@@ -28,7 +28,7 @@ class Entry(db.Model):
     game_entries = db.relationship('Game', back_populates="entries")
     logs = db.relationship('MemoryCard', back_populates="entry_logs")
     status = db.relationship('Status', back_populates="entry_status")
-
+    reviews = db.relationship('Review', back_populates='entry', overlaps="entry_reviews,review")
     def to_dict(self):
         return {
             'id': self.id,
