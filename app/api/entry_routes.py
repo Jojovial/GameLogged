@@ -63,7 +63,7 @@ def create_entry():
         new_entry = Entry(
             user_id=current_user.id,
             game_id=None,
-            progress=entry_form.progress.data,
+            progress=Progress[entry_form.progress.data],
             progress_note=entry_form.progress_note.data,
             is_now_playing=entry_form.is_now_playing.data,
             wishlist=entry_form.wishlist.data
@@ -73,8 +73,8 @@ def create_entry():
 
         new_game = Game(
             name=game_form.name.data,
-            system=game_form.system.data,
-            region=game_form.region.data
+            system=System[game_form.system.data],
+            region=Region[game_form.region.data]
         )
         db.session.add(new_game)
         db.session.commit()
@@ -96,3 +96,76 @@ def create_entry():
         return generate_success_response('Entry created!')
     else:
         return generate_error_response('Invalid form data.')
+
+#Update a entry
+@entry_routes('/<int:entry_id>', methods=['PUT'])
+@login_required
+def update_entry(entry_id):
+    entry = Entry.query.get(entry_id)
+
+    if not entry:
+        return generate_error_response('Entry not found.', 404)
+
+    if entry.user_id != current_user.id:
+        return generate_error_response('Unauthorized to update this entry', 403)
+
+    entry_form = EntryForm(request.form)
+    entry_form['csrf_token'].data = request.cookies['csrf_token']
+    game_form = GameForm(request.form)
+    game_form['csrf_token'].data = request.cookies['csrf_token']
+    review_form = ReviewForm(request.form)
+    review_form['csrf_token'].data = request.cookies['csrf_token']
+
+    if entry_form.validate_on_submit() and game_form.validate_on_submit() and review_form.validate_on_submit():
+        entry.progress = Progress[entry_form.progress.data]
+        entry.progress_note = entry_form.progress_note.data
+        entry.is_now_playing = entry_form.is_now_playing.data
+        entry.wishlist = entry_form.wishlist.data
+
+        game = Game.query.get(entry.game_id)
+        if not game:
+            game = Game(
+                name = game_form.name.data,
+                system = System[game_form.system.data],
+                region = Region[game_form.region.data]
+            )
+            db.session.add(game)
+            db.session.commit()
+            entry.game_id = game.id
+
+        review = Review.query.filter_by(entry_id=entry_id).first()
+        if not review:
+            review = Review(
+                user_id=current_user.id,
+                entry_id = entry_id,
+                game_id = entry.game_id,
+                rating = review_form.rating.data,
+                comment = review_form.comment.data
+            )
+            db.session.add(review)
+        else:
+            review.rating = review_form.rating.data
+            review.comment = review_form.comment.data
+
+        db.session.commit()
+
+        return generate_success_response('Entry updated!')
+    else:
+        return generate_error_response('Invalid form data.')
+
+#Delete an entry
+@entry_routes.route('/<int:entry_id>', methods=["DELETE"])
+@login_required
+def delete_board(entry_id):
+    entry = Entry.query.get(entry_id)
+
+    if not entry:
+        return generate_error_response('Entry not found.', 404)
+
+    if entry.user_id != current_user.id:
+        return generate_error_response('Unauthorized to delete this entry.', 403)
+
+    db.session.delete(entry)
+    db.session.commit()
+
+    return generate_success_response({'message': 'Entry deleted successfully.'})
