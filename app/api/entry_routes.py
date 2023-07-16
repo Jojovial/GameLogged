@@ -9,7 +9,7 @@ from app.ultis import generate_error_response, generate_success_response
 from sqlalchemy import asc
 
 
-entry_routes = Blueprint('entries', __name__, url_prefix='/entry')
+entry_routes = Blueprint('entries', __name__, url_prefix='/entries')
 
 #GET details of specific entry
 @entry_routes.route('/<int:entry_id>', methods=["GET"])
@@ -161,6 +161,7 @@ def update_entry(entry_id):
 
     if entry.user_id != current_user.id:
         return generate_error_response('Unauthorized to update this entry', 403)
+
 
     entry_form = EntryForm(request.form)
     entry_form['csrf_token'].data = request.cookies['csrf_token']
