@@ -32,10 +32,63 @@ def get_entry_details(entry_id):
         'wishlist': entry.wishlist
     }
 
+    game = Game.query.get(entry.game_id)
+    if game:
+        entry_data['game'] = {
+            'id': game.id,
+            'name': game.name,
+            'system': game.system.value,
+            'region': game.region.value
+        }
+
+    review = Review.query.filter_by(entry_id=entry.id).first()
+    if review:
+        entry_data['review'] = {
+            'id': review.id,
+            'rating': review.rating,
+            'review_text': review.review_text
+        }
+
     return generate_success_response({'entry': entry_data})
 
+
+#GET all games by current user
+@entry_routes.route('/games/all', methods=['GET'])
+@login_required
+def get_user_games():
+    entries = Entry.query.filter_by(user_id=current_user.id).all()
+    game_ids = [entry.game_id for entry in entries]
+    games = Game.query.filter(Game.id.in_(game_ids)).all()
+
+    games_data = [{
+        'id': game.id,
+        'name': game.name,
+        'system': game.system.value,
+        'region': game.region.value
+    } for game in games]
+
+    return generate_success_response({'games': games_data})
+
+#GET all reviews by current user
+@entry_routes.route('/reviews/all', methods=['GET'])
+@login_required
+def get_user_reviews():
+    entries = Entry.query.filter_by(user_id=current_user.id).all()
+    entry_ids = [entry.id for entry in entries]
+    reviews = Review.query.filter(Review.entry_id.in_(entry_ids)).all()
+
+    reviews_data = [{
+        'id': review.id,
+        'entry_id': review.entry_id,
+        'game_id': review.game_id,
+        'rating': review.rating,
+        'review_text': review.review_text
+    } for review in reviews]
+
+    return generate_success_response({'reviews': reviews_data})
+
 #GET all entries by current user
-@entry_routes.route('', methods=['GET'])
+@entry_routes.route('/all', methods=['GET'])
 @login_required
 def get_entries():
     entries = Entry.query.filter_by(user_id=current_user.id).order_by(asc(Entry.id)).all()
@@ -49,7 +102,7 @@ def get_entries():
     return generate_success_response({'entries': entries_data})
 
 #Create new entry
-@entry_routes('', methods=['POST'])
+@entry_routes.route('', methods=['POST'])
 @login_required
 def create_entry():
     entry_form = EntryForm(request.form)
@@ -98,7 +151,7 @@ def create_entry():
         return generate_error_response('Invalid form data.')
 
 #Update a entry
-@entry_routes('/<int:entry_id>', methods=['PUT'])
+@entry_routes.route('/<int:entry_id>', methods=['PUT'])
 @login_required
 def update_entry(entry_id):
     entry = Entry.query.get(entry_id)
@@ -169,3 +222,46 @@ def delete_board(entry_id):
     db.session.commit()
 
     return generate_success_response({'message': 'Entry deleted successfully.'})
+
+#Delete a game within an entry
+@entry_routes.route('/<int:entry_id>/game/<int:game_id>', methods=['DELETE'])
+@login_required
+def delete_game(entry_id, game_id):
+    entry = Entry.query.get(entry_id)
+
+    if not entry:
+        return generate_error_response('Entry not found.', 404)
+
+    if entry.user_id != current_user.id:
+        return generate_error_response('Unauthorized to delete this game.', 403)
+
+    game = Game.query.get(game_id)
+
+    if not game or game.id != entry.game_id:
+        return generate_error_response('Game not found.', 404)
+
+    db.session.delete(game)
+    db.session.commit()
+
+    return generate_success_response({'message': 'Game deleted successfully.'})
+
+#Delete a review within an entry
+@entry_routes.route('/<int:entry_id>/review/<int:review_id>', methods=['DELETE'])
+def delete_review(entry_id, review_id):
+    entry = Entry.query.get(entry_id)
+
+    if not entry:
+        return generate_error_response('Entry not found.', 404)
+
+    if entry.user_id != current_user.id:
+        return generate_error_response('Unauthorized to delete this review.', 403)
+
+    review = Review.query.get(review_id)
+
+    if not review or review.entry_id != entry.id:
+        return generate_error_response('Review not found.', 404)
+
+    db.session.delete(review)
+    db.session.commit()
+
+    return generate_success_response({'message': 'Review deelted successfully.'})
