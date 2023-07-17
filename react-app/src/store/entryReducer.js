@@ -1,3 +1,6 @@
+import { deleteGame, editGame } from "./gamesReducer";
+import { deleteReview, editReview } from "./reviewsReducer";
+
 /*-Action Types-*/
 const GET_ALL_ENTRIES = 'entries/GetAllEntries';
 const GET_ENTRY = 'entries/GetEntry';
@@ -65,17 +68,43 @@ export const thunkEntry = (entryId) => async (dispatch, getState) => {
 /*-Add Entry Thunk-*/
 export const thunkAddEntry = (entry) => async (dispatch) => {
     let response;
-    try {
-        response = await fetch ('/api/entries', {
+    try { //Create Game
+        const gameResponse = await fetch('/api/games', {
             method: 'POST',
-            headers:{ 'Content-Type': 'application/json' },
-            body: JSON.stringify(entry)
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify(entry.game)
+        });
+
+        if (!gameResponse.ok) {
+            throw new Error('Failed to create game');
+        }
+
+        const game = await gameResponse.json();
+        //Create Entry
+        const entryWithGame = { ...entry, game_id: game.id};
+        response = await fetch('/api/entries', {
+            method:'POST',
+            headers: {'Content-Type': 'application/json' },
+            body: JSON.stringify(entryWithGame)
         });
 
         if (response.ok) {
             const entryResponse = await response.json();
-            dispatch(addEntry(entryResponse));
-            return entryResponse;
+            //Create Review
+            const reviewResponse = await fetch('/api/reviews', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(entry.review)
+            });
+
+            if(!reviewResponse.ok){
+                throw new Error('Failed to create review');
+            }
+            const review = await reviewResponse.json();
+
+            const entryWithReview = {...entryResponse, review_id: review.id};
+            dispatch(addEntry(entryWithReview));
+            return entryWithReview;
         }
     } catch (err) {
         const errors = await err.json();
@@ -99,6 +128,33 @@ export const thunkEditEntry = (entryId, entry) => async (dispatch) => {
         const entryToEdit = await response.json();
         dispatch(editEntry(entryToEdit));
 
+        const gameResponse = await fetch(`/api/games/${entry.game_id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify(entry.game)
+        });
+
+        if(!gameResponse.ok) {
+            throw new Error('Failed to update game');
+        }
+
+        const gameToEdit = await gameResponse.json();
+        dispatch(editGame(gameToEdit));
+
+        const reviewResponse = await fetch(`/api/reviews/${entry.review_id}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(entry.review)
+        });
+
+        if(!reviewResponse.ok) {
+            throw new Error('Failed to update review');
+        }
+
+        const reviewToEdit = await reviewResponse.json();
+        dispatch(editReview(reviewToEdit));
+
+
         return { payload: entryToEdit };
     } catch (err) {
         return { error: err.message };
@@ -109,22 +165,48 @@ export const thunkEditEntry = (entryId, entry) => async (dispatch) => {
 export const thunkDeleteEntry = (entryId) => async (dispatch) => {
     let response;
     try {
-        response = await fetch(`/api/entries/${entryId}`, {
-            method: 'DELETE'
-        });
-        const deleteEntryResponse = await response.json();
-        if (response.ok) {
-            dispatch(deleteEntry(entryId));
-            return deleteEntryResponse;
-        } else {
-            throw new Error(deleteEntryResponse.message || 'Unable to delete entry');
+       response = await fetch(`/api/entries/${entryId}`);
+       const entryToDelete = await response.json();
 
-        }
-    } catch (err) {
-        console.error(err.message);
-    }
+       if(!response.ok) {
+        throw new Error('Failed to get entry');
+       }
+
+       response = await fetch(`/api/entries/${entryId}`, {
+        method: 'DELETE'
+       });
+
+       if(!response.ok) {
+        throw new Error('Failed to delete entry');
+       }
+       dispatch(deleteEntry(entryId));
+
+       response = await fetch(`/api/games/${entryToDelete.game_id}`, {
+        method: 'DELETE'
+       });
+
+       if(!response.ok) {
+        throw new Error('Failed to delete game')
+       }
+
+       dispatch(deleteGame(entryToDelete.game_id));
+
+       response = await fetch(`/api/reviews/${entryToDelete.review_id}`, {
+        method: 'DELETE'
+       });
+
+       if(!response.ok) {
+        throw new Error('Failed to delete review')
+       }
+
+       dispatch(deleteReview(entryToDelete.review_id));
+
+       return { payload: entryId }
+
+} catch (err) {
+    console.error(err.message);
 }
-
+}
 
 const initialState = {
     allEntries: {},
