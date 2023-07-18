@@ -101,21 +101,42 @@ def get_entries():
                      for entry in entries]
     return generate_success_response({'entries': entries_data})
 
-#Create new entry
+# Create new entry
 @entry_routes.route('', methods=['POST'])
 @login_required
 def create_entry():
-    entry_form = EntryForm(request.form)
+    data = request.get_json()
+    entry_form = EntryForm(data=data)
     entry_form['csrf_token'].data = request.cookies['csrf_token']
-    game_form = GameForm(request.form)
+    game_form = GameForm(data=data)
     game_form['csrf_token'].data = request.cookies['csrf_token']
-    review_form = ReviewForm(request.form)
-    review_form['csrf_token'].data = request.cookies['csrf_token']
 
-    if entry_form.validate_on_submit() and game_form.validate_on_submit() and review_form.validate_on_submit():
+    if entry_form.validate_on_submit() and game_form.validate_on_submit():
+        # Check if a game with the same name, system, and region exists
+        existing_game = Game.query.filter_by(
+            name=game_form.name.data,
+            system=System[game_form.system.data],
+            region=Region[game_form.region.data]
+        ).first()
+
+        if existing_game:
+            # Use the existing game's ID
+            game_id = existing_game.id
+        else:
+            # Create a new game entry
+            new_game = Game(
+                name=game_form.name.data,
+                system=System[game_form.system.data],
+                region=Region[game_form.region.data]
+            )
+            db.session.add(new_game)
+            db.session.commit()
+            game_id = new_game.id
+
+        # Create the new entry using the obtained game ID
         new_entry = Entry(
             user_id=current_user.id,
-            game_id=None,
+            game_id=game_id,
             progress=Progress[entry_form.progress.data],
             progress_note=entry_form.progress_note.data,
             is_now_playing=entry_form.is_now_playing.data,
@@ -124,36 +145,29 @@ def create_entry():
         db.session.add(new_entry)
         db.session.commit()
 
-        new_game = Game(
-            name=game_form.name.data,
-            system=System[game_form.system.data],
-            region=Region[game_form.region.data]
-        )
-        db.session.add(new_game)
-        db.session.commit()
+        # Process review data (assuming reviews are optional)
+        review_form = ReviewForm(data=data)
+        review_form['csrf_token'].data = request.cookies['csrf_token']
 
-        new_entry.game_id = new_game.id
-        db.session.commit()
-
-        new_review = Review(
-            user_id = current_user.id,
-            entry_id=new_entry.id,
-            game_id = new_game.id,
-            rating = review_form.rating.data,
-             review_text=review_form.review_text.data
-
-        )
-        db.session.add(new_review)
-        db.session.commit()
+        if review_form.validate_on_submit():
+            new_review = Review(
+                user_id=current_user.id,
+                entry_id=new_entry.id,
+                game_id=game_id,
+                rating=review_form.rating.data,
+                review_text=review_form.review_text.data
+            )
+            db.session.add(new_review)
+            db.session.commit()
 
         return generate_success_response('Entry created!')
     else:
         print(entry_form.errors)
         print(game_form.errors)
-        print(review_form.errors)
+        print(review_form.errors)  # Remember to initialize review_form for error handling
         return generate_error_response('Invalid form data.', 400)
 
-#Update a entry
+# Update an entry
 @entry_routes.route('/<int:entry_id>', methods=['PUT'])
 @login_required
 def update_entry(entry_id):
@@ -165,12 +179,12 @@ def update_entry(entry_id):
     if entry.user_id != current_user.id:
         return generate_error_response('Unauthorized to update this entry', 403)
 
-
-    entry_form = EntryForm(request.form)
+    data = request.get_json()
+    entry_form = EntryForm(data=data)
     entry_form['csrf_token'].data = request.cookies['csrf_token']
-    game_form = GameForm(request.form)
+    game_form = GameForm(data=data)
     game_form['csrf_token'].data = request.cookies['csrf_token']
-    review_form = ReviewForm(request.form)
+    review_form = ReviewForm(data=data)
     review_form['csrf_token'].data = request.cookies['csrf_token']
 
     if entry_form.validate_on_submit() and game_form.validate_on_submit() and review_form.validate_on_submit():
@@ -179,36 +193,54 @@ def update_entry(entry_id):
         entry.is_now_playing = entry_form.is_now_playing.data
         entry.wishlist = entry_form.wishlist.data
 
+        print("game_form.system.data:", game_form.system.data)
+        print("System enum values:", [s.value for s in System])
+        system_data_lower = game_form.system.data.lower()
+
+        # Check if the lowercase value exists in the System enum
+        if system_data_lower in [s.value.lower() for s in System]:
+            # Find the matching enum member using the lowercase value
+            system_enum_member = next(member for member in System if member.value.lower() == system_data_lower)
+        else:
+            # If the value doesn't match any enum, handle the error
+            return generate_error_response('Invalid system value.', 400)
+
+        # Check if the game exists or create a new one
         game = Game.query.get(entry.game_id)
         if not game:
             game = Game(
-                name = game_form.name.data,
-                system = System[game_form.system.data],
-                region = Region[game_form.region.data]
+                name=game_form.name.data,
+                system=system_enum_member,
+                region=Region[game_form.region.data]
             )
             db.session.add(game)
-            db.session.commit()
-            entry.game_id = game.id
+        else:
+            game.name = game_form.name.data
+            game.system = system_enum_member
+            game.region = Region[game_form.region.data]
+
+        db.session.commit()
+        entry.game_id = game.id
 
         review = Review.query.filter_by(entry_id=entry_id).first()
         if not review:
             review = Review(
                 user_id=current_user.id,
-                entry_id = entry_id,
-                game_id = entry.game_id,
-                rating = review_form.rating.data,
-                comment = review_form.comment.data
+                entry_id=entry_id,
+                game_id=entry.game_id,
+                rating=review_form.rating.data,
+                review_text=review_form.review_text.data
             )
             db.session.add(review)
         else:
             review.rating = review_form.rating.data
-            review.comment = review_form.comment.data
+            review.review_text = review_form.review_text.data
 
         db.session.commit()
 
-        return generate_success_response('Entry updated!')
+        return generate_success_response('Entry and game updated!')
     else:
-        return generate_error_response('Invalid form data.')
+        return generate_error_response('Invalid form data.', 400)
 
 #Delete an entry
 @entry_routes.route('/<int:entry_id>', methods=["DELETE"])

@@ -15,8 +15,8 @@ class EntryForm(FlaskForm):
     """
     Form for creating an entry
     """
-    user_id = IntegerField('user_id', validators=[DataRequired()])
-    game_id = IntegerField('game_id', validators=[DataRequired()])
+    user_id = IntegerField('user_id')
+    game_id = IntegerField('game_id')
     progress = SelectField('progress', choices=[('Unplayed', 'Unplayed'), ('Unfinished', 'Unfinished'), ('Beaten', 'Beaten'), ('Completed', 'Completed')], validators=[DataRequired()])
     progress_note = StringField('progress_note', validators=[DataRequired(), Length(max=300)])
     is_now_playing = BooleanField('is_now_playing')
@@ -33,10 +33,10 @@ class MemoryCardForm(FlaskForm):
     log_info = StringField('log_info', validators=[DataRequired(), Length(max=200)])
 
 class ReviewForm(FlaskForm):
-    user_id = IntegerField('user_id', validators=[DataRequired()])
-    game_id = IntegerField('game_id', validators=[DataRequired()])
+    user_id = IntegerField('user_id')
+    game_id = IntegerField('game_id')
     rating = IntegerField('rating')
-    review_text = StringField('review_text', validators=[DataRequired(), Length(max=300)])
+    review_text = StringField('review_text', validators=[Length(max=300)])
 
 class StatusForm(FlaskForm):
     entry_id = IntegerField('entry_id', validators=[DataRequired()])

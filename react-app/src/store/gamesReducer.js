@@ -166,7 +166,10 @@ const gamesReducer = (state = initialState, action) => {
                 ...state,
                 allGames: {
                     ...state.allGames,
-                    [action.game.id]: action.game
+                    [action.game.id]:{
+                        ...state.allGames[action.game.id],
+                        ...action.game,
+                    }
                 }
             }
         case DELETE_GAME:
