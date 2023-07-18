@@ -283,6 +283,7 @@ def delete_game(entry_id, game_id):
 
 #Delete a review within an entry
 @entry_routes.route('/<int:entry_id>/reviews/<int:review_id>', methods=['DELETE'])
+@login_required
 def delete_review(entry_id, review_id):
     entry = Entry.query.get(entry_id)
 

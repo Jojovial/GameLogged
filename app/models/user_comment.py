@@ -5,5 +5,4 @@ user_comment = db.Table(
     'user_comment',
     db.Column('user_id', db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), primary_key=True),
     db.Column('comment_id', db.Integer, db.ForeignKey(add_prefix_for_prod('comments.id')), primary_key=True),
-    schema=SCHEMA
 )

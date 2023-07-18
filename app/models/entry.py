@@ -25,10 +25,10 @@ class Entry(db.Model):
 
     # Relationships
     users = db.relationship('User', secondary=user_entry, back_populates="entries")
-    game_entries = db.relationship('Game', back_populates="entries")
+    game_entries = db.relationship('Game', back_populates="entries", cascade='all, delete')
     logs = db.relationship('MemoryCard', back_populates="entry_logs")
     status = db.relationship('Status', back_populates="entry_status")
-    reviews = db.relationship('Review', back_populates='entry', overlaps="entry_reviews,review")
+    reviews = db.relationship('Review', back_populates='entry', overlaps="entry_reviews,review", cascade='all, delete')
     def to_dict(self):
         return {
             'id': self.id,
