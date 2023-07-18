@@ -12,7 +12,7 @@ const DELETE_ENTRY = 'entries/DeleteEntry';
 export const getAllEntries = (entries) => {
     return {
         type: GET_ALL_ENTRIES,
-        entries: entries.entries
+        entries: entries
     }
 }
 
@@ -53,10 +53,16 @@ export const deleteEntry = (entryId) => {
 
 /*-Get All Entries Thunk-*/
 export const thunkAllEntries = () => async (dispatch) => {
-    const response = await fetch('/api/entries');
-    const entries = await response.json();
-    dispatch(getAllEntries(entries));
-}
+    try {
+        const response = await fetch('/api/entries/all');
+        const entries = await response.json();
+        console.log('API Response:', entries); // Check the response from the API
+        dispatch(getAllEntries(entries));
+        console.log('After dispatch', entries)
+      } catch (error) {
+        console.error('Error fetching entries:', error);
+      }
+    };
 
 /*-Get Entry Thunk-*/
 export const thunkEntry = (entryId) => async (dispatch, getState) => {
@@ -223,11 +229,10 @@ const entryReducer = (state = initialState, action) => {
                 singleEntry: action.entry
             }
         case GET_ALL_ENTRIES:
+            console.log('Redux state after GET_ALL_ENTRIES:', action.entries);
             return {
                 ...state,
-                allEntries: {
-                    ...action.entries
-                }
+                allEntries: action.entries
             };
         case ADD_ENTRY:
             return {

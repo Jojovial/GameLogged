@@ -9,7 +9,7 @@ const DELETE_GAME = 'games/DeleteGame';
 export const getAllGames = (games) => {
     return {
         type: GET_ALL_GAMES,
-        games: games.games
+        games: games
     }
 }
 
@@ -50,10 +50,15 @@ export const deleteGame = (gameId) => {
 
 /*-Get All Games Thunk-*/
 export const thunkAllGames = () => async (dispatch) => {
-    const response = await fetch('/api/games');
-    const games = await response.json();
-    dispatch(getAllGames(games));
-}
+    try {
+        const response = await fetch('/api/entries/games/all');
+        const games = await response.json();
+        console.log('Fetched Games:', games); // Check if the data is received correctly
+        dispatch(getAllGames(games));
+      } catch (error) {
+        console.error('Error fetching games:', error);
+      }
+    };
 
 /*-Get Game Thunk-*/
 export const thunkGame = (gameId) => async (dispatch, getState) => {

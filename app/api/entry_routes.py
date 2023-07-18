@@ -225,7 +225,7 @@ def delete_board(entry_id):
     return generate_success_response({'message': 'Entry deleted successfully.'})
 
 #Delete a game within an entry
-@entry_routes.route('/<int:entry_id>/game/<int:game_id>', methods=['DELETE'])
+@entry_routes.route('/<int:entry_id>/games/<int:game_id>', methods=['DELETE'])
 @login_required
 def delete_game(entry_id, game_id):
     entry = Entry.query.get(entry_id)
@@ -247,7 +247,7 @@ def delete_game(entry_id, game_id):
     return generate_success_response({'message': 'Game deleted successfully.'})
 
 #Delete a review within an entry
-@entry_routes.route('/<int:entry_id>/review/<int:review_id>', methods=['DELETE'])
+@entry_routes.route('/<int:entry_id>/reviews/<int:review_id>', methods=['DELETE'])
 def delete_review(entry_id, review_id):
     entry = Entry.query.get(entry_id)
 
