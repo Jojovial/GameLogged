@@ -112,7 +112,7 @@ def create_entry():
     review_form = ReviewForm(request.form)
     review_form['csrf_token'].data = request.cookies['csrf_token']
 
-    if entry_form.validate_on_submit() and game_form.vadliate_on_submit() and review_form.validate_on_submit():
+    if entry_form.validate_on_submit() and game_form.validate_on_submit() and review_form.validate_on_submit():
         new_entry = Entry(
             user_id=current_user.id,
             game_id=None,
@@ -140,7 +140,7 @@ def create_entry():
             entry_id=new_entry.id,
             game_id = new_game.id,
             rating = review_form.rating.data,
-            comment = review_form.comment.data
+             review_text=review_form.review_text.data
 
         )
         db.session.add(new_review)
@@ -148,7 +148,10 @@ def create_entry():
 
         return generate_success_response('Entry created!')
     else:
-        return generate_error_response('Invalid form data.')
+        print(entry_form.errors)
+        print(game_form.errors)
+        print(review_form.errors)
+        return generate_error_response('Invalid form data.', 400)
 
 #Update a entry
 @entry_routes.route('/<int:entry_id>', methods=['PUT'])
