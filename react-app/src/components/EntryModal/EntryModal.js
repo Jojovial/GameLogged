@@ -2,8 +2,10 @@ import React, {useState, useEffect} from "react";
 import { useDispatch } from "react-redux";
 import { thunkAddEntry, thunkEditEntry } from "../../store/entryReducer";
 
-const EntryModal = ({ closeModal, editMode, initialFormData }) => {
+
+const EntryModal = ({ editMode, initialFormData }) => {
     const dispatch = useDispatch();
+    const [isModalOpen, setIsModalOpen] = useState(true);
     const [formData, setFormData] = useState({
         progress: '',
         progress_note: '',
@@ -16,28 +18,83 @@ const EntryModal = ({ closeModal, editMode, initialFormData }) => {
         review_text: ''
     });
 
+    const [enums, setEnums] = useState({
+        System: [],
+        Region: [],
+        Progress: []
+    });
+
     useEffect(() => {
-        if(editMode && initialFormData) {
-            setFormData(initialFormData)
-        }
-    }, [editMode, initialFormData])
+        fetch('/api/enums')
+            .then((response) => response.json())
+            .then((data) => setEnums(data))
+    }, []);
 
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setFormData((prevData) => ({
-        ...prevData,
-        [name]: type === "checkbox" ? checked : value,}));
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (editMode) {
-            dispatch(thunkEditEntry(formData));
+    useEffect(() => {
+        if (editMode && initialFormData) {
+          setFormData(initialFormData);
         } else {
-            dispatch(thunkAddEntry(formData));
+          // Set default values for the form fields
+          setFormData({
+            progress: "",
+            progress_note: "",
+            is_now_playing: false,
+            wishlist: false,
+            name: "",
+            system: "",
+            region: "",
+            rating: 0,
+            review_text: "",
+          });
         }
-        closeModal();
+      }, [editMode, initialFormData]);
+
+      const closeModal = () => {
+        setIsModalOpen(false); // Close the modal by setting the state to false
+      };
+
+      const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        console.log("Name:", name);
+        console.log("Value:", value);
+        console.log("Type:", type);
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: type === "checkbox" ? checked : value,
+        }));
     };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+          const formattedData = {
+            progress: formData.progress,
+            progress_note: formData.progress_note,
+            is_now_playing: formData.is_now_playing,
+            wishlist: formData.wishlist,
+            game: {
+              name: formData.name,
+              system: formData.system,
+              region: formData.region,
+            },
+            review: {
+              rating: formData.rating,
+              review_text: formData.review_text,
+            },
+          };
+
+          if (editMode) {
+            await dispatch(thunkEditEntry(formattedData));
+          } else {
+            await dispatch(thunkAddEntry(formattedData));
+          }
+          closeModal();
+        } catch (error) {
+          console.error("Error creating/updating entry:", error);
+          // Handle the error, e.g., show an error message to the user
+          throw error; // or show an error message and prevent form submission
+        }
+      };
 
     const handleRatingChange = (rating) => {
         setFormData((prevData) => ({
@@ -66,7 +123,7 @@ const EntryModal = ({ closeModal, editMode, initialFormData }) => {
                 onChange={handleChange}
                 required
             >
-                {Object.values(System).map((systemOption) => (
+                {enums.System.map((systemOption) => (
                     <option key={systemOption} value={systemOption}>
                         {systemOption}
                     </option>
@@ -80,7 +137,7 @@ const EntryModal = ({ closeModal, editMode, initialFormData }) => {
                 onChange={handleChange}
                 required
             >
-                {Object.values(Region).map((regionOption) => (
+                {enums.Region.map((regionOption) => (
                     <option key={regionOption} value={regionOption}>
                         {regionOption}
                     </option>
@@ -94,17 +151,17 @@ const EntryModal = ({ closeModal, editMode, initialFormData }) => {
                 onChange={handleChange}
                 required
             >
-                {Object.values(Progress).map((progressOption) => (
+                {enums.Progress.map((progressOption) => (
                     <option key={progressOption} value={progressOption}>
                         {progressOption}
                     </option>
                 ))}
             </select>
-            <label htmlFor="progress-note">Progress Note:</label>
+            <label htmlFor="progress_note">Progress Note:</label>
             <input
                 type="text"
                 id="entry-progress-note-modal"
-                name="progress-note"
+                name="progress_note"
                 value={formData.progress_note}
                 onChange={handleChange}
             />
@@ -122,11 +179,11 @@ const EntryModal = ({ closeModal, editMode, initialFormData }) => {
             ))}
           </div>
         </div>
-            <label htmlFor="review-text">Review:</label>
+            <label htmlFor="review_text">Review:</label>
             <input
                 type="text"
                 id="entry-review-modal"
-                name="review-text"
+                name="review_text"
                 value={formData.review_text}
                 onChange={handleChange}
             />
@@ -138,11 +195,11 @@ const EntryModal = ({ closeModal, editMode, initialFormData }) => {
                 checked={formData.wishlist}
                 onChange={handleChange}
             />
-            <label htmlFor="is-now-playing">Now Playing?:</label>
+            <label htmlFor="is_now_playing">Now Playing?:</label>
             <input
                 type="checkbox"
                 id="entry-is-now-playing-modal"
-                name="is-now-playing"
+                name="is_now_playing"
                 checked={formData.is_now_playing}
                 onChange={handleChange}
             />

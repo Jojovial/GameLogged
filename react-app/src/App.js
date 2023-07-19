@@ -9,12 +9,16 @@ import LandingPage from "./components/LandingPage/LadingPage";
 import EntryPage from "./components/EntryPage/EntryPage";
 import Home from "./components/Home/Home";
 
+
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     dispatch(authenticate()).then(() => setIsLoaded(true));
   }, [dispatch]);
+
+
+
 
   return (
     <>

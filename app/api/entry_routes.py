@@ -167,6 +167,54 @@ def create_entry():
         print(review_form.errors)  # Remember to initialize review_form for error handling
         return generate_error_response('Invalid form data.', 400)
 
+#Create Game
+@entry_routes.route('/games', methods=['POST'])
+@login_required
+def create_game():
+    data = request.get_json()
+
+
+    print("Data received from frontend:", data)
+
+    try:
+        # Validate the incoming data here and create a new game entry.
+
+        # Sample implementation:
+        new_game = Game(
+            name=data['name'],
+            system=data['system'],
+            region=data['region']
+        )
+        db.session.add(new_game)
+        db.session.commit()
+
+        return generate_success_response({'message': 'Game created successfully.'})
+
+    except Exception as e:
+        db.session.rollback()  # Roll back the transaction in case of an error
+        return generate_error_response(f'Error creating the game: {str(e)}', 500)
+
+#Create reviews
+@entry_routes.route('/reviews', methods=['POST'])
+@login_required
+def create_review():
+    data = request.get_json()
+
+    # Validate the incoming data here and create a new review entry.
+
+    # Sample implementation:
+    new_review = Review(
+        user_id=current_user.id,
+        entry_id=data['entry_id'],
+        game_id=data['game_id'],
+        rating=data['rating'],
+        review_text=data['review_text']
+    )
+    db.session.add(new_review)
+    db.session.commit()
+
+    return generate_success_response({'message': 'Review created successfully.'})
+
 # Update an entry
 @entry_routes.route('/<int:entry_id>', methods=['PUT'])
 @login_required

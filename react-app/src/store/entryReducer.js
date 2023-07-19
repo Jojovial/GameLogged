@@ -75,11 +75,14 @@ export const thunkEntry = (entryId) => async (dispatch, getState) => {
 export const thunkAddEntry = (entry) => async (dispatch) => {
     let response;
     try { //Create Game
-        const gameResponse = await fetch('/api/games', {
+        console.log(entry.game, 'Entry Game Before Fetch');
+        const gameResponse = await fetch('/api/entries/games', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify(entry.game)
         });
+
+
 
         if (!gameResponse.ok) {
             throw new Error('Failed to create game');
@@ -97,11 +100,12 @@ export const thunkAddEntry = (entry) => async (dispatch) => {
         if (response.ok) {
             const entryResponse = await response.json();
             //Create Review
-            const reviewResponse = await fetch('/api/reviews', {
+            const reviewResponse = await fetch('/api/entries/reviews', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(entry.review)
             });
+
 
             if(!reviewResponse.ok){
                 throw new Error('Failed to create review');
@@ -112,9 +116,8 @@ export const thunkAddEntry = (entry) => async (dispatch) => {
             dispatch(addEntry(entryWithReview));
             return entryWithReview;
         }
-    } catch (err) {
-        const errors = await err.json();
-        return errors;
+    } catch (error) {
+        console.error('Error creating game:', error.message);
     }
 }
 

@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { thunkAllEntries, thunkDeleteEntry } from '../../store/entryReducer';
 import { thunkAllGames } from '../../store/gamesReducer';
 import './Home.css';
-import OpenModalButton from './OpenModalButton';
 import EntryModal from '../EntryModal/EntryModal';
+import OpenModalButton from '../OpenModalButton';
 
 
 const Home = () => {

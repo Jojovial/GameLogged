@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
@@ -9,6 +9,9 @@ from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
 from .api.entry_routes import entry_routes
 from .api.dialogue_routes import dialogue_routes
+from .api.game_routes import game_routes
+from app.models.game import System, Region
+from app.models.entry import Progress
 from .seeds import seed_commands
 from .config import Config
 
@@ -30,6 +33,7 @@ app.config.from_object(Config)
 app.register_blueprint(user_routes, url_prefix='/api/users')
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(entry_routes, url_prefix='/api/entries')
+app.register_blueprint(game_routes, url_prefix='/api/games')
 app.register_blueprint(dialogue_routes, url_prefix='/api/comment')
 db.init_app(app)
 Migrate(app, db)
@@ -92,3 +96,12 @@ def react_root(path):
 @app.errorhandler(404)
 def not_found(e):
     return app.send_static_file('index.html')
+
+@app.route('/api/enums')
+def get_enums():
+    enums = {
+        'System': [e.value for e in System],
+        'Region': [e.value for e in Region],
+        'Progress': [e.value for e in Progress],
+    }
+    return jsonify(enums)
