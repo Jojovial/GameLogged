@@ -1,0 +1,19 @@
+.rating-slider {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .stars {
+    font-size: 24px;
+    color: #ffd700; /* gold color */
+    cursor: pointer;
+  }
+
+  .star {
+    transition: color 0.2s;
+  }
+
+  .star.active {
+    color: #ffac33; /* darker gold color */
+  }
