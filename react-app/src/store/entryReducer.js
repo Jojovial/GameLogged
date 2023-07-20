@@ -1,5 +1,6 @@
-import { deleteGame, editGame } from "./gamesReducer";
-import { deleteReview, editReview } from "./reviewsReducer";
+import { deleteGame, editGame, addGame } from "./gamesReducer";
+import { deleteReview, editReview, addReview } from "./reviewsReducer";
+
 
 /*-Action Types-*/
 const GET_ALL_ENTRIES = 'entries/GetAllEntries';
@@ -71,55 +72,72 @@ export const thunkEntry = (entryId) => async (dispatch, getState) => {
     dispatch(getEntry(entry));
 }
 
-/*-Add Entry Thunk-*/
-export const thunkAddEntry = (entry) => async (dispatch) => {
-    let response;
-    try { //Create Game
-        console.log(entry.game, 'Entry Game Before Fetch');
-        const gameResponse = await fetch('/api/entries/games', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify(entry.game)
-        });
+// thunkCreateGame
+export const thunkCreateGame = (gameData) => async (dispatch) => {
+    try {
+      const response = await fetch('/api/entries/games', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(gameData),
+      });
 
+      if (!response.ok) {
+        throw new Error('Failed to create game');
+      }
 
-
-        if (!gameResponse.ok) {
-            throw new Error('Failed to create game');
-        }
-
-        const game = await gameResponse.json();
-        //Create Entry
-        const entryWithGame = { ...entry, game_id: game.id};
-        response = await fetch('/api/entries', {
-            method:'POST',
-            headers: {'Content-Type': 'application/json' },
-            body: JSON.stringify(entryWithGame)
-        });
-
-        if (response.ok) {
-            const entryResponse = await response.json();
-            //Create Review
-            const reviewResponse = await fetch('/api/entries/reviews', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(entry.review)
-            });
-
-
-            if(!reviewResponse.ok){
-                throw new Error('Failed to create review');
-            }
-            const review = await reviewResponse.json();
-
-            const entryWithReview = {...entryResponse, review_id: review.id};
-            dispatch(addEntry(entryWithReview));
-            return entryWithReview;
-        }
+      const game = await response.json();
+      dispatch(addGame(game));
+      console.log("Created game:", game);
+      return game;
     } catch (error) {
-        console.error('Error creating game:', error.message);
+      console.error('Error creating game:', error.message);
+      throw error;
     }
-}
+  };
+
+  // thunkCreateEntry
+  export const thunkCreateEntry = (entryData) => async (dispatch) => {
+    try {
+      const response = await fetch('/api/entries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(entryData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create entry');
+      }
+
+      const entry = await response.json();
+      dispatch(addEntry(entry))
+      return entry;
+    } catch (error) {
+      console.error('Error creating entry:', error.message);
+      throw error;
+    }
+  };
+
+  // thunkCreateReview
+  export const thunkCreateReview = (reviewData) => async (dispatch) => {
+    try {
+      const response = await fetch('/api/entries/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(reviewData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create review');
+      }
+
+      const review = await response.json();
+      dispatch(addReview(review));
+      return review;
+    } catch (error) {
+      console.error('Error creating review:', error.message);
+      throw error;
+    }
+  };
 
 /*-Edit An Entry Thunk-*/
 export const thunkEditEntry = (entryId, entry) => async (dispatch) => {

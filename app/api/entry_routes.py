@@ -7,6 +7,8 @@ from app.models.game import Game, System, Region
 from app.forms.forms import EntryForm, GameForm, ReviewForm
 from app.ultis import generate_error_response, generate_success_response
 from sqlalchemy import asc
+import requests
+
 
 
 entry_routes = Blueprint('entries', __name__, url_prefix='/entries')
@@ -105,115 +107,143 @@ def get_entries():
 @entry_routes.route('', methods=['POST'])
 @login_required
 def create_entry():
-    data = request.get_json()
+    data = request.json
+
+
     entry_form = EntryForm(data=data)
     entry_form['csrf_token'].data = request.cookies['csrf_token']
-    game_form = GameForm(data=data)
-    game_form['csrf_token'].data = request.cookies['csrf_token']
+    print(entry_form.data)
 
-    if entry_form.validate_on_submit() and game_form.validate_on_submit():
+    region_mapping = {
+        'Other': Region.OTHER,
+        #
+    }
+
+    # Process the JSON data
+    region_value = region_mapping.get(entry_form.region.data)
+    if region_value is None:
+        return generate_error_response('Invalid region value.', 400)
+
+    print("System Enum Values:", [system.value for system in System])
+    print("game_system.data:", entry_form.system.data)
+    if entry_form.validate_on_submit():
+        game_data = data.get('game', {})
+        review_data = data.get('review', {})
+
+        # Create the GameForm and ReviewForm instances
+        game_data = entry_form.game.data
+        review_data = entry_form.review.data
         # Check if a game with the same name, system, and region exists
         existing_game = Game.query.filter_by(
-            name=game_form.name.data,
-            system=System[game_form.system.data],
-            region=Region[game_form.region.data]
+            name=entry_form.name.data,
+            system=entry_form.system.data,
+            region=entry_form.region.data,
         ).first()
 
         if existing_game:
             # Use the existing game's ID
             game_id = existing_game.id
         else:
-            # Create a new game entry
-            new_game = Game(
-                name=game_form.name.data,
-                system=System[game_form.system.data],
-                region=Region[game_form.region.data]
-            )
-            db.session.add(new_game)
-            db.session.commit()
-            game_id = new_game.id
+            # Create the new game using the new game creation route
+            game_data = {
+                'name': entry_form.name.data,
+                'system': entry_form.system.data,
+                'region': entry_form.region.data,
+            }
+            game_response = requests.post('/api/entries/games', json=game_data)
+            game_response_data = game_response.json()
+            game_id = game_response_data['game_id']
 
         # Create the new entry using the obtained game ID
         new_entry = Entry(
             user_id=current_user.id,
             game_id=game_id,
-            progress=Progress[entry_form.progress.data],
+            progress=entry_form.progress.data,
             progress_note=entry_form.progress_note.data,
             is_now_playing=entry_form.is_now_playing.data,
-            wishlist=entry_form.wishlist.data
+            wishlist=entry_form.wishlist.data,
         )
         db.session.add(new_entry)
         db.session.commit()
 
-        # Process review data (assuming reviews are optional)
-        review_form = ReviewForm(data=data)
-        review_form['csrf_token'].data = request.cookies['csrf_token']
+        review_data = {
+            'entry_id': new_entry.id,
+            'game_id': game_id,
+            'rating': data.get('review', {}).get('rating'),
+            'review_text': data.get('review', {}).get('review_text'),
+        }
+        review_response = requests.post('/api/entries/reviews', json=review_data)
+        if review_response.ok:
+            return generate_success_response('Entry created!')
+        else:
+            print(review_response.json())
 
-        if review_form.validate_on_submit():
-            new_review = Review(
-                user_id=current_user.id,
-                entry_id=new_entry.id,
-                game_id=game_id,
-                rating=review_form.rating.data,
-                review_text=review_form.review_text.data
-            )
-            db.session.add(new_review)
-            db.session.commit()
-
-        return generate_success_response('Entry created!')
     else:
         print(entry_form.errors)
-        print(game_form.errors)
-        print(review_form.errors)  # Remember to initialize review_form for error handling
         return generate_error_response('Invalid form data.', 400)
-
-#Create Game
+    return generate_success_response('Entry created!')
 @entry_routes.route('/games', methods=['POST'])
 @login_required
 def create_game():
     data = request.get_json()
+    print("Received data:", data)
+    progress_choices = [(progress.value, progress.name) for progress in Progress]
+    progress_value = data.get('progress')
+    print("Progress value:", progress_value)
 
+    entry_form = EntryForm(data=data, progress_choices=progress_choices)
+    entry_form['csrf_token'].data = request.cookies['csrf_token']
 
-    print("Data received from frontend:", data)
+    if entry_form.validate_on_submit():
+        try:
+            # Validate the incoming data here and create a new game entry.
+            new_game = Game(
+                name=entry_form.name.data,
+                system=System[entry_form.system.data],
+                region=Region[entry_form.region.data]
+            )
+            db.session.add(new_game)
+            db.session.commit()
 
-    try:
-        # Validate the incoming data here and create a new game entry.
+            return generate_success_response({'message': 'Game created successfully.'})
 
-        # Sample implementation:
-        new_game = Game(
-            name=data['name'],
-            system=data['system'],
-            region=data['region']
-        )
-        db.session.add(new_game)
-        db.session.commit()
+        except Exception as e:
+            db.session.rollback()  # Roll back the transaction in case of an error
+            return generate_error_response(f'Error creating the game: {str(e)}', 500)
+    else:
+        print(entry_form.errors)
+        return generate_error_response('Invalid form data.', 400)
 
-        return generate_success_response({'message': 'Game created successfully.'})
-
-    except Exception as e:
-        db.session.rollback()  # Roll back the transaction in case of an error
-        return generate_error_response(f'Error creating the game: {str(e)}', 500)
-
-#Create reviews
+# Create new review
 @entry_routes.route('/reviews', methods=['POST'])
 @login_required
 def create_review():
-    data = request.get_json()
+    data = request.json
 
-    # Validate the incoming data here and create a new review entry.
+    entry_form = EntryForm(data=data)
+    entry_form['csrf_token'].data = request.cookies['csrf_token']
 
-    # Sample implementation:
-    new_review = Review(
-        user_id=current_user.id,
-        entry_id=data['entry_id'],
-        game_id=data['game_id'],
-        rating=data['rating'],
-        review_text=data['review_text']
-    )
-    db.session.add(new_review)
-    db.session.commit()
+    if entry_form.validate_on_submit():
+        try:
+            # Validate the incoming data here and create a new review entry.
+            new_review = Review(
+                user_id=current_user.id,
+                entry_id=data.get('entry_id'),  # Update with the correct field name in the data
+                game_id=data.get('game_id'),    # Update with the correct field name in the data
+                rating=entry_form.rating.data,
+                review_text=entry_form.review_text.data
+            )
+            db.session.add(new_review)
+            db.session.commit()
 
-    return generate_success_response({'message': 'Review created successfully.'})
+            return generate_success_response({'message': 'Review created successfully.'})
+
+        except Exception as e:
+            db.session.rollback()  # Roll back the transaction in case of an error
+            return generate_error_response(f'Error creating the review: {str(e)}', 500)
+    else:
+        print(entry_form.errors)
+        return generate_error_response('Invalid form data.', 400)
 
 # Update an entry
 @entry_routes.route('/<int:entry_id>', methods=['PUT'])

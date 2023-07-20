@@ -8,6 +8,9 @@ class Progress(Enum):
     Beaten = 'Beaten'
     Completed = 'Completed'
 
+
+
+
 class Entry(db.Model):
     __tablename__ = 'entries'
 
