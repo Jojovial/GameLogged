@@ -123,7 +123,11 @@ const PROGRESS_CHOICES = [
       }
 
       const responseData = await response.json();
-      return responseData.game.id;
+      if (responseData.game && responseData.game.id) {
+        return responseData.game.id;
+      } else {
+        throw new Error('Invalid response data: game id is missing.');
+      }
     } catch (error) {
       console.error('Error creating game:', error);
       throw error;
@@ -134,6 +138,7 @@ const PROGRESS_CHOICES = [
   const handleCreateEntry = async (gameId) => {
     try {
       const entryData = {
+        name: formData.name,
         progress: formData.progress,
         progress_note: formData.progress_note,
         is_now_playing: formData.is_now_playing,

@@ -115,24 +115,17 @@ def create_entry():
     if entry_form.validate():
         try:
 
-            # Check if a game with the same name, system, and region exists
-            existing_game = Game.query.filter_by(
-                name=data['name'],
-                system=data['system'],
-                region=data['region'],
-            ).first()
+          # Check if the game exists using the provided game_id
+            existing_game = Game.query.filter_by(id=data['game_id']).first()
 
-            if existing_game:
-                # Use the existing game's ID
-                game_id = existing_game.id
-            else:
+            if not existing_game:
                 # Return an error response to indicate that the specified game does not exist
                 return generate_error_response('Game does not exist.', 404)
 
             # Create the new entry using the obtained game ID
             new_entry = Entry(
                 user_id=current_user.id,
-                game_id=game_id,
+                game_id=data['game_id'],
                 progress=data['progress'],
                 progress_note=data['progress_note'],
                 is_now_playing=data['is_now_playing'],
@@ -143,7 +136,7 @@ def create_entry():
             db.session.commit()
             print("New entry created successfully:", new_entry)
 
-            return generate_success_response('Entry created!')
+            return generate_success_response({'message': 'Entry created!', 'entry': new_entry.to_dict()})
 
         except KeyError as e:
             print("Error creating the entry:", e)
@@ -165,15 +158,12 @@ def create_game():
 
     if game_form.validate():
         try:
-            # Convert the string representation of enum values to actual enums
-            system_value = data['system']
-            region_value = data['region']
 
             # Validate the incoming data here and create a new game entry.
             new_game = Game(
                 name=data['name'],
-                system=system_value,
-                region=region_value
+                system=data['system'],
+                region=data['region']
             )
             db.session.add(new_game)
             db.session.commit()
