@@ -17,7 +17,7 @@ const EntryModal = ({ editMode, initialFormData }) => {
     review_text: "",
   });
 
-  SYSTEM_CHOICES = [
+  const SYSTEM_CHOICES = [
     "PC",
     "GameCube",
     "GameBoy",
@@ -44,7 +44,7 @@ const EntryModal = ({ editMode, initialFormData }) => {
     "Other",
 ]
 
-REGION_CHOICES = [
+const REGION_CHOICES = [
     'NAM',
     'JP',
     'PAL',
@@ -54,7 +54,7 @@ REGION_CHOICES = [
     'Other',
 ]
 
-PROGRESS_CHOICES = [
+const PROGRESS_CHOICES = [
     'Unplayed',
     'Unfinished',
     'Beaten',
@@ -91,10 +91,11 @@ PROGRESS_CHOICES = [
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    const newValue = type === "checkbox" ? checked : value;
 
     setFormData((prevData) => ({
       ...prevData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: newValue,
     }));
   };
 
@@ -111,7 +112,7 @@ PROGRESS_CHOICES = [
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Add any other headers you might need, e.g., authorization token
+
         },
         body: JSON.stringify(gameData),
       });
@@ -122,7 +123,7 @@ PROGRESS_CHOICES = [
       }
 
       const responseData = await response.json();
-      return responseData.game.id; // Assuming the response contains the created game object with an 'id' property
+      return responseData.game.id;
     } catch (error) {
       console.error('Error creating game:', error);
       throw error;
@@ -146,7 +147,7 @@ PROGRESS_CHOICES = [
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Add any other headers you might need, e.g., authorization token
+
         },
         body: JSON.stringify(entryData),
       });
@@ -159,7 +160,7 @@ PROGRESS_CHOICES = [
       }
 
       const responseData = await response.json();
-      return responseData.entry.id; // Assuming the response contains the created entry object with an 'id' property
+      return responseData.entry.id;
     } catch (error) {
       console.error('Error creating entry:', error);
       throw error;
@@ -179,7 +180,7 @@ PROGRESS_CHOICES = [
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Add any other headers you might need, e.g., authorization token
+
         },
         body: JSON.stringify(reviewData),
       });

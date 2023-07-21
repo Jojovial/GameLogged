@@ -114,16 +114,12 @@ def create_entry():
 
     if entry_form.validate():
         try:
-            # Convert the string representation of enum values to actual enums
-            system_value = [data['system']]
-            region_value = [data['region']]
-            progress_value = [data['progress']]
 
             # Check if a game with the same name, system, and region exists
             existing_game = Game.query.filter_by(
                 name=data['name'],
-                system=system_value,
-                region=region_value,
+                system=data['system'],
+                region=data['region'],
             ).first()
 
             if existing_game:
@@ -137,7 +133,7 @@ def create_entry():
             new_entry = Entry(
                 user_id=current_user.id,
                 game_id=game_id,
-                progress=progress_value,
+                progress=data['progress'],
                 progress_note=data['progress_note'],
                 is_now_playing=data['is_now_playing'],
                 wishlist=data['wishlist'],
@@ -170,8 +166,8 @@ def create_game():
     if game_form.validate():
         try:
             # Convert the string representation of enum values to actual enums
-            system_value = [data['system']]
-            region_value = [data['region']]
+            system_value = data['system']
+            region_value = data['region']
 
             # Validate the incoming data here and create a new game entry.
             new_game = Game(
