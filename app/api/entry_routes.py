@@ -8,6 +8,8 @@ from app.forms.forms import EntryForm, GameForm, ReviewForm
 from app.ultis import generate_error_response, generate_success_response
 from sqlalchemy import asc
 import requests
+import traceback
+import logging
 
 
 
@@ -108,110 +110,127 @@ def get_entries():
 @login_required
 def create_entry():
     data = request.json
+    print("Received review data:", data)
 
+    game_form = GameForm(data=data)
+    game_form['csrf_token'].data = request.cookies['csrf_token']
 
     entry_form = EntryForm(data=data)
     entry_form['csrf_token'].data = request.cookies['csrf_token']
-    print(entry_form.data)
 
-    region_mapping = {
-        'Other': Region.OTHER,
-        #
-    }
+    if game_form.validate() and entry_form.validate():
+        try:
+            # Convert the string representation of enum values to actual enums
+            system_value = System[game_form.system.data]
+            region_value = Region[game_form.region.data]
+            progress_value = Progress[entry_form.progress.data]
 
-    # Process the JSON data
-    region_value = region_mapping.get(entry_form.region.data)
-    if region_value is None:
-        return generate_error_response('Invalid region value.', 400)
+            # Check if a game with the same name, system, and region exists
+            existing_game = Game.query.filter_by(
+                name=game_form.name.data,
+                system=system_value,
+                region=region_value,
+            ).first()
 
-    print("System Enum Values:", [system.value for system in System])
-    print("game_system.data:", entry_form.system.data)
-    if entry_form.validate_on_submit():
-        game_data = data.get('game', {})
-        review_data = data.get('review', {})
+            if existing_game:
+                # Use the existing game's ID
+                game_id = existing_game.id
+            else:
+                # Create the new game using the new game creation route
+                game_data = {
+                    'name': game_form.name.data,
+                    'system': system_value.value,
+                    'region': region_value.value,
+                }
+                game_response = requests.post('/api/entries/games', json=game_data)
+                game_response_data = game_response.json()
+                game_id = game_response_data['game']['id']
 
-        # Create the GameForm and ReviewForm instances
-        game_data = entry_form.game.data
-        review_data = entry_form.review.data
-        # Check if a game with the same name, system, and region exists
-        existing_game = Game.query.filter_by(
-            name=entry_form.name.data,
-            system=entry_form.system.data,
-            region=entry_form.region.data,
-        ).first()
+            # Create the new entry using the obtained game ID
+            new_entry = Entry(
+                user_id=current_user.id,
+                game_id=game_id,
+                progress=progress_value,
+                progress_note=entry_form.progress_note.data,
+                is_now_playing=entry_form.is_now_playing.data,
+                wishlist=entry_form.wishlist.data,
+            )
+            print('new entry error?', new_entry)
+            db.session.add(new_entry)
+            db.session.commit()
+            print("New entry created successfully:", new_entry)
 
-        if existing_game:
-            # Use the existing game's ID
-            game_id = existing_game.id
-        else:
-            # Create the new game using the new game creation route
-            game_data = {
-                'name': entry_form.name.data,
-                'system': entry_form.system.data,
-                'region': entry_form.region.data,
+            review_data = {
+                'entry_id': new_entry.id,
+                'game_id': game_id,
+                'rating': data.get('review', {}).get('rating'),
+                'review_text': data.get('review', {}).get('review_text'),
             }
-            game_response = requests.post('/api/entries/games', json=game_data)
-            game_response_data = game_response.json()
-            game_id = game_response_data['game_id']
+            review_response = requests.post('/api/entries/reviews', json=review_data)
+            if review_response.ok:
+                return generate_success_response('Entry created!')
+            else:
+                print(review_response.json())
 
-        # Create the new entry using the obtained game ID
-        new_entry = Entry(
-            user_id=current_user.id,
-            game_id=game_id,
-            progress=entry_form.progress.data,
-            progress_note=entry_form.progress_note.data,
-            is_now_playing=entry_form.is_now_playing.data,
-            wishlist=entry_form.wishlist.data,
-        )
-        db.session.add(new_entry)
-        db.session.commit()
+        except KeyError as e:
+            print("Error creating the entry:", e)
+            return generate_error_response(f'Invalid enum value: {str(e)}', 400)
 
-        review_data = {
-            'entry_id': new_entry.id,
-            'game_id': game_id,
-            'rating': data.get('review', {}).get('rating'),
-            'review_text': data.get('review', {}).get('review_text'),
-        }
-        review_response = requests.post('/api/entries/reviews', json=review_data)
-        if review_response.ok:
-            return generate_success_response('Entry created!')
-        else:
-            print(review_response.json())
+        # Combine form errors for both GameForm and EntryForm
+        form_errors = {**game_form.errors, **entry_form.errors}
+        return generate_error_response(form_errors, 400)
 
-    else:
-        print(entry_form.errors)
-        return generate_error_response('Invalid form data.', 400)
     return generate_success_response('Entry created!')
+# Create new game
 @entry_routes.route('/games', methods=['POST'])
 @login_required
 def create_game():
     data = request.get_json()
     print("Received data:", data)
-    progress_choices = [(progress.value, progress.name) for progress in Progress]
-    progress_value = data.get('progress')
-    print("Progress value:", progress_value)
 
-    entry_form = EntryForm(data=data, progress_choices=progress_choices)
-    entry_form['csrf_token'].data = request.cookies['csrf_token']
-
-    if entry_form.validate_on_submit():
+    game_form = GameForm(data=data)
+    game_form['csrf_token'].data = request.cookies['csrf_token']
+    print("game_form validation:", game_form.validate())
+    if not game_form.validate():
+        print("Form validation errors:", game_form.errors)
+    if game_form.validate():
         try:
+            # Convert the string representation of enum values to actual enums
+            system_value = System[game_form.system.data]
+            region_value = Region[game_form.region.data]
+
+
+            game_data = {
+                'name': game_form.name.data,
+                'system': system_value,
+                'region': region_value
+            }
+            print("game_data:", game_data)
+
+
             # Validate the incoming data here and create a new game entry.
             new_game = Game(
-                name=entry_form.name.data,
-                system=System[entry_form.system.data],
-                region=Region[entry_form.region.data]
+                name=game_form.name.data,
+                system=system_value,
+                region=region_value
             )
             db.session.add(new_game)
+            print('new_game', new_game)
             db.session.commit()
+            print("New game entry created successfully:", new_game)
 
-            return generate_success_response({'message': 'Game created successfully.'})
+
+            return generate_success_response({'message': 'Game created successfully.', 'game': new_game.to_dict()})
+
+        except KeyError as e:
+            return generate_error_response(f'Invalid enum value: {str(e)}', 400)
 
         except Exception as e:
             db.session.rollback()  # Roll back the transaction in case of an error
+            print("Error creating the game:", e)
             return generate_error_response(f'Error creating the game: {str(e)}', 500)
+
     else:
-        print(entry_form.errors)
         return generate_error_response('Invalid form data.', 400)
 
 # Create new review
@@ -219,30 +238,31 @@ def create_game():
 @login_required
 def create_review():
     data = request.json
+    print("Received review data:", data)
 
-    entry_form = EntryForm(data=data)
-    entry_form['csrf_token'].data = request.cookies['csrf_token']
+    review_form = ReviewForm(data=data)
+    review_form['csrf_token'].data = request.cookies['csrf_token']
 
-    if entry_form.validate_on_submit():
+    if review_form.validate():
         try:
             # Validate the incoming data here and create a new review entry.
             new_review = Review(
                 user_id=current_user.id,
-                entry_id=data.get('entry_id'),  # Update with the correct field name in the data
-                game_id=data.get('game_id'),    # Update with the correct field name in the data
-                rating=entry_form.rating.data,
-                review_text=entry_form.review_text.data
+                entry_id=data.get('entry_id'),
+                game_id=data.get('game_id'),
+                rating=review_form.rating.data,
+                review_text=review_form.review_text.data
             )
             db.session.add(new_review)
             db.session.commit()
 
-            return generate_success_response({'message': 'Review created successfully.'})
+            return generate_success_response({'message': 'Review created successfully.', 'review' : new_review.to_dict()})
 
         except Exception as e:
             db.session.rollback()  # Roll back the transaction in case of an error
             return generate_error_response(f'Error creating the review: {str(e)}', 500)
+
     else:
-        print(entry_form.errors)
         return generate_error_response('Invalid form data.', 400)
 
 # Update an entry

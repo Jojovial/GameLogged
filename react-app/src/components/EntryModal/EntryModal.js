@@ -6,15 +6,15 @@ const EntryModal = ({ editMode, initialFormData }) => {
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [formData, setFormData] = useState({
-    name: "", // Updated field name
-    system: "", // Updated field name
-    region: "", // Updated field name
+    name: "",
+    system: "",
+    region: "",
     progress: "",
     progress_note: "",
     is_now_playing: false,
     wishlist: false,
-    rating: 0, // Updated field name
-    review_text: "", // Updated field name
+    rating: 0,
+    review_text: "",
   });
 
   const [enums, setEnums] = useState({
@@ -26,7 +26,10 @@ const EntryModal = ({ editMode, initialFormData }) => {
   useEffect(() => {
     fetch("/api/enums")
       .then((response) => response.json())
-      .then((data) => setEnums(data));
+      .then((data) => {
+        console.log("Enums data:", data);
+        setEnums(data);
+      });
   }, []);
 
 
@@ -57,13 +60,17 @@ const EntryModal = ({ editMode, initialFormData }) => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    // If the name is 'progress', set the value directly without adding to 'type === "checkbox" ? checked : value'
-    // This is because the progress field is a select element, not a checkbox
-    if (name === 'progress') {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
+    if (name === "progress") {
+      // Check if the selected value is a valid Progress enum value
+      if (enums.Progress.includes(value)) {
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+      } else {
+        // Log an error or handle invalid progress value
+        console.error("Invalid progress value:", value);
+      }
     } else {
       setFormData((prevData) => ({
         ...prevData,
@@ -72,44 +79,61 @@ const EntryModal = ({ editMode, initialFormData }) => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+
+  const handleCreateGame = async () => {
     try {
-      console.log("Form Data:", formData);
       const gameData = {
         name: formData.name,
         system: formData.system,
         region: formData.region,
       };
-      console.log("gameData:", gameData);
-
-
       const responseGame = await dispatch(thunkCreateGame(gameData));
-      const game_id = responseGame.game_id;
+      return responseGame.game_id;
+    } catch (error) {
+      console.error("Error creating game:", error);
+      throw error;
+    }
+  };
 
+
+  const handleCreateEntry = async (gameId) => {
+    try {
       const entryData = {
-        // Check if the fields are available in formData before adding them to entryData
-        progress: formData.hasOwnProperty("progress") ? formData.progress : "",
+        progress: formData.progress,
         progress_note: formData.progress_note,
         is_now_playing: formData.is_now_playing,
         wishlist: formData.wishlist,
-        game_id: game_id,
+        game_id: gameId,
       };
-
       const responseEntry = await dispatch(thunkCreateEntry(entryData));
+      return responseEntry.id;
+    } catch (error) {
+      console.error("Error creating entry:", error);
+      throw error;
+    }
+  };
 
+  const handleCreateReview = async (entryId, gameId) => {
+    try {
       const reviewData = {
-        entry_id: responseEntry.id,
-        game_id: game_id,
+        entry_id: entryId,
+        game_id: gameId,
         rating: formData.rating,
         review_text: formData.review_text,
       };
-      console.log("gameData:", gameData);
-      console.log("entryData:", entryData);
-      console.log("reviewData:", reviewData);
-
-
       await dispatch(thunkCreateReview(reviewData));
+    } catch (error) {
+      console.error("Error creating review:", error);
+      throw error;
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const gameId = await handleCreateGame();
+      const entryId = await handleCreateEntry(gameId);
+      await handleCreateReview(entryId, gameId);
       closeModal();
     } catch (error) {
       console.error("Error creating/updating entry:", error);
