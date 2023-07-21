@@ -1,12 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from .user_entry import user_entry
-from enum import Enum
-
-class Progress(Enum):
-    Unplayed = 'Unplayed'
-    Unfinished = 'Unfinished'
-    Beaten = 'Beaten'
-    Completed = 'Completed'
 
 
 
@@ -21,7 +14,7 @@ class Entry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
     game_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('games.id')), nullable=False)
-    progress = db.Column(db.Enum(Progress), nullable=False)
+    progress = db.Column(db.String, nullable=False)
     progress_note = db.Column(db.String(300), nullable=True)
     is_now_playing = db.Column(db.Boolean)
     wishlist = db.Column(db.Boolean)
@@ -37,7 +30,7 @@ class Entry(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'game_id': self.game_id,
-            'progress': self.progress.value,
+            'progress': self.progress,
             'progress_note': self.progress_note,
             'is_now_playing': self.is_now_playing,
             'wishlist': self.wishlist

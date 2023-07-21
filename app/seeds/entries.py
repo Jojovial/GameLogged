@@ -1,22 +1,22 @@
-from app.models.entry import db, Entry, environment, SCHEMA, Progress
+from app.models.entry import db, Entry, environment, SCHEMA
 from sqlalchemy.sql import text
 
 def seed_entries():
     entry_one = Entry(
         user_id = 1, game_id = 1,
-        progress = Progress.Unplayed, progress_note = "I will play this!",
+        progress = "Unplayed", progress_note = "I will play this!",
         is_now_playing=False, wishlist=True
     )
 
     entry_two = Entry(
         user_id = 2, game_id = 2,
-        progress=Progress.Unfinished, progress_note="Almost done!",
+        progress="Unfinished", progress_note="Almost done!",
         is_now_playing=True, wishlist=False
     )
 
     entry_three = Entry(
         user_id = 3, game_id = 3,
-        progress=Progress.Beaten, progress_note="I beat it!",
+        progress="Beaten", progress_note="I beat it!",
         is_now_playing=False, wishlist=False
     )
 

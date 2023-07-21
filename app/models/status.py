@@ -1,12 +1,7 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
-from enum import Enum
 
 
-class GameStatus(Enum):
-    Unplayed = 'Unplayed'
-    Unfinished = 'Unfinished'
-    Beaten = 'Beaten'
-    Completed = 'Completed'
+
 
 class Status(db.Model):
     __tablename__ = 'statuses'
@@ -16,7 +11,7 @@ class Status(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     entry_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('entries.id')), nullable=False)
-    game_status = db.Column(db.Enum(GameStatus), nullable=False)
+    game_status = db.Column(db.String, nullable=False)
 
 
     #Relationships

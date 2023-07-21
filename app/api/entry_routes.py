@@ -1,15 +1,12 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
-from app.models.entry import Entry, Progress
+from app.models.entry import Entry
 from app.models.db import db
 from app.models.review import Review
-from app.models.game import Game, System, Region
+from app.models.game import Game
 from app.forms.forms import EntryForm, GameForm, ReviewForm
 from app.ultis import generate_error_response, generate_success_response
 from sqlalchemy import asc
-import requests
-import traceback
-import logging
 
 
 
@@ -67,8 +64,8 @@ def get_user_games():
     games_data = [{
         'id': game.id,
         'name': game.name,
-        'system': game.system.value,
-        'region': game.region.value
+        'system': game.system,
+        'region': game.region
     } for game in games]
 
     return generate_success_response({'games': games_data})
@@ -98,7 +95,7 @@ def get_entries():
     entries = Entry.query.filter_by(user_id=current_user.id).order_by(asc(Entry.id)).all()
     entries_data = [{'id': entry.id,
                      'game_id': entry.game_id,
-                     'progress': entry.progress.value,
+                     'progress': entry.progress,
                      'progress_note': entry.progress_note,
                      'is_now_playing': entry.is_now_playing,
                      'wishlist': entry.wishlist}
@@ -112,22 +109,19 @@ def create_entry():
     data = request.json
     print("Received review data:", data)
 
-    game_form = GameForm(data=data)
-    game_form['csrf_token'].data = request.cookies['csrf_token']
-
     entry_form = EntryForm(data=data)
     entry_form['csrf_token'].data = request.cookies['csrf_token']
 
-    if game_form.validate() and entry_form.validate():
+    if entry_form.validate():
         try:
             # Convert the string representation of enum values to actual enums
-            system_value = System[game_form.system.data]
-            region_value = Region[game_form.region.data]
-            progress_value = Progress[entry_form.progress.data]
+            system_value = [data['system']]
+            region_value = [data['region']]
+            progress_value = [data['progress']]
 
             # Check if a game with the same name, system, and region exists
             existing_game = Game.query.filter_by(
-                name=game_form.name.data,
+                name=data['name'],
                 system=system_value,
                 region=region_value,
             ).first()
@@ -136,89 +130,58 @@ def create_entry():
                 # Use the existing game's ID
                 game_id = existing_game.id
             else:
-                # Create the new game using the new game creation route
-                game_data = {
-                    'name': game_form.name.data,
-                    'system': system_value.value,
-                    'region': region_value.value,
-                }
-                game_response = requests.post('/api/entries/games', json=game_data)
-                game_response_data = game_response.json()
-                game_id = game_response_data['game']['id']
+                # Return an error response to indicate that the specified game does not exist
+                return generate_error_response('Game does not exist.', 404)
 
             # Create the new entry using the obtained game ID
             new_entry = Entry(
                 user_id=current_user.id,
                 game_id=game_id,
                 progress=progress_value,
-                progress_note=entry_form.progress_note.data,
-                is_now_playing=entry_form.is_now_playing.data,
-                wishlist=entry_form.wishlist.data,
+                progress_note=data['progress_note'],
+                is_now_playing=data['is_now_playing'],
+                wishlist=data['wishlist'],
             )
             print('new entry error?', new_entry)
             db.session.add(new_entry)
             db.session.commit()
             print("New entry created successfully:", new_entry)
 
-            review_data = {
-                'entry_id': new_entry.id,
-                'game_id': game_id,
-                'rating': data.get('review', {}).get('rating'),
-                'review_text': data.get('review', {}).get('review_text'),
-            }
-            review_response = requests.post('/api/entries/reviews', json=review_data)
-            if review_response.ok:
-                return generate_success_response('Entry created!')
-            else:
-                print(review_response.json())
+            return generate_success_response('Entry created!')
 
         except KeyError as e:
             print("Error creating the entry:", e)
             return generate_error_response(f'Invalid enum value: {str(e)}', 400)
 
-        # Combine form errors for both GameForm and EntryForm
-        form_errors = {**game_form.errors, **entry_form.errors}
-        return generate_error_response(form_errors, 400)
+        # Combine form errors for EntryForm (if needed)
+        return generate_error_response(entry_form.errors, 400)
 
-    return generate_success_response('Entry created!')
+    return generate_error_response('Invalid form data.', 400)
 # Create new game
 @entry_routes.route('/games', methods=['POST'])
 @login_required
 def create_game():
-    data = request.get_json()
+    data = request.json
     print("Received data:", data)
 
     game_form = GameForm(data=data)
     game_form['csrf_token'].data = request.cookies['csrf_token']
-    print("game_form validation:", game_form.validate())
-    if not game_form.validate():
-        print("Form validation errors:", game_form.errors)
+
     if game_form.validate():
         try:
             # Convert the string representation of enum values to actual enums
-            system_value = System[game_form.system.data]
-            region_value = Region[game_form.region.data]
-
-
-            game_data = {
-                'name': game_form.name.data,
-                'system': system_value,
-                'region': region_value
-            }
-            print("game_data:", game_data)
-
+            system_value = [data['system']]
+            region_value = [data['region']]
 
             # Validate the incoming data here and create a new game entry.
             new_game = Game(
-                name=game_form.name.data,
+                name=data['name'],
                 system=system_value,
                 region=region_value
             )
             db.session.add(new_game)
-            print('new_game', new_game)
             db.session.commit()
             print("New game entry created successfully:", new_game)
-
 
             return generate_success_response({'message': 'Game created successfully.', 'game': new_game.to_dict()})
 
@@ -256,7 +219,7 @@ def create_review():
             db.session.add(new_review)
             db.session.commit()
 
-            return generate_success_response({'message': 'Review created successfully.', 'review' : new_review.to_dict()})
+            return generate_success_response({'message': 'Review created successfully.', 'review': new_review.to_dict()})
 
         except Exception as e:
             db.session.rollback()  # Roll back the transaction in case of an error
@@ -275,7 +238,7 @@ def update_entry(entry_id):
         return generate_error_response('Entry not found.', 404)
 
     if entry.user_id != current_user.id:
-        return generate_error_response('Unauthorized to update this entry', 403)
+        return generate_error_response('Unauthorized to update this entry.', 403)
 
     data = request.get_json()
     entry_form = EntryForm(data=data)
@@ -285,37 +248,24 @@ def update_entry(entry_id):
     review_form = ReviewForm(data=data)
     review_form['csrf_token'].data = request.cookies['csrf_token']
 
-    if entry_form.validate_on_submit() and game_form.validate_on_submit() and review_form.validate_on_submit():
-        entry.progress = Progress[entry_form.progress.data]
+    if entry_form.validate() and game_form.validate() and review_form.validate():
+        entry.progress = entry_form.progress.data
         entry.progress_note = entry_form.progress_note.data
         entry.is_now_playing = entry_form.is_now_playing.data
         entry.wishlist = entry_form.wishlist.data
 
-        print("game_form.system.data:", game_form.system.data)
-        print("System enum values:", [s.value for s in System])
-        system_data_lower = game_form.system.data.lower()
-
-        # Check if the lowercase value exists in the System enum
-        if system_data_lower in [s.value.lower() for s in System]:
-            # Find the matching enum member using the lowercase value
-            system_enum_member = next(member for member in System if member.value.lower() == system_data_lower)
-        else:
-            # If the value doesn't match any enum, handle the error
-            return generate_error_response('Invalid system value.', 400)
-
-        # Check if the game exists or create a new one
         game = Game.query.get(entry.game_id)
         if not game:
             game = Game(
                 name=game_form.name.data,
-                system=system_enum_member,
-                region=Region[game_form.region.data]
+                system=game_form.system.data,
+                region=game_form.region.data
             )
             db.session.add(game)
         else:
             game.name = game_form.name.data
-            game.system = system_enum_member
-            game.region = Region[game_form.region.data]
+            game.system = game_form.system.data
+            game.region = game_form.region.data
 
         db.session.commit()
         entry.game_id = game.id

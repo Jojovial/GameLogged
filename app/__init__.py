@@ -10,8 +10,7 @@ from .api.auth_routes import auth_routes
 from .api.entry_routes import entry_routes
 from .api.dialogue_routes import dialogue_routes
 from .api.game_routes import game_routes
-from app.models.game import System, Region
-from app.models.entry import Progress
+from app.forms.forms import SYSTEM_CHOICES, REGION_CHOICES, PROGRESS_CHOICES
 from .seeds import seed_commands
 from .config import Config
 
@@ -93,16 +92,12 @@ def react_root(path):
         return app.send_from_directory('public', 'favicon.ico')
     return app.send_static_file('index.html')
 
+@app.route('/choices')
+def your_view_function():
+    # Assuming you have already defined the choices (SYSTEM_CHOICES, REGION_CHOICES, PROGRESS_CHOICES) in your Flask app
+    return render_template('choices.html', system_choices=SYSTEM_CHOICES, region_choices=REGION_CHOICES, progress_choices=PROGRESS_CHOICES)
+
 
 @app.errorhandler(404)
 def not_found(e):
     return app.send_static_file('index.html')
-
-@app.route('/api/enums')
-def get_enums():
-    enums = {
-        'System': [e.value for e in System],
-        'Region': [e.value for e in Region],
-        'Progress': [e.value for e in Progress],
-    }
-    return jsonify(enums)

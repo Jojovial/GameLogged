@@ -17,20 +17,52 @@ const EntryModal = ({ editMode, initialFormData }) => {
     review_text: "",
   });
 
-  const [enums, setEnums] = useState({
-    System: [],
-    Region: [],
-    Progress: [],
-  });
+  SYSTEM_CHOICES = [
+    "PC",
+    "GameCube",
+    "GameBoy",
+    "GameBoyColor",
+    "GameBoyAdvance",
+    "Nintendo3DS",
+    "Nintendo64",
+    "NES",
+    "SNES",
+    "NintendoSwitch",
+    "PlayStation",
+    "PlayStation2",
+    "PlayStation3",
+    "PlayStation4",
+    "PlayStation5",
+    "PSP",
+    "PlayStationVita",
+    "Phone",
+    "Wii",
+    "WiiU",
+    "Xbox",
+    "Xbox360",
+    "XboxOne",
+    "Other",
+]
 
-  useEffect(() => {
-    fetch("/api/enums")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Enums data:", data);
-        setEnums(data);
-      });
-  }, []);
+REGION_CHOICES = [
+    'NAM',
+    'JP',
+    'PAL',
+    'CN',
+    'KR',
+    'BR',
+    'Other',
+]
+
+PROGRESS_CHOICES = [
+    'Unplayed',
+    'Unfinished',
+    'Beaten',
+    'Completed',
+]
+
+
+
 
 
   useEffect(() => {
@@ -60,23 +92,10 @@ const EntryModal = ({ editMode, initialFormData }) => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    if (name === "progress") {
-      // Check if the selected value is a valid Progress enum value
-      if (enums.Progress.includes(value)) {
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: value,
-        }));
-      } else {
-        // Log an error or handle invalid progress value
-        console.error("Invalid progress value:", value);
-      }
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: type === "checkbox" ? checked : value,
-      }));
-    }
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
 
@@ -87,10 +106,25 @@ const EntryModal = ({ editMode, initialFormData }) => {
         system: formData.system,
         region: formData.region,
       };
-      const responseGame = await dispatch(thunkCreateGame(gameData));
-      return responseGame.game_id;
+
+      const response = await fetch('/api/entries/games', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add any other headers you might need, e.g., authorization token
+        },
+        body: JSON.stringify(gameData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+
+      const responseData = await response.json();
+      return responseData.game.id; // Assuming the response contains the created game object with an 'id' property
     } catch (error) {
-      console.error("Error creating game:", error);
+      console.error('Error creating game:', error);
       throw error;
     }
   };
@@ -105,10 +139,29 @@ const EntryModal = ({ editMode, initialFormData }) => {
         wishlist: formData.wishlist,
         game_id: gameId,
       };
-      const responseEntry = await dispatch(thunkCreateEntry(entryData));
-      return responseEntry.id;
+
+      console.log("Entry data to be sent:", entryData);
+
+      const response = await fetch('/api/entries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add any other headers you might need, e.g., authorization token
+        },
+        body: JSON.stringify(entryData),
+      });
+
+      console.log("Entry creation response:", response);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+
+      const responseData = await response.json();
+      return responseData.entry.id; // Assuming the response contains the created entry object with an 'id' property
     } catch (error) {
-      console.error("Error creating entry:", error);
+      console.error('Error creating entry:', error);
       throw error;
     }
   };
@@ -121,9 +174,24 @@ const EntryModal = ({ editMode, initialFormData }) => {
         rating: formData.rating,
         review_text: formData.review_text,
       };
-      await dispatch(thunkCreateReview(reviewData));
+
+      const response = await fetch('/api/entries/reviews', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add any other headers you might need, e.g., authorization token
+        },
+        body: JSON.stringify(reviewData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+
+      // No need to return anything since this function doesn't need to return any data
     } catch (error) {
-      console.error("Error creating review:", error);
+      console.error('Error creating review:', error);
       throw error;
     }
   };
@@ -170,11 +238,12 @@ const EntryModal = ({ editMode, initialFormData }) => {
                 onChange={handleChange}
                 required
             >
-                {enums.System.map((systemOption) => (
-                    <option key={systemOption} value={systemOption}>
-                        {systemOption}
-                    </option>
-                ))}
+                {SYSTEM_CHOICES.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+
             </select>
             <label htmlFor="region">Region:</label>
             <select
@@ -184,11 +253,11 @@ const EntryModal = ({ editMode, initialFormData }) => {
                 onChange={handleChange}
                 required
             >
-                {enums.Region.map((regionOption) => (
-                    <option key={regionOption} value={regionOption}>
-                        {regionOption}
-                    </option>
-                ))}
+              {REGION_CHOICES.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
             </select>
             <label htmlFor="progress">Progress:</label>
             <select
@@ -198,11 +267,12 @@ const EntryModal = ({ editMode, initialFormData }) => {
                 onChange={handleChange}
                 required
             >
-                {enums.Progress.map((progressOption) => (
-                    <option key={progressOption} value={progressOption}>
-                        {progressOption}
-                    </option>
-                ))}
+              {PROGRESS_CHOICES.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+
             </select>
             <label htmlFor="progress_note">Progress Note:</label>
             <input
