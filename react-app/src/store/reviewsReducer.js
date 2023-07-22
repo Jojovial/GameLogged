@@ -54,7 +54,7 @@ export const deleteReview = (reviewId) => {
 
 /*-Get All Reviews Thunk-*/
 export const thunkAllReviews = () => async (dispatch) => {
-    const response = await fetch('/api/reviews/all');
+    const response = await fetch('/api/entries/reviews/all');
     const reviews = await response.json();
     dispatch(getAllReviews(reviews));
 }
@@ -146,9 +146,8 @@ const reviewsReducer = (state = initialState, action) => {
         case GET_ALL_REVIEWS:
             return {
                 ...state,
-                allReviews: {
-                    ...action.reviews
-                }
+                allReviews: action.reviews
+
             }
         case ADD_REVIEW:
             return {
@@ -166,13 +165,12 @@ const reviewsReducer = (state = initialState, action) => {
                     [action.review.id]: action.review
                 }
             }
-        case DELETE_REVIEW:
-            const reviewToDelete = { ...state.allReviews};
-            delete reviewToDelete[action.payload];
-            return {
-                ...state,
-                allReviews: reviewToDelete
-            };
+            case DELETE_REVIEW:
+                const { [action.payload]: _, ...remainingReviews } = state.allReviews;
+                return {
+                  ...state,
+                  allReviews: remainingReviews,
+                };
         default:
             return state;
     }

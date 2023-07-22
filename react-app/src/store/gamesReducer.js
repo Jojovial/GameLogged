@@ -172,13 +172,12 @@ const gamesReducer = (state = initialState, action) => {
                     }
                 }
             }
-        case DELETE_GAME:
-            const gameToDelete = { ...state.allGames };
-            delete gameToDelete[action.payload];
-            return {
-                ...state,
-                allGames: gameToDelete
-            };
+            case DELETE_GAME:
+                const { [action.payload]: _, ...remainingGames } = state.allGames;
+                return {
+                  ...state,
+                  allGames: remainingGames,
+                };
         default:
             return state;
     }

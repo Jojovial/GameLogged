@@ -1,0 +1,131 @@
+/* Sign page body */
+.sign-up-page-body{
+    background-color:#603fef;
+    height:85vh;
+    color:#ffffff;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+   }
+
+
+   /* Sign body */
+   .sign-up-page-wrapper .sign-up-body{
+    background-color:#603fef;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    float:none;
+    height:90vh;
+    transform:translatex(0px) translatey(0px);
+    font-family:'Lily Script One', display;
+    color:#ffffff;
+   }
+
+   /* Sign form */
+   .sign-up-page-wrapper .sign-up-body .sign-up-form{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    height:205px;
+    transform:translatex(0px) translatey(0px);
+    overflow:visible;
+    width:497px;
+   }
+
+   .sign-up-page-wrapper .sign-up-body form{
+    min-width:428px;
+   }
+
+   /* Sign body */
+   #root .sign-up-page-wrapper .sign-up-body{
+    transform:translatex(0px) translatey(0px);
+   }
+
+   /* Sign form */
+   .sign-up-page-wrapper .sign-up-body .sign-up-form{
+    flex:0 1 auto;
+    float:none;
+    align-self:center;
+    justify-content:space-around;
+    align-items:flex-end;
+    flex-direction:column;
+    overflow:visible;
+    height:40%;
+    border-style:none;
+    padding-left:0px;
+    padding-right:200px;
+    padding-top:0px;
+    transform:scale(1.5) translatex(-49px);
+   }
+
+   /* Button */
+   .sign-up-body .sign-up-form button{
+    color:#ffffff;
+    background-color:#ab00f4;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    width:197px;
+   }
+
+   /* Sign email */
+   .sign-up-form label input[type=text].sign-up-email{
+    color:#ab00f4;
+    border-style:none;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    border-top-left-radius:5px;
+    height:20px;
+   }
+
+   /* Input */
+   .sign-up-form label:nth-child(3) input[type=text]{
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    color:#ab00f4;
+   }
+
+   /* Sign username */
+   .sign-up-form label input[type=text].sign-up-username{
+    border-style:none;
+    height:20px;
+   }
+
+   /* Input */
+   .sign-up-form label:nth-child(4) input[type=password]{
+    transform:translatex(0px) translatey(0px);
+    border-style:none;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    color:#ab00f4;
+   }
+
+   /* Input */
+   .sign-up-form label:nth-child(5) input[type=password]{
+    color:#ab00f4;
+    border-style:none;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+   }
+
+   /* Sign password */
+   .sign-up-form label input[type=password].sign-up-password{
+    height:20px;
+   }
+
+   /* Sign password confirm */
+   .sign-up-form label input[type=password].sign-up-password-confirm{
+    height:20px;
+   }

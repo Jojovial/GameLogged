@@ -5,3 +5,93 @@
 .hidden {
   display: none;
 }
+
+@import url("//fonts.googleapis.com/css2?family=Lexend:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
+
+/* Nav links */
+.nav-links{
+ list-style-type:none;
+ display:flex;
+ flex-direction:row;
+ justify-content:space-between;
+ align-items:normal;
+ background-color:rgba(96,63,239,0.72);
+ overflow:hidden;
+ margin-bottom:0px;
+ margin-top:5px;
+ height:68px;
+ float:none;
+ z-index:23;
+ transform:translatex(0px) translatey(0px);
+}
+
+/* Link */
+.nav-links .nav-home-link a{
+ box-shadow:none;
+ text-decoration:none;
+}
+
+/* Landing page */
+.landing-page{
+ background-color:#603fef;
+}
+
+/* Nav home link */
+.nav-links .nav-home-link{
+ transform: translatey(30px);
+}
+
+/* Profile Unknowndown */
+.nav-links .nav-profile-button .profile-dropdown{
+ transform: translatex(-173px) translatey(9px);
+ width:231px;
+}
+
+/* Body */
+body{
+ transform:translatex(0px) translatey(0px);
+}
+
+/* Nav profile button */
+#root .nav-links .nav-profile-button{
+ transform: translatex(-14px) translatey(9px);
+}
+
+/* Button */
+.nav-profile-button .profile-dropdown button:nth-child(1){
+ color:#ffffff;
+ background-color:#603fef;
+ border-style:solid;
+ border-top-left-radius:5px;
+ border-top-right-radius:5px;
+ border-bottom-left-radius:5px;
+ border-bottom-right-radius:5px;
+ font-family:'Lexend', sans-serif;
+ text-shadow:none;
+ font-weight:600;
+}
+
+/* Button */
+.nav-profile-button .profile-dropdown button:nth-child(2){
+ color:#ffffff;
+ background-color:#603fef;
+ border-top-left-radius:5px;
+ border-top-right-radius:5px;
+ border-bottom-left-radius:5px;
+ border-bottom-right-radius:5px;
+ font-family:'Lexend', sans-serif;
+ border-style:solid;
+ font-weight:600;
+}
+
+/* Button */
+.nav-links .nav-profile-button > button:nth-child(1){
+ background-color:#603fef;
+ color:#ffffff;
+ border-top-left-radius:5px;
+ border-top-right-radius:5px;
+ border-bottom-left-radius:5px;
+ border-bottom-right-radius:5px;
+ width:35px;
+ border-style:solid;
+}

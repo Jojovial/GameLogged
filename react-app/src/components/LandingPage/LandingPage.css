@@ -1,0 +1,198 @@
+
+.landing-page{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+   }
+
+   .landing-page{
+    background-color:#603fef;
+    height:90vh;
+    transform:translatex(0px) translatey(0px);
+   }
+
+
+   .landing-wrapper .landing-body .landing-header{
+    color:#ffffff;
+    letter-spacing:7.4px;
+    transform: translatey(-250px);
+    position:relative;
+    top:-50px;
+   }
+
+
+   .landing-nav .landing-wrapper .landing-pitch{
+    color:#ffffff;
+    transform: translatex(-40px) translatey(-239px);
+    word-spacing:5.6px;
+    letter-spacing:-0.4px;
+    white-space:break-spaces;
+   }
+
+
+   .landing-nav .landing-login .landing-login-text{
+    transform:translatex(319px) translatey(201px);
+    color:#ffffff;
+    border-color:transparent;
+    border-width:4px;
+    border-style:solid;
+    width:80px;
+    background-color:#ac9eff;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    letter-spacing:1px;
+    text-shadow:none;
+    white-space:normal;
+   }
+
+
+   .landing-nav .landing-signup .landing-signup-text{
+    color:#ffffff;
+    background-color:#ac9eff;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    letter-spacing:2.1px;
+    word-spacing:0.9px;
+    direction:ltr;
+    height:35px;
+    transform:translatex(434px) translatey(133px);
+    position:relative;
+    top:12px;
+   }
+
+
+   .landing-page .landing-nav .credentials .landing-signup .landing-signup-text{
+    width:20% !important;
+   }
+
+
+   .landing-page .landing-nav{
+    width:auto !important;
+    height:auto !important;
+   }
+
+
+   .landing-nav .landing-login{
+    transform:translatex(0px) translatey(0px);
+   }
+
+
+   /* Landing login text */
+.landing-nav .landing-login .landing-login-text{
+    color:#0600c1;
+    font-family:'Monoton', display;
+    text-shadow:rgb(255, 0, 0) -1px 0px 0px, rgb(0, 255, 255) 1px 0px 0px;
+    background-color:#ffffff;
+    width:97px;
+    border-style:solid;
+    border-color:#0600c1;
+    border-width:6px;
+    border-top-left-radius:20px;
+    border-top-right-radius:20px;
+    border-bottom-left-radius:20px;
+    border-bottom-right-radius:20px;
+    text-align:center;
+   }
+
+   /* Landing page */
+   .landing-page{
+    background-color:#603fef;
+    transform:translatex(0px) translatey(0px);
+   }
+
+   /* Landing signup text */
+   .landing-nav .landing-signup .landing-signup-text{
+    background-color:#ffffff;
+    color:#0600c1;
+    font-family:'Monoton', display;
+    height:40px;
+    text-align:center;
+    text-shadow:rgb(255, 0, 0) -1px 0px 0px, rgb(0, 255, 255) 1px 0px 0px;
+    border-width:6px;
+    border-color:#0600c1;
+    border-style:solid;
+    border-top-left-radius:20px;
+    border-top-right-radius:20px;
+    border-bottom-left-radius:20px;
+    border-bottom-right-radius:20px;
+    top:11px;
+    transform:translatex(432px) translatey(119px);
+   }
+
+   /* Landing signup text */
+   .landing-page .landing-nav .credentials .landing-signup .landing-signup-text{
+    width:30% !important;
+   }
+
+   /* Landing nav */
+   .landing-page .landing-nav{
+    width:auto !important;
+    height:auto !important;
+   }
+
+
+   @import url("//fonts.googleapis.com/css2?family=Lexend:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
+
+/* Landing page */
+.landing-page{
+ background-color:#603fef;
+ transform:translatex(0px) translatey(0px);
+}
+
+/* Landing login text */
+.landing-nav .landing-login .landing-login-text{
+ background-color:#ffffff;
+ color:#1c0099;
+ font-family:'Lexend', sans-serif;
+ text-shadow:none;
+ white-space:normal;
+ border-style:solid;
+ border-top-left-radius:5px;
+ border-top-right-radius:5px;
+ border-bottom-left-radius:5px;
+ border-bottom-right-radius:20px;
+}
+
+/* Landing signup text */
+.landing-nav .landing-signup .landing-signup-text{
+ font-family:'Lexend', sans-serif;
+ text-shadow:none;
+ border-style:solid;
+ border-top-left-radius:5px;
+ border-top-right-radius:5px;
+ border-bottom-left-radius:20px;
+ border-bottom-right-radius:5px;
+ height:30px;
+ transform:translatex(428px) translatey(127px);
+}
+
+
+.landing-nav .landing-login h2{
+    background-color:#ab00f4 !important;
+    color:#ffffff !important;
+    border-style:none !important;
+    border-bottom-right-radius:5px !important;
+   }
+
+   /* Heading */
+   .landing-nav .landing-signup h2{
+    background-color:#ab00f4 !important;
+    color:#ffffff !important;
+    border-bottom-left-radius:5px !important;
+    border-style:none !important;
+   }
+
+   /* Landing login text */
+   .landing-nav .landing-login .landing-login-text{
+    transform:translatex(405px) translatey(-245px);
+   }
+
+   /* Landing signup text */
+   .landing-nav .landing-signup .landing-signup-text{
+    transform:translatex(310px) translatey(-386px);
+   }

@@ -21,22 +21,23 @@ const LandingPage = () => {
     };
 
     return (
-        <div>
+        <div className="landing-page">
             <div className="landing-nav">
-                <div className='logo-container'></div>
-                <div className='credentials'>
-                    <div className='landing-login' onClick={login}>
-                        Log In
-                    </div>
-                    <div className='landing-signup' onClick={signUp}>
-                        Sign Up Gamer!
-                    </div>
-                </div>
-            </div>
             <div className='landing-body-container'>
                 <div className='landing-wrapper'>
                     <div className='landing-body'>
-                        <h2 className='landing-header'>Idk what to put here yet</h2>
+                        <h2 className='landing-header'>Video Game Hoarder? You've come to the right place!</h2>
+                    </div>
+                    <h3 className='landing-pitch'>Tired of not being able to keep track of all the games you want to play? Well you can keep track of them here!</h3>
+                </div>
+            </div>
+                <div className='logo-container'></div>
+                <div className='credentials'>
+                    <div className='landing-login' onClick={login}>
+                        <h2 className='landing-login-text'>Log in</h2>
+                    </div>
+                    <div className='landing-signup' onClick={signUp}>
+                        <h2 className='landing-signup-text'>Sign Up Gamer!</h2>
                     </div>
                 </div>
             </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { thunkAllEntries, thunkDeleteEntry } from '../../store/entryReducer';
 import { thunkAllGames } from '../../store/gamesReducer';
+import { thunkAllReviews } from '../../store/reviewsReducer';
 import './Home.css';
 import EntryModal from '../EntryModal/EntryModal';
 import OpenModalButton from '../OpenModalButton';
@@ -15,26 +16,34 @@ const Home = () => {
     console.log('All Entries Use Selector', allEntries)
     const allGames = useSelector((state) => state.games.allGames.games);
     console.log('All Games from home', allGames);
+    const allReviews = useSelector((state) => state.reviews.allReviews);
+    console.log('ALL REVIEWS from home', allReviews);
     const [currentPage, setCurrentPage] = useState(1);
     const entriesPerPage = 5;
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [entryToEdit, setEntryToEdit] = useState(null);
     const [entryToDelete, setEntryToDelete] = useState(null);
-
+    const reviewsArray = Object.values(allReviews);
+    console.log('Reviews Array from home', reviewsArray);
     useEffect(() => {
-        setLoading(true);
-        setError(null);
-        dispatch(thunkAllEntries())
-          .then(() => {
-            dispatch(thunkAllGames()); // Dispatch thunkAllGames to fetch game data
-            setLoading(false);
-          })
-          .catch((err) => {
-            setLoading(false);
-            setError(err.message);
-          });
-      }, [dispatch]);
+      setLoading(true);
+      setError(null);
+      dispatch(thunkAllEntries())
+        .then(() => {
+          dispatch(thunkAllGames());
+          dispatch(thunkAllReviews())
+            .then(() => setLoading(false))
+            .catch((err) => {
+              setLoading(false);
+              setError(err.message);
+            });
+        })
+        .catch((err) => {
+          setLoading(false);
+          setError(err.message);
+        });
+    }, [dispatch]);
 
       const handleOpenEditModal = (entry) => {
         setEntryToEdit(entry);
@@ -56,18 +65,22 @@ const Home = () => {
         setEntryToDelete(null);
       };
 
-      const handleDeleteEntry = () => {
+      const handleDeleteEntry = async () => {
         if (entryToDelete) {
-          dispatch(thunkDeleteEntry(entryToDelete.id));
-          setDeleteModalOpen(false);
-          setEntryToDelete(null);
+          try {
+            await dispatch(thunkDeleteEntry(entryToDelete.id));
+            setDeleteModalOpen(false);
+            setEntryToDelete(null);
+          } catch (error) {
+            console.error('Error deleting entry:', error.message);
+          }
         }
       };
 
-    if(loading) {
-        return <p> Loading...</p>
+      if (loading) {
+        return <p>Loading...</p>;
+      }
 
-    }
 
     if (!allGames) {
         return <p>Loading...</p>;
@@ -75,6 +88,10 @@ const Home = () => {
 
     if(error) {
         return <p>Error: {error}</p>
+    }
+
+    if (!allReviews || Object.keys(allReviews).length === 0) {
+      return <p>No reviews found.</p>;
     }
 
     const indexOfLastEntry = currentPage * entriesPerPage;
@@ -99,8 +116,16 @@ const Home = () => {
             <p>No entries found.</p>
           ) : (
             currentEntries.map((entry) => {
-                    // Find the game with the matching game_id from allGames
+
                     const game = allGames.find((game) => game.id === entry.game_id);
+                    const review = reviewsArray.find((r) => r.game_id === entry.id);
+
+
+
+                    console.log('Entry:', entry);
+                    console.log('All Reviews:', allReviews);
+                    console.log('Review ID:', entry.id);
+                    console.log('Review:', review);
 
                     return (
                       <div key={entry.id} className="entries-item">
@@ -108,12 +133,30 @@ const Home = () => {
                         <button onClick={() => handleOpenDeleteModal(entry)}>Delete</button>
                         <p>{console.log(entry, 'entry here?')}</p>
                         <h3>{game ? game.name : 'No Game Name'}</h3>
+                        <p>System: {game.system}</p>
+                        <p>Region : {game.region}</p>
                         <p>Progress: {entry.progress}</p>
                         <p>{console.log(entry.progress, 'entry progress??')}</p>
                         <p>Progress Note: {entry.progress_note}</p>
                         <p>{console.log(entry.progress_note, 'entry progress note??')}</p>
                         <p>Now Playing: {entry.is_now_playing ? 'Yes' : 'No'}</p>
                         <p>Wishlist: {entry.wishlist ? 'Yes' : 'No'}</p>
+                        {review && typeof review === 'object' ? (
+                  <>
+                    {review.rating !== null ? (
+                      <p>Rating: {review.rating}</p>
+                    ) : (
+                      <p>No rating available.</p>
+                    )}
+                    {review.review_text.trim() !== '' ? (
+                      <p>Review: {review.review_text}</p>
+                    ) : (
+                      <p>No review available.</p>
+                    )}
+                  </>
+                ) : (
+                  <p>No review available for this entry.</p>
+                )}
                       </div>
                     );
                   })
@@ -140,9 +183,13 @@ const Home = () => {
             </div>
           </div>
            {/* Modal for editing an entry */}
-        {editModalOpen && entryToEdit && (
-        <EntryModal onClose={handleCloseEditModal} editMode={true} initialFormData={entryToEdit} />
-      )}
+           {editModalOpen && ( // Render the edit modal conditionally
+      <EntryModal
+        onClose={handleCloseEditModal}
+        editMode={!!entryToEdit} // Set editMode based on whether entryToEdit exists
+        initialFormData={entryToEdit} // Pass the entry data to the modal for editing
+      />
+    )}
        {deleteModalOpen && entryToDelete && (
         <div className="delete-modal">
           <h3>Are you sure you want to delete this entry?</h3>

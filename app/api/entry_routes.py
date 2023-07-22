@@ -27,7 +27,7 @@ def get_entry_details(entry_id):
     entry_data = {
         'id': entry.id,
         'game_id': entry.game_id,
-        'progress': entry.progress.value,
+        'progress': entry.progress,
         'progress_note': entry.progress_note,
         'is_now_playing': entry.is_now_playing,
         'wishlist': entry.wishlist
@@ -273,6 +273,61 @@ def update_entry(entry_id):
         db.session.commit()
 
         return generate_success_response('Entry and game updated!')
+    else:
+        return generate_error_response('Invalid form data.', 400)
+
+# Update a game within an entry
+@entry_routes.route('/<int:entry_id>/games/<int:game_id>', methods=['PUT'])
+@login_required
+def update_game(entry_id, game_id):
+    game = Game.query.get(game_id)
+
+    if not game:
+        return generate_error_response('Game not found.', 404)
+
+    if game.entry_id != entry_id:
+        return generate_error_response('Unauthorized to update this game.', 403)
+
+    data = request.get_json()
+    game_form = GameForm(data=data)
+    game_form['csrf_token'].data = request.cookies['csrf_token']
+
+    if game_form.validate():
+        # Update the game fields based on the form data
+        game.name = game_form.name.data
+        game.system = game_form.system.data
+        game.region = game_form.region.data
+
+        db.session.commit()
+
+        return generate_success_response('Game updated successfully!')
+    else:
+        return generate_error_response('Invalid form data.', 400)
+
+# Update a review within an entry
+@entry_routes.route('/<int:entry_id>/reviews/<int:review_id>', methods=['PUT'])
+@login_required
+def update_review(entry_id, review_id):
+    review = Review.query.get(review_id)
+
+    if not review:
+        return generate_error_response('Review not found.', 404)
+
+    if review.entry_id != entry_id:
+        return generate_error_response('Unauthorized to update this review.', 403)
+
+    data = request.get_json()
+    review_form = ReviewForm(data=data)
+    review_form['csrf_token'].data = request.cookies['csrf_token']
+
+    if review_form.validate():
+        # Update the review fields based on the form data
+        review.rating = review_form.rating.data
+        review.review_text = review_form.review_text.data
+
+        db.session.commit()
+
+        return generate_success_response('Review updated successfully!')
     else:
         return generate_error_response('Invalid form data.', 400)
 

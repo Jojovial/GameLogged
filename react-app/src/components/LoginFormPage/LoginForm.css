@@ -1,0 +1,71 @@
+.login-container{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background-color:#603fef;
+    height:90vh;
+    transform:translatex(0px) translatey(0px);
+   }
+
+   .form-wrapper{
+    height:250px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-around;
+    align-items:normal;
+    align-self:auto;
+    transform:scale(1.5) translatey(-20px);
+   }
+
+   /* Buttons */
+   .form-wrapper .demo-wrapper .buttons{
+    width:170px;
+    transform: translatex(9px);
+    color:#ffffff;
+    background-color:#ab00f4;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    border-style:none;
+   }
+
+   /* Inputs */
+   .form-wrapper .form-group input[type=email].inputs{
+    color:#ab00f4;
+    transform:translatex(0px) translatey(0px);
+    border-style:none;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    height:20px;
+   }
+
+   /* Inputs */
+   .form-wrapper .form-group input[type=password].inputs{
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    border-style:none;
+    height:20px;
+    color:#ab00f4;
+   }
+
+   /* Buttons */
+    .form-wrapper .buttons:nth-child(4){
+    color:#ffffff;
+    background-color:#ab00f4;
+    border-style:none;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+   }
+
+
+   .input-title{
+    color:#ffffff;
+   }
