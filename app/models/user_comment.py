@@ -5,4 +5,5 @@ user_comment = db.Table(
     'user_comment',
     db.Column('user_id', db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), primary_key=True),
     db.Column('comment_id', db.Integer, db.ForeignKey(add_prefix_for_prod('comments.id')), primary_key=True),
+     __table_args__ = {'schema': SCHEMA} if environment == 'production' else {}
 )
