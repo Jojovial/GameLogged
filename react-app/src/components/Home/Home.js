@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { thunkAllEntries, thunkDeleteEntry } from '../../store/entryReducer';
 import { thunkAllGames } from '../../store/gamesReducer';
 import { thunkAllReviews } from '../../store/reviewsReducer';
+import { deleteEntry } from '../../store/entryReducer';
 import './Home.css';
 import EntryModal from '../EntryModal/EntryModal';
 import OpenModalButton from '../OpenModalButton';
@@ -71,6 +72,7 @@ const Home = () => {
             await dispatch(thunkDeleteEntry(entryToDelete.id));
             setDeleteModalOpen(false);
             setEntryToDelete(null);
+            dispatch(thunkAllEntries);
           } catch (error) {
             console.error('Error deleting entry:', error.message);
           }
@@ -132,6 +134,7 @@ const Home = () => {
                         <button onClick={() => handleOpenEditModal(entry)}>Edit</button>
                         <button onClick={() => handleOpenDeleteModal(entry)}>Delete</button>
                         <p>{console.log(entry, 'entry here?')}</p>
+
                         <h3>{game ? game.name : 'No Game Name'}</h3>
                         <p>System: {game.system}</p>
                         <p>Region : {game.region}</p>
@@ -183,11 +186,11 @@ const Home = () => {
             </div>
           </div>
            {/* Modal for editing an entry */}
-           {editModalOpen && ( // Render the edit modal conditionally
+           {editModalOpen && ( 
       <EntryModal
         onClose={handleCloseEditModal}
-        editMode={!!entryToEdit} // Set editMode based on whether entryToEdit exists
-        initialFormData={entryToEdit} // Pass the entry data to the modal for editing
+        editMode={!!entryToEdit}
+        initialFormData={entryToEdit}
       />
     )}
        {deleteModalOpen && entryToDelete && (

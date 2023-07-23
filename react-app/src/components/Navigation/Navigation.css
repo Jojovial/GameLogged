@@ -95,3 +95,30 @@ body{
  width:35px;
  border-style:solid;
 }
+
+.nav-links .nav-profile-button .profile-dropdown{
+  position:fixed;
+  transform: translatex(-127px) translatey(-20px);
+  text-decoration:none;
+  list-style-type:none;
+  color:#ffffff;
+ }
+
+
+ .nav-links .nav-profile-button .profile-dropdown{
+  z-index:-10;
+  position:fixed;
+  transform: translatex(-127px) translatey(-20px);
+  text-decoration:none;
+  list-style-type:none;
+  color:#ffffff;
+ }
+
+ /* Link */
+ .nav-links .nav-home-link a{
+  font-size:29px;
+  color:#ffffff;
+  text-shadow:rgb(255, 255, 255) 0px 0px 2px, rgb(255, 255, 255) 0px 0px 4px, rgb(255, 255, 255) 0px 0px 6px, rgb(255, 119, 255) 0px 0px 8px, rgb(255, 0, 255) 0px 0px 12px, rgb(255, 0, 255) 0px 0px 16px, rgb(255, 0, 255) 0px 0px 20px, rgb(255, 0, 255) 0px 0px 24px;
+  position:relative;
+  top:-8px;
+ }

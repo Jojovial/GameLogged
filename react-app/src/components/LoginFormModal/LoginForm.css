@@ -1,0 +1,49 @@
+.login-modal-container{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    width:322px;
+    height:279px;
+    transform:translatex(0px) translatey(0px);
+    background-color:#ab00f4;
+    color:#ffffff;
+   }
+
+   /* Login modal form */
+   .login-modal-form{
+    display:flex;
+    flex-direction:column;
+    flex-wrap:nowrap;
+    width:197px;
+    position:relative;
+    top:-37px;
+    transform:scale(1.41) translatey(14px);
+   }
+
+   /* Login modal form */
+   .login-modal-container .login-modal-form{
+    height:172px !important;
+   }
+
+   /* Button */
+  .login-modal-form button{
+    position:relative;
+    top:12px;
+    color:#ffffff;
+   }
+
+   /* Login modal email */
+   .login-modal-form label input[type=text].login-modal-email{
+    width:190px;
+   }
+
+   /* Login modal password */
+   .login-modal-form label input[type=password].login-modal-password{
+    width:190px;
+   }
+
+   /* Button */
+   .login-modal-form button{
+    background-color:#603fef;
+   }

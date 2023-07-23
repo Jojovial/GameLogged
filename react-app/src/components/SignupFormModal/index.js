@@ -30,9 +30,11 @@ function SignupFormModal() {
 	};
 
 	return (
-		<>
+
+			<div className="signup-modal-container">
+
 			<h1>Sign Up</h1>
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={handleSubmit} className="signup-modal-form">
 				<ul>
 					{errors.map((error, idx) => (
 						<li key={idx}>{error}</li>
@@ -45,6 +47,7 @@ function SignupFormModal() {
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
 						required
+						className="signup-modal-email"
 					/>
 				</label>
 				<label>
@@ -54,6 +57,7 @@ function SignupFormModal() {
 						value={username}
 						onChange={(e) => setUsername(e.target.value)}
 						required
+						className="signup-modal-username"
 					/>
 				</label>
 				<label>
@@ -63,6 +67,7 @@ function SignupFormModal() {
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 						required
+						className="signup-modal-password"
 					/>
 				</label>
 				<label>
@@ -72,11 +77,13 @@ function SignupFormModal() {
 						value={confirmPassword}
 						onChange={(e) => setConfirmPassword(e.target.value)}
 						required
+						className="signup-modal-confirm-password"
 					/>
 				</label>
 				<button type="submit">Sign Up</button>
 			</form>
-		</>
+			</div>
+
 	);
 }
 

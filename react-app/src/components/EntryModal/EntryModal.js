@@ -5,6 +5,7 @@ import { thunkAllEntries } from "../../store/entryReducer";
 import { thunkAllGames } from "../../store/gamesReducer";
 import { thunkAllReviews } from "../../store/reviewsReducer";
 import { thunkEditEntry } from '../../store/entryReducer';
+import './EntryModal.css';
 
 const EntryModal = ({ editMode, initialFormData }) => {
   const dispatch = useDispatch();
@@ -266,7 +267,7 @@ const PROGRESS_CHOICES = [
 
     return (
         <div className="entry-modal">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="entry-modal-form">
             <label htmlFor="name">Game Name:</label>
             <input
                 type="text"
@@ -275,6 +276,7 @@ const PROGRESS_CHOICES = [
                 value={formData.name}
                 onChange={handleChange}
                 required
+                className="entry-modal-game-name"
             />
             <label htmlFor="system">System:</label>
             <select
@@ -283,6 +285,7 @@ const PROGRESS_CHOICES = [
                 value={formData.system}
                 onChange={handleChange}
                 required
+                className="entry-modal-system"
             >
                 {SYSTEM_CHOICES.map((option) => (
             <option key={option} value={option}>
@@ -298,6 +301,7 @@ const PROGRESS_CHOICES = [
                 value={formData.region}
                 onChange={handleChange}
                 required
+                className="entry-modal-region"
             >
               {REGION_CHOICES.map((option) => (
             <option key={option} value={option}>
@@ -312,6 +316,7 @@ const PROGRESS_CHOICES = [
                 value={formData.progress}
                 onChange={handleChange}
                 required
+                className="entry-modal-progress"
             >
               {PROGRESS_CHOICES.map((option) => (
             <option key={option} value={option}>
@@ -327,6 +332,7 @@ const PROGRESS_CHOICES = [
                 name="progress_note"
                 value={formData.progress_note}
                 onChange={handleChange}
+                className="entry-modal-progress-note"
             />
              <div className="rating-slider">
              <p>
@@ -354,6 +360,7 @@ const PROGRESS_CHOICES = [
                 name="review_text"
                 value={formData.review_text}
                 onChange={handleChange}
+                className="entry-modal-review"
             />
             <label htmlFor="wishlist">Wishlist:</label>
             <input
@@ -362,6 +369,7 @@ const PROGRESS_CHOICES = [
                 name="wishlist"
                 checked={formData.wishlist}
                 onChange={handleChange}
+                className="entry-modal-wishlist"
             />
             <label htmlFor="is_now_playing">Now Playing?:</label>
             <input
@@ -370,6 +378,7 @@ const PROGRESS_CHOICES = [
                 name="is_now_playing"
                 checked={formData.is_now_playing}
                 onChange={handleChange}
+                className="entry-modal-now-playing"
             />
             <button type="submit">{editMode ? "Update" : "Create"}</button>
          </form>

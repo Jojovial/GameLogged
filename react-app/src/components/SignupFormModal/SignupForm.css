@@ -1,0 +1,126 @@
+.login-modal-container{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    width:322px;
+    height:279px;
+    transform:translatex(0px) translatey(0px);
+    background-color:#ab00f4;
+    color:#ffffff;
+   }
+
+   /* Login modal form */
+    .login-modal-form{
+    display:flex;
+    flex-direction:column;
+    flex-wrap:nowrap;
+    width:197px;
+    position:relative;
+    top:-37px;
+    transform:scale(1.41) translatey(14px);
+   }
+
+   /* Login modal form */
+    .login-modal-container .login-modal-form{
+    height:172px !important;
+   }
+
+   /* Button */
+   .login-modal-form button{
+    position:relative;
+    top:12px;
+    color:#ffffff;
+   }
+
+   /* Login modal email */
+   .login-modal-form label input[type=text].login-modal-email{
+    width:190px;
+   }
+
+   /* Login modal password */
+   .login-modal-form label input[type=password].login-modal-password{
+    width:190px;
+   }
+
+   /* Button */
+   #modal .login-modal-form button{
+    background-color:#603fef;
+   }
+
+   /* Signup modal container */
+   .signup-modal-container{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    flex-wrap:nowrap;
+    height:293px;
+    transform:translatex(0px) translatey(0px);
+    background-color:#ab00f4;
+    color:#ffffff;
+   }
+
+   /* Signup modal form */
+   .signup-modal-form{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    width:462px;
+    transform:scale(1.22);
+    height:180px;
+    position:relative;
+    top:-40px;
+   }
+
+   /* Label */
+   .signup-modal-form > label{
+    display:flex;
+    flex-direction:column;
+    flex:0 1 auto;
+    width:206px;
+   }
+
+   /* Button */
+  .signup-modal-form button{
+    width:188px;
+    transform: translatey(6px);
+    background-color:#603fef;
+    color:#ffffff;
+   }
+
+   /* Signup modal email */
+   .signup-modal-form label input[type=text].signup-modal-email{
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    border-style:none;
+   }
+
+   /* Signup modal username */
+   .signup-modal-form label input[type=text].signup-modal-username{
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    border-style:none;
+   }
+
+   /* Signup modal password */
+   .signup-modal-form label input[type=password].signup-modal-password{
+    border-style:none;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+   }
+
+   /* Signup modal confirm password */
+   .signup-modal-form label input[type=password].signup-modal-confirm-password{
+    border-style:none;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+   }

@@ -1,0 +1,103 @@
+.home-container{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background-color:#603fef;
+    transform:translatex(0px) translatey(0px);
+   }
+
+   /* Home entries */
+   .home-wrapper .home-entries{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+   }
+
+   /* Entries item */
+   .home-wrapper .home-entries .entries-item{
+    display:flex;
+    flex-direction:column;
+    background-color:#bcaef8;
+    border-style:solid;
+    border-width:5px;
+    transform:scale(.9);
+    width:454px;
+    text-align:center;
+    color:#63008e;
+   }
+
+   /* Button */
+   .home-entries .entries-item button{
+    color:#ffffff;
+    background-color:#ab00f4;
+    width:25%;
+    transform: translatex(170px);
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+    align-items:center;
+   }
+
+   /* Paragraph */
+   .home-entries .entries-item p{
+    display:flex;
+    flex-direction:column;
+    flex:0 1 auto;
+    justify-content:normal;
+    flex-wrap:wrap;
+    overflow:visible;
+   }
+
+   /* Button */
+   .home-wrapper .home-entries button{
+    color:#ffffff;
+    background-color:#ab00f4;
+   }
+
+   /* Heading */
+   h2{
+    color:#ffffff;
+   }
+
+   .home-wrapper .home-memory-card h2{
+    transform:translatex(-449px) translatey(-2777px);
+   }
+
+   /* Heading */
+   .home-wrapper .home-dialogue-box h2{
+    transform:translatex(503px) translatey(-2825px);
+   }
+
+
+   .delete-modal{
+    background-color:#d1cbf5;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    transform:translatex(-509px) translatey(-662px);
+    text-align:center;
+    width:514px;
+    height:154px;
+    color:#ab00f4;
+    border-style:dotted;
+    border-width:5px;
+   }
+
+   /* Button */
+   .delete-modal button:nth-child(2){
+    color:#ffffff;
+    background-color:#ab00f4;
+    width:140px;
+    transform:translatex(-85px) translatey(-18px);
+   }
+
+   /* Button */
+   .delete-modal button:nth-child(3){
+    color:#ffffff;
+    background-color:#603fef;
+    width:140px;
+    transform:translatex(75px) translatey(-39px);
+   }
