@@ -54,17 +54,20 @@ export const deleteEntry = (entryId) => {
 
 /*-Get All Entries Thunk-*/
 export const thunkAllEntries = () => async (dispatch) => {
-    try {
-        const response = await fetch('/api/entries/all');
-        const entries = await response.json();
-        console.log('API Response:', entries); // Check the response from the API
-        dispatch(getAllEntries(entries));
-        console.log('After dispatch', entries)
-      } catch (error) {
-        console.error('Error fetching entries:', error);
-      }
-    };
+  try {
+      const response = await fetch('/api/entries/all');
+      const entries = await response.json();
+      console.log('API Response:', entries); // Check the response from the API
+      dispatch(getAllEntries(entries));
+      console.log('After dispatch', entries);
 
+      return Promise.resolve(); // Resolve the promise when the operation is done
+  } catch (error) {
+      console.error('Error fetching entries:', error);
+
+      return Promise.reject(error); // Reject the promise if an error occurs
+  }
+};
 /*-Get Entry Thunk-*/
 export const thunkEntry = (entryId) => async (dispatch, getState) => {
     const response = await fetch(`/api/entries/${entryId}`);
@@ -75,7 +78,7 @@ export const thunkEntry = (entryId) => async (dispatch, getState) => {
 // thunkCreateGame
 export const thunkCreateGame = (gameData) => async (dispatch) => {
     try {
-      const response = await fetch('/api/entries/games', {
+      const response = await fetch('/api/games', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(gameData),
@@ -120,7 +123,7 @@ export const thunkCreateGame = (gameData) => async (dispatch) => {
   // thunkCreateReview
   export const thunkCreateReview = (reviewData) => async (dispatch) => {
     try {
-      const response = await fetch('/api/entries/reviews', {
+      const response = await fetch('/api/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reviewData),
@@ -163,7 +166,7 @@ export const thunkCreateGame = (gameData) => async (dispatch) => {
 
 export const thunkEditGame = (gameId, game) => async (dispatch) => {
     try {
-        const response = await fetch(`/api/entries/games/${gameId}`, {
+        const response = await fetch(`/api/games/${gameId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(game)
@@ -184,7 +187,7 @@ export const thunkEditGame = (gameId, game) => async (dispatch) => {
 
 export const thunkEditReview = (reviewId, review) => async (dispatch) => {
     try {
-        const response = await fetch(`/api/entries/reviews/${reviewId}`, {
+        const response = await fetch(`/api/reviews/${reviewId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(review)

@@ -126,7 +126,7 @@ const PROGRESS_CHOICES = [
         region: formData.region,
       };
 
-      const response = await fetch('/api/entries/games', {
+      const response = await fetch('/api/games', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -190,16 +190,15 @@ const PROGRESS_CHOICES = [
     }
   };
 
-  const handleCreateReview = async (entryId, gameId) => {
+  const handleCreateReview = async (gameId) => {
     try {
       const reviewData = {
-        entry_id: entryId,
         game_id: gameId,
         rating: formData.rating,
         review_text: formData.review_text,
       };
 
-      const response = await fetch('/api/entries/reviews', {
+      const response = await fetch('/api/reviews', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -234,9 +233,11 @@ const PROGRESS_CHOICES = [
       }
 
       // Fetch the latest data after creating/updating the entry
-      dispatch(thunkAllEntries());
-      dispatch(thunkAllGames());
-      dispatch(thunkAllReviews());
+      await Promise.all([
+        dispatch(thunkAllEntries()),
+        dispatch(thunkAllGames()),
+        dispatch(thunkAllReviews()),
+      ]);
 
       closeModal();
     } catch (error) {

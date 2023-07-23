@@ -9,6 +9,7 @@ from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
 from .api.entry_routes import entry_routes
 from .api.dialogue_routes import dialogue_routes
+from .api.review_routes import review_routes
 from .api.game_routes import game_routes
 from app.forms.forms import SYSTEM_CHOICES, REGION_CHOICES, PROGRESS_CHOICES
 from .seeds import seed_commands
@@ -33,6 +34,7 @@ app.config.from_object(Config)
 app.register_blueprint(user_routes, url_prefix='/api/users')
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(entry_routes, url_prefix='/api/entries')
+app.register_blueprint(review_routes, url_prefix='/api/reviews')
 app.register_blueprint(game_routes, url_prefix='/api/games')
 app.register_blueprint(dialogue_routes, url_prefix='/api/comment')
 db.init_app(app)

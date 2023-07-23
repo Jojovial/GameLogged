@@ -51,14 +51,18 @@ export const deleteGame = (gameId) => {
 /*-Get All Games Thunk-*/
 export const thunkAllGames = () => async (dispatch) => {
     try {
-        const response = await fetch('/api/entries/games/all');
+        const response = await fetch('/api/games/all');
         const games = await response.json();
         console.log('Fetched Games:', games); // Check if the data is received correctly
         dispatch(getAllGames(games));
-      } catch (error) {
+
+        return Promise.resolve(); // Resolve the promise when the operation is done
+    } catch (error) {
         console.error('Error fetching games:', error);
-      }
-    };
+
+        return Promise.reject(error); // Reject the promise if an error occurs
+    }
+};
 
 /*-Get Game Thunk-*/
 export const thunkGame = (gameId) => async (dispatch, getState) => {

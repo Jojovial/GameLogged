@@ -54,10 +54,18 @@ export const deleteReview = (reviewId) => {
 
 /*-Get All Reviews Thunk-*/
 export const thunkAllReviews = () => async (dispatch) => {
-    const response = await fetch('/api/entries/reviews/all');
-    const reviews = await response.json();
-    dispatch(getAllReviews(reviews));
-}
+    try {
+        const response = await fetch('/api/reviews/all');
+        const reviews = await response.json();
+        dispatch(getAllReviews(reviews));
+
+        return Promise.resolve(); // Resolve the promise when the operation is done
+    } catch (error) {
+        console.error('Error fetching reviews:', error);
+
+        return Promise.reject(error); // Reject the promise if an error occurs
+    }
+};
 
 /*-Get Review Thunk-*/
 export const thunkReview = (reviewId) => async (dispatch, getState) => {

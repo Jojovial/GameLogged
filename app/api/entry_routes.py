@@ -54,39 +54,49 @@ def get_entry_details(entry_id):
 
 
 #GET all games by current user
-@entry_routes.route('/games/all', methods=['GET'])
-@login_required
-def get_user_games():
-    entries = Entry.query.filter_by(user_id=current_user.id).all()
-    game_ids = [entry.game_id for entry in entries]
-    games = Game.query.filter(Game.id.in_(game_ids)).all()
+# @entry_routes.route('/games/all', methods=['GET'])
+# @login_required
+# def get_user_games():
+#     entries = Entry.query.filter_by(user_id=current_user.id).all()
+#     game_ids = [entry.game_id for entry in entries]
+#     games = Game.query.filter(Game.id.in_(game_ids)).all()
 
-    games_data = [{
-        'id': game.id,
-        'name': game.name,
-        'system': game.system,
-        'region': game.region
-    } for game in games]
+#     games_data = [{
+#         'id': game.id,
+#         'name': game.name,
+#         'system': game.system,
+#         'region': game.region
+#     } for game in games]
 
-    return generate_success_response({'games': games_data})
+#     return generate_success_response({'games': games_data})
 
-#GET all reviews by current user
-@entry_routes.route('/reviews/all', methods=['GET'])
-@login_required
-def get_user_reviews():
-    entries = Entry.query.filter_by(user_id=current_user.id).all()
-    entry_ids = [entry.id for entry in entries]
-    reviews = Review.query.filter(Review.entry_id.in_(entry_ids)).all()
+# @entry_routes.route('/reviews/all', methods=['GET'])
+# @login_required
+# def get_user_reviews():
+#     user_reviews = Review.query.filter_by(user_id=current_user.id).all()
 
-    reviews_data = [{
-        'id': review.id,
-        'entry_id': review.entry_id,
-        'game_id': review.game_id,
-        'rating': review.rating,
-        'review_text': review.review_text
-    } for review in reviews]
+#     reviews_data = []
+#     for review in user_reviews:
+#         review_data = {
+#             'id': review.id,
+#             'game_id': review.game_id,
+#             'rating': review.rating,
+#             'review_text': review.review_text
+#         }
 
-    return generate_success_response({'reviews': reviews_data})
+#         # Fetch game details associated with the review's game_id
+#         game = Game.query.get(review.game_id)
+#         if game:
+#             review_data['game'] = {
+#                 'id': game.id,
+#                 'name': game.name,
+#                 'system': game.system,
+#                 'region': game.region
+#             }
+
+#         reviews_data.append(review_data)
+
+#     return generate_success_response({'reviews': reviews_data})
 
 #GET all entries by current user
 @entry_routes.route('/all', methods=['GET'])
@@ -147,72 +157,71 @@ def create_entry():
 
     return generate_error_response('Invalid form data.', 400)
 # Create new game
-@entry_routes.route('/games', methods=['POST'])
-@login_required
-def create_game():
-    data = request.json
-    print("Received data:", data)
 
-    game_form = GameForm(data=data)
-    game_form['csrf_token'].data = request.cookies['csrf_token']
+# @entry_routes.route('/games', methods=['POST'])
+# @login_required
+# def create_game():
+#     data = request.json
+#     print("Received data:", data)
 
-    if game_form.validate():
-        try:
+#     game_form = GameForm(data=data)
+#     game_form['csrf_token'].data = request.cookies['csrf_token']
 
-            # Validate the incoming data here and create a new game entry.
-            new_game = Game(
-                name=data['name'],
-                system=data['system'],
-                region=data['region']
-            )
-            db.session.add(new_game)
-            db.session.commit()
-            print("New game entry created successfully:", new_game)
+#     if game_form.validate():
+#         try:
 
-            return generate_success_response({'message': 'Game created successfully.', 'game': new_game.to_dict()})
+#             # Validate the incoming data here and create a new game entry.
+#             new_game = Game(
+#                 name=data['name'],
+#                 system=data['system'],
+#             
+#             db.session.add(new_game)
+#             db.session.commit()
+#             print("New game entry created successfully:", new_game)
 
-        except KeyError as e:
-            return generate_error_response(f'Invalid enum value: {str(e)}', 400)
+#             return generate_success_response({'message': 'Game created successfully.', 'game': new_game.to_dict()})
 
-        except Exception as e:
-            db.session.rollback()  # Roll back the transaction in case of an error
-            print("Error creating the game:", e)
-            return generate_error_response(f'Error creating the game: {str(e)}', 500)
+#         except KeyError as e:
+#             return generate_error_response(f'Invalid enum value: {str(e)}', 400)
 
-    else:
-        return generate_error_response('Invalid form data.', 400)
+#         except Exception as e:
+#             db.session.rollback()  # Roll back the transaction in case of an error
+#             print("Error creating the game:", e)
+#             return generate_error_response(f'Error creating the game: {str(e)}', 500)
 
-# Create new review
-@entry_routes.route('/reviews', methods=['POST'])
-@login_required
-def create_review():
-    data = request.json
-    print("Received review data:", data)
+#     else:
+#         return generate_error_response('Invalid form data.', 400)
 
-    review_form = ReviewForm(data=data)
-    review_form['csrf_token'].data = request.cookies['csrf_token']
+# # Create new review
+# @entry_routes.route('/reviews', methods=['POST'])
+# @login_required
+# def create_review():
+#     data = request.json
+#     print("Received review data:", data)
 
-    if review_form.validate():
-        try:
-            # Validate the incoming data here and create a new review entry.
-            new_review = Review(
-                user_id=current_user.id,
-                entry_id=data.get('entry_id'),
-                game_id=data.get('game_id'),
-                rating=review_form.rating.data,
-                review_text=review_form.review_text.data
-            )
-            db.session.add(new_review)
-            db.session.commit()
+#     review_form = ReviewForm(data=data)
+#     review_form['csrf_token'].data = request.cookies['csrf_token']
 
-            return generate_success_response({'message': 'Review created successfully.', 'review': new_review.to_dict()})
+#     if review_form.validate():
+#         try:
+#             # Validate the incoming data here and create a new review entry.
+#             new_review = Review(
+#                 user_id=current_user.id,
+#                 game_id=data.get('game_id'),
+#                 rating=review_form.rating.data,
+#                 review_text=review_form.review_text.data
+#             )
+#             db.session.add(new_review)
+#             db.session.commit()
 
-        except Exception as e:
-            db.session.rollback()  # Roll back the transaction in case of an error
-            return generate_error_response(f'Error creating the review: {str(e)}', 500)
+#             return generate_success_response({'message': 'Review created successfully.', 'review': new_review.to_dict()})
 
-    else:
-        return generate_error_response('Invalid form data.', 400)
+#         except Exception as e:
+#             db.session.rollback()  # Roll back the transaction in case of an error
+#             return generate_error_response(f'Error creating the review: {str(e)}', 500)
+
+#     else:
+#         return generate_error_response('Invalid form data.', 400)
 
 # Update an entry
 @entry_routes.route('/<int:entry_id>', methods=['PUT'])
@@ -256,11 +265,10 @@ def update_entry(entry_id):
         db.session.commit()
         entry.game_id = game.id
 
-        review = Review.query.filter_by(entry_id=entry_id).first()
+        review = Review.query.filter_by(game_id=entry.game_id).first()
         if not review:
             review = Review(
                 user_id=current_user.id,
-                entry_id=entry_id,
                 game_id=entry.game_id,
                 rating=review_form.rating.data,
                 review_text=review_form.review_text.data
@@ -276,60 +284,60 @@ def update_entry(entry_id):
     else:
         return generate_error_response('Invalid form data.', 400)
 
-# Update a game within an entry
-@entry_routes.route('/<int:entry_id>/games/<int:game_id>', methods=['PUT'])
-@login_required
-def update_game(entry_id, game_id):
-    game = Game.query.get(game_id)
+# # Update a game within an entry
+# @entry_routes.route('/<int:entry_id>/games/<int:game_id>', methods=['PUT'])
+# @login_required
+# def update_game(entry_id, game_id):
+#     game = Game.query.get(game_id)
 
-    if not game:
-        return generate_error_response('Game not found.', 404)
+#     if not game:
+#         return generate_error_response('Game not found.', 404)
 
-    if game.entry_id != entry_id:
-        return generate_error_response('Unauthorized to update this game.', 403)
+#     if game.entry_id != entry_id:
+#         return generate_error_response('Unauthorized to update this game.', 403)
 
-    data = request.get_json()
-    game_form = GameForm(data=data)
-    game_form['csrf_token'].data = request.cookies['csrf_token']
+#     data = request.get_json()
+#     game_form = GameForm(data=data)
+#     game_form['csrf_token'].data = request.cookies['csrf_token']
 
-    if game_form.validate():
-        # Update the game fields based on the form data
-        game.name = game_form.name.data
-        game.system = game_form.system.data
-        game.region = game_form.region.data
+#     if game_form.validate():
+#         # Update the game fields based on the form data
+#         game.name = game_form.name.data
+#         game.system = game_form.system.data
+#         game.region = game_form.region.data
 
-        db.session.commit()
+#         db.session.commit()
 
-        return generate_success_response('Game updated successfully!')
-    else:
-        return generate_error_response('Invalid form data.', 400)
+#         return generate_success_response('Game updated successfully!')
+#     else:
+#         return generate_error_response('Invalid form data.', 400)
 
-# Update a review within an entry
-@entry_routes.route('/<int:entry_id>/reviews/<int:review_id>', methods=['PUT'])
-@login_required
-def update_review(entry_id, review_id):
-    review = Review.query.get(review_id)
+# # Update a review within an entry
+# @entry_routes.route('/<int:entry_id>/games/<int:game_id>/reviews/<int:review_id>', methods=['PUT'])
+# @login_required
+# def update_review(game_id, review_id):
+#     review = Review.query.get(review_id)
 
-    if not review:
-        return generate_error_response('Review not found.', 404)
+#     if not review:
+#         return generate_error_response('Review not found.', 404)
 
-    if review.entry_id != entry_id:
-        return generate_error_response('Unauthorized to update this review.', 403)
+#     if review.game_id != game_id:
+#         return generate_error_response('Unauthorized to update this review.', 403)
 
-    data = request.get_json()
-    review_form = ReviewForm(data=data)
-    review_form['csrf_token'].data = request.cookies['csrf_token']
+#     data = request.get_json()
+#     review_form = ReviewForm(data=data)
+#     review_form['csrf_token'].data = request.cookies['csrf_token']
 
-    if review_form.validate():
-        # Update the review fields based on the form data
-        review.rating = review_form.rating.data
-        review.review_text = review_form.review_text.data
+#     if review_form.validate():
+#         # Update the review fields based on the form data
+#         review.rating = review_form.rating.data
+#         review.review_text = review_form.review_text.data
 
-        db.session.commit()
+#         db.session.commit()
 
-        return generate_success_response('Review updated successfully!')
-    else:
-        return generate_error_response('Invalid form data.', 400)
+#         return generate_success_response('Review updated successfully!')
+#     else:
+#         return generate_error_response('Invalid form data.', 400)
 
 #Delete an entry
 @entry_routes.route('/<int:entry_id>', methods=["DELETE"])
@@ -348,46 +356,46 @@ def delete_board(entry_id):
 
     return generate_success_response({'message': 'Entry deleted successfully.'})
 
-#Delete a game within an entry
-@entry_routes.route('/<int:entry_id>/games/<int:game_id>', methods=['DELETE'])
-@login_required
-def delete_game(entry_id, game_id):
-    entry = Entry.query.get(entry_id)
+# #Delete a game within an entry
+# @entry_routes.route('/<int:entry_id>/games/<int:game_id>', methods=['DELETE'])
+# @login_required
+# def delete_game(entry_id, game_id):
+#     entry = Entry.query.get(entry_id)
 
-    if not entry:
-        return generate_error_response('Entry not found.', 404)
+#     if not entry:
+#         return generate_error_response('Entry not found.', 404)
 
-    if entry.user_id != current_user.id:
-        return generate_error_response('Unauthorized to delete this game.', 403)
+#     if entry.user_id != current_user.id:
+#         return generate_error_response('Unauthorized to delete this game.', 403)
 
-    game = Game.query.get(game_id)
+#     game = Game.query.get(game_id)
 
-    if not game or game.id != entry.game_id:
-        return generate_error_response('Game not found.', 404)
+#     if not game or game.id != entry.game_id:
+#         return generate_error_response('Game not found.', 404)
 
-    db.session.delete(game)
-    db.session.commit()
+#     db.session.delete(game)
+#     db.session.commit()
 
-    return generate_success_response({'message': 'Game deleted successfully.'})
+#     return generate_success_response({'message': 'Game deleted successfully.'})
 
-#Delete a review within an entry
-@entry_routes.route('/<int:entry_id>/reviews/<int:review_id>', methods=['DELETE'])
-@login_required
-def delete_review(entry_id, review_id):
-    entry = Entry.query.get(entry_id)
+# #Delete a review within an entry
+# @entry_routes.route('/<int:entry_id>/games/<int:game_id>/reviews/<int:review_id>', methods=['DELETE'])
+# @login_required
+# def delete_review(game_id, review_id):
+#     game = Game.query.get(game_id)
 
-    if not entry:
-        return generate_error_response('Entry not found.', 404)
+#     if not game:
+#         return generate_error_response('Entry not found.', 404)
 
-    if entry.user_id != current_user.id:
-        return generate_error_response('Unauthorized to delete this review.', 403)
+#     if game.user_id != current_user.id:
+#         return generate_error_response('Unauthorized to delete this review.', 403)
 
-    review = Review.query.get(review_id)
+#     review = Review.query.get(review_id)
 
-    if not review or review.entry_id != entry.id:
-        return generate_error_response('Review not found.', 404)
+#     if not review or review.game_id != game.id:
+#         return generate_error_response('Review not found.', 404)
 
-    db.session.delete(review)
-    db.session.commit()
+#     db.session.delete(review)
+#     db.session.commit()
 
-    return generate_success_response({'message': 'Review deelted successfully.'})
+#     return generate_success_response({'message': 'Review deelted successfully.'})

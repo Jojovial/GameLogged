@@ -22,7 +22,6 @@ class Game(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'review_id': self.review_id,
             'name': self.name,
             'system': self.system,
             'region': self.region
