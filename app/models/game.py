@@ -14,7 +14,7 @@ class Game(db.Model):
 
     #Relationships
     entries = db.relationship('Entry', back_populates='game_entries', cascade='all, delete')
-    reviews = db.relationship('Review', back_populates='game_reviews', cascade='all, delete')
+    # reviews = db.relationship('Review', back_populates='game_reviews', cascade='all, delete')
 
 
 
@@ -22,6 +22,7 @@ class Game(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
+            'review_id': self.review_id,
             'name': self.name,
             'system': self.system,
             'region': self.region

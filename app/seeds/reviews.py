@@ -4,13 +4,13 @@ from sqlalchemy.sql import text
 
 def seed_reviews():
     review_1 = Review(
-     user_id = 1, game_id = 1, entry_id=1, rating= 0, review_text =""
+     user_id = 1, game_id = 1, rating= 0, review_text =""
     )
     review_2 = Review(
-     user_id = 2, game_id = 2, entry_id=2,rating = 4, review_text = "Almost done but lengthy grind."
+     user_id = 2, game_id = 2, rating = 4, review_text = "Almost done but lengthy grind."
     )
     review_3 = Review(
-     user_id = 3, game_id = 3, entry_id=3, rating = 5, review_text = "JELLY BOY IS SO GOOD OMG!!!!"
+     user_id = 3, game_id = 3, rating = 5, review_text = "JELLY BOY IS SO GOOD OMG!!!!"
     )
 
     db.session.add(review_1)
