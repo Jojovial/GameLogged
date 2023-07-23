@@ -1,5 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
-from .user_review import user_review
+
 
 
 class Review(db.Model):
@@ -17,9 +17,9 @@ class Review(db.Model):
 
 
     #Relationships
-    users = db.relationship('User', secondary=user_review, back_populates='reviews', lazy=True)
+    users = db.relationship('User', back_populates='reviews', lazy=True)
     game_reviews = db.relationship('Game', back_populates='reviews', lazy=True)
-    entry = db.relationship('Entry', back_populates='reviews', overlaps="entry_reviews,review")
+    entry = db.relationship('Entry', back_populates='reviews', lazy=True)
     def to_dict(self):
         return {
             'id': self.id,

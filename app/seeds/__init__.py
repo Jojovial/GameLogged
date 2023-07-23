@@ -6,9 +6,7 @@ from .games import seed_games, undo_games
 from .memory_cards import seed_memory_cards, undo_memory_cards
 from .reviews import seed_reviews, undo_reviews
 from .statuses import seed_statuses, undo_statuses
-from .user_comments import seed_user_comments, undo_user_comments
-from .user_entries import seed_user_entries, undo_user_entries
-from .user_reviews import seed_user_reviews, undo_user_reviews
+
 
 from app.models.db import db, environment, SCHEMA
 
@@ -32,9 +30,7 @@ def seed():
         undo_memory_cards()
         undo_reviews()
         undo_statuses()
-        undo_user_comments()
-        undo_user_entries()
-        undo_user_reviews()
+
 
     seed_users()
     seed_comments()
@@ -44,18 +40,12 @@ def seed():
     seed_memory_cards()
     seed_reviews()
     seed_statuses()
-    seed_user_comments()
-    seed_user_entries()
-    seed_user_reviews()
+
 
 
 # Creates the `flask seed undo` command
 @seed_commands.command('undo')
 def undo():
-    undo_user_comments()
-    # Add other undo fun ctions here
-    undo_user_entries()
-    undo_user_reviews()
     undo_reviews()
     undo_statuses()
     undo_entries()

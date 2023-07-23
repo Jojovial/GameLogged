@@ -13,8 +13,8 @@ class Game(db.Model):
     region = db.Column(db.String, nullable=False)
 
     #Relationships
-    entries = db.relationship('Entry', back_populates='game_entries', cascade='all, delete-orphan')
-    reviews = db.relationship('Review', back_populates='game_reviews', cascade='all, delete-orphan')
+    entries = db.relationship('Entry', back_populates='game_entries', cascade='all, delete')
+    reviews = db.relationship('Review', back_populates='game_reviews', cascade='all, delete')
 
 
 

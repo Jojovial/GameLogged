@@ -1,5 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
-from .user_comment import user_comment
+
 
 class Comment(db.Model):
     __tablename__ = 'comments'
@@ -14,7 +14,7 @@ class Comment(db.Model):
 
     #Relationships
 
-    users = db.relationship('User', secondary=user_comment, back_populates='comments')
+    users = db.relationship('User', back_populates='comments')
 
 
     def to_dict(self):
