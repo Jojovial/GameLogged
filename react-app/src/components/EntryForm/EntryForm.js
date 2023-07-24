@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { thunkEditEntry, thunkEditGame, thunkEditReview } from '../../store/entryReducer';
 import { thunkAllEntries } from '../../store/entryReducer';
-
+import './EntryForm.css';
 
 const EntryForm = ({initialFormData, onSubmit, onCancel}) => {
     console.log('before useState',initialFormData);
