@@ -83,14 +83,21 @@ def create_game():
 # Update a game within an entry
 @game_routes.route('/<int:game_id>', methods=['PUT'])
 @login_required
-def update_game(entry_id, game_id):
+def update_game(game_id):
     game = Game.query.get(game_id)
 
     if not game:
         return generate_error_response('Game not found.', 404)
 
-    if game.entry_id != entry_id:
-        return generate_error_response('Unauthorized to update this game.', 403)
+    # Assuming there's a foreign key relationship between Game and Entry models
+    entries = game.entries  # Use the 'entries' attribute to access the associated entries
+
+    if not entries:  # Check if there are any entries associated with the game
+        return generate_error_response('Entry not found.', 404)
+
+    for entry in entries:
+        if entry.user_id != current_user.id:
+            return generate_error_response('Unauthorized to update this game.', 403)
 
     data = request.get_json()
     game_form = GameForm(data=data)
@@ -107,7 +114,6 @@ def update_game(entry_id, game_id):
         return generate_success_response('Game updated successfully!')
     else:
         return generate_error_response('Invalid form data.', 400)
-
 
 #Delete a game within an entry
 @game_routes.route('/<int:game_id>', methods=['DELETE'])

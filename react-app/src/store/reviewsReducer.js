@@ -6,6 +6,7 @@ const GET_REVIEW = 'reviews/GetReview';
 const ADD_REVIEW = 'reviews/AddReview';
 const EDIT_REVIEW = 'reviews/EditReview';
 const DELETE_REVIEW = 'reviews/DeleteReview';
+const DELETE_REVIEWS_FOR_GAME = 'reviews/DeleteReviewsForGame';
 
 /*-Get All Reviews-*/
 export const getAllReviews = (reviews) => {
@@ -14,6 +15,11 @@ export const getAllReviews = (reviews) => {
         reviews: reviews
     }
 }
+
+const deleteReviewsForGame = (gameId) => ({
+    type: 'DELETE_REVIEWS_FOR_GAME',
+    payload: gameId,
+  });
 
 
 /*-Get Review-*/
@@ -58,11 +64,10 @@ export const thunkAllReviews = () => async (dispatch) => {
         const response = await fetch('/api/reviews/all');
         const reviews = await response.json();
         dispatch(getAllReviews(reviews));
-
+        console.log('Fetched reviews:', reviews);
         return Promise.resolve(); // Resolve the promise when the operation is done
     } catch (error) {
         console.error('Error fetching reviews:', error);
-
         return Promise.reject(error); // Reject the promise if an error occurs
     }
 };
@@ -138,6 +143,7 @@ export const thunkDeleteReview = (reviewId) => async (dispatch) => {
 }
 
 
+
 const initialState = {
     allReviews: {},
     singleReview: {},
@@ -179,6 +185,17 @@ const reviewsReducer = (state = initialState, action) => {
                   ...state,
                   allReviews: remainingReviews,
                 };
+                case DELETE_REVIEWS_FOR_GAME:
+                    // Filter out all reviews associated with the specified gameId
+                    const updatedReviews = Object.fromEntries(
+                      Object.entries(state.allReviews).filter(
+                        ([_, review]) => review.game_id !== action.payload
+                      )
+                    );
+                    return {
+                      ...state,
+                      allReviews: updatedReviews,
+                    };
         default:
             return state;
     }

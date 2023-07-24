@@ -5,6 +5,7 @@
     align-items:center;
     background-color:#603fef;
     transform:translatex(0px) translatey(0px);
+    min-height: 70vh
    }
 
    /* Home entries */
@@ -13,10 +14,24 @@
     flex-direction:column;
     justify-content:center;
     align-items:center;
+    min-height: 70vh;
    }
 
    /* Entries item */
    .home-wrapper .home-entries .entries-item{
+    display:flex;
+    flex-direction:column;
+    background-color:#bcaef8;
+    border-style:solid;
+    border-width:5px;
+    transform:scale(.9);
+    width:454px;
+    text-align:center;
+    color:#63008e;
+   }
+
+
+   .entries-item-placeholder{
     display:flex;
     flex-direction:column;
     background-color:#bcaef8;

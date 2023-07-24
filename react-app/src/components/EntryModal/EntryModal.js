@@ -5,12 +5,14 @@ import { thunkAllEntries } from "../../store/entryReducer";
 import { thunkAllGames } from "../../store/gamesReducer";
 import { thunkAllReviews } from "../../store/reviewsReducer";
 import { thunkEditEntry } from '../../store/entryReducer';
+import { useModal } from "../../context/Modal";
 import './EntryModal.css';
 
-const EntryModal = ({ editMode, initialFormData }) => {
+const EntryModal = ({allEntries, allGames, allReviews }) => {
   const dispatch = useDispatch();
   const [tempRating, setTempRating] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { closeModal} = useModal();
   const SYSTEM_CHOICES = [
     "PC",
     "GameCube",
@@ -68,46 +70,12 @@ const PROGRESS_CHOICES = [
   });
 
 
-
-
-
-  useEffect(() => {
-    if (editMode && initialFormData) {
-      console.log("Initial form data:", initialFormData);
-      // If in edit mode and there is initialFormData, set the form fields with the initial data
-      setFormData({
-        name: initialFormData.name,
-        system: initialFormData.system,
-        region: initialFormData.region,
-        progress: initialFormData.progress,
-        progress_note: initialFormData.progress_note,
-        is_now_playing: initialFormData.is_now_playing,
-        wishlist: initialFormData.wishlist,
-        rating: initialFormData.rating,
-        review_text: initialFormData.review_text,
-      });
-      console.log('Edit Data', initialFormData);
-    } else {
-      // Set default values for the form fields
-      setFormData({
-        name: "",
-        system: SYSTEM_CHOICES[0],
-        region: REGION_CHOICES[0],
-        progress: PROGRESS_CHOICES[0],
-        progress_note: "",
-        is_now_playing: false,
-        wishlist: false,
-        rating: 0,
-        review_text: "",
-      });
-    }
-  }, [editMode, initialFormData]);
-  const closeModal = () => {
-    // Close the modal by setting the state to false
-    setIsModalOpen(false);
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
   const handleChange = (e) => {
+    console.log(e.target); // add this line
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
@@ -116,7 +84,6 @@ const PROGRESS_CHOICES = [
       [name]: newValue,
     }));
   };
-
 
   const handleCreateGame = async () => {
     try {
@@ -222,27 +189,22 @@ const PROGRESS_CHOICES = [
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (editMode) {
-        // If in edit mode, dispatch a thunk to update the existing entry instead of creating a new one.
-        await dispatch(thunkEditEntry(initialFormData.id, formData)); // Use the entryToEdit.id as the entryId
-      } else {
-        // Create a new entry
-        const gameId = await handleCreateGame();
-        const entryId = await handleCreateEntry(gameId);
-        await handleCreateReview(entryId, gameId);
-      }
+      const gameId = await handleCreateGame();
+      const entryId = await handleCreateEntry(gameId);
 
-      // Fetch the latest data after creating/updating the entry
+      // Fetch the latest data after creating the entry
       await Promise.all([
         dispatch(thunkAllEntries()),
         dispatch(thunkAllGames()),
         dispatch(thunkAllReviews()),
       ]);
+      await handleCreateReview(entryId, gameId);
 
       closeModal();
     } catch (error) {
-      console.error("Error creating/updating entry:", error);
+      console.error("Error creating entry:", error);
       // Handle the error, e.g., show an error message to the user
+      console.log("Server Response:", error.response);
       // You can use the setError state to display an error message on the modal.
     }
   };
@@ -381,10 +343,14 @@ const PROGRESS_CHOICES = [
                 onChange={handleChange}
                 className="entry-modal-now-playing"
             />
-            <button type="submit">{editMode ? "Update" : "Create"}</button>
+            <button type="submit">Create</button>
+            <button type="button" onClick={closeModal}>
+          Cancel
+        </button>
          </form>
         </div>
     )
+
 };
 
 export default EntryModal;

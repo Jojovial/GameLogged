@@ -152,3 +152,5 @@ def delete_review(review_id):
     db.session.commit()
 
     return generate_success_response({'message': 'Review deleted successfully.'})
+
+

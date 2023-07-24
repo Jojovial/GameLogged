@@ -216,9 +216,8 @@ export const thunkDeleteEntry = (entryId) => async (dispatch) => {
         throw new Error('Failed to delete entry');
       }
 
+      // If the API is configured to cascade delete reviews, you don't need to dispatch deleteReview action separately.
       dispatch(deleteEntry(entryId));
-      dispatch(deleteGame(entryId)); // Assuming the game ID is the same as the entry ID
-      dispatch(deleteReview(entryId)); // Assuming the review ID is the same as the entry ID
 
       return { payload: entryId };
     } catch (err) {
