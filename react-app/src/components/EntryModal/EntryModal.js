@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { thunkCreateEntry, thunkCreateGame, thunkCreateReview } from "../../store/entryReducer";
+import { thunkCreateEntry} from "../../store/entryReducer";
 import { thunkAllEntries } from "../../store/entryReducer";
-import { thunkAllGames } from "../../store/gamesReducer";
-import { thunkAllReviews } from "../../store/reviewsReducer";
-import { thunkEditEntry } from '../../store/entryReducer';
 import { useModal } from "../../context/Modal";
 import './EntryModal.css';
 
-const EntryModal = ({allEntries, allGames, allReviews }) => {
+const EntryModal = () => {
   const dispatch = useDispatch();
   const [tempRating, setTempRating] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,7 +72,7 @@ const PROGRESS_CHOICES = [
   };
 
   const handleChange = (e) => {
-    console.log(e.target); // add this line
+    console.log(e.target);
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
@@ -85,52 +82,22 @@ const PROGRESS_CHOICES = [
     }));
   };
 
-  const handleCreateGame = async () => {
-    try {
-      const gameData = {
-        name: formData.name,
-        system: formData.system,
-        region: formData.region,
-      };
-
-      const response = await fetch('/api/games', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-
-        },
-        body: JSON.stringify(gameData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-      }
-
-      const responseData = await response.json();
-      if (responseData.game && responseData.game.id) {
-        return responseData.game.id;
-      } else {
-        throw new Error('Invalid response data: game id is missing.');
-      }
-    } catch (error) {
-      console.error('Error creating game:', error);
-      throw error;
-    }
-  };
-
-
-  const handleCreateEntry = async (gameId) => {
+  const handleCreateEntry = async () => {
     try {
       const entryData = {
-        name: formData.name,
+        game_name: formData.game_name,
+        system: formData.system,
+        region: formData.region,
         progress: formData.progress,
         progress_note: formData.progress_note,
+        rating: formData.rating,
+        review_text: formData.review_text,
         is_now_playing: formData.is_now_playing,
         wishlist: formData.wishlist,
-        game_id: gameId,
       };
 
+      const createdEntry = await dispatch(thunkCreateEntry(entryData));
+      console.log('New entry created:', createdEntry);
       console.log("Entry data to be sent:", entryData);
 
       const response = await fetch('/api/entries', {
@@ -157,55 +124,19 @@ const PROGRESS_CHOICES = [
     }
   };
 
-  const handleCreateReview = async (gameId) => {
-    try {
-      const reviewData = {
-        game_id: gameId,
-        rating: formData.rating,
-        review_text: formData.review_text,
-      };
-
-      const response = await fetch('/api/reviews', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-
-        },
-        body: JSON.stringify(reviewData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-      }
-
-      // No need to return anything since this function doesn't need to return any data
-    } catch (error) {
-      console.error('Error creating review:', error);
-      throw error;
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const gameId = await handleCreateGame();
-      const entryId = await handleCreateEntry(gameId);
 
-      // Fetch the latest data after creating the entry
-      await Promise.all([
-        dispatch(thunkAllEntries()),
-        dispatch(thunkAllGames()),
-        dispatch(thunkAllReviews()),
-      ]);
-      await handleCreateReview(entryId, gameId);
+      await handleCreateEntry();
+      dispatch(thunkAllEntries()),
+
+
 
       closeModal();
     } catch (error) {
       console.error("Error creating entry:", error);
-      // Handle the error, e.g., show an error message to the user
       console.log("Server Response:", error.response);
-      // You can use the setError state to display an error message on the modal.
     }
   };
 

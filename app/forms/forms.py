@@ -54,24 +54,20 @@ class CommentForm(FlaskForm):
     """
     user_id = IntegerField('user_id', validators=[DataRequired()])
     comment_text = StringField('comment_text', validators=[DataRequired(), Length(max=500)])
-class ReviewForm(FlaskForm):
-    user_id = IntegerField('user_id')
-    game_id = IntegerField('game_id')
-    rating = IntegerField('rating')
-    review_text = StringField('review_text', validators=[Length(max=300)])
-class GameForm(FlaskForm):
-    name = StringField('name', validators=[DataRequired(), Length(max=100)])
-    system = SelectField('system', choices=SYSTEM_CHOICES)
-    region = SelectField('region', choices=REGION_CHOICES)
+
 
 class EntryForm(FlaskForm):
     """
     Form for creating an entry
     """
     user_id = IntegerField('user_id')
-    game_id = IntegerField('game_id')
+    game_name = StringField('name', validators=[DataRequired(), Length(max=100)])
+    system = SelectField('system', choices=SYSTEM_CHOICES)
+    region = SelectField('region', choices=REGION_CHOICES)
     progress = SelectField('progress', choices=PROGRESS_CHOICES)
     progress_note = StringField('progress_note', validators=[Length(max=300)])
+    rating = IntegerField('rating')
+    review_text = StringField('review_text', validators=[Length(max=300)])
     is_now_playing = BooleanField('is_now_playing')
     wishlist = BooleanField('wishlist')
 

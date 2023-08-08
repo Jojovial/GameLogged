@@ -1,5 +1,4 @@
-import { deleteGame, editGame, addGame } from "./gamesReducer";
-import { deleteReview, editReview, addReview } from "./reviewsReducer";
+
 
 
 /*-Action Types-*/
@@ -57,15 +56,15 @@ export const thunkAllEntries = () => async (dispatch) => {
   try {
       const response = await fetch('/api/entries/all');
       const entries = await response.json();
-      console.log('API Response:', entries); // Check the response from the API
+      console.log('API Response:', entries);
       dispatch(getAllEntries(entries));
       console.log('After dispatch', entries);
 
-      return Promise.resolve(); // Resolve the promise when the operation is done
+      return Promise.resolve();
   } catch (error) {
       console.error('Error fetching entries:', error);
 
-      return Promise.reject(error); // Reject the promise if an error occurs
+      return Promise.reject(error);
   }
 };
 /*-Get Entry Thunk-*/
@@ -75,28 +74,7 @@ export const thunkEntry = (entryId) => async (dispatch, getState) => {
     dispatch(getEntry(entry));
 }
 
-// thunkCreateGame
-export const thunkCreateGame = (gameData) => async (dispatch) => {
-    try {
-      const response = await fetch('/api/games', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(gameData),
-      });
 
-      if (!response.ok) {
-        throw new Error('Failed to create game');
-      }
-
-      const game = await response.json();
-      dispatch(addGame(game));
-      console.log("Created game:", game);
-      return game;
-    } catch (error) {
-      console.error('Error creating game:', error.message);
-      throw error;
-    }
-  };
 
   // thunkCreateEntry
   export const thunkCreateEntry = (entryData) => async (dispatch) => {
@@ -120,27 +98,6 @@ export const thunkCreateGame = (gameData) => async (dispatch) => {
     }
   };
 
-  // thunkCreateReview
-  export const thunkCreateReview = (reviewData) => async (dispatch) => {
-    try {
-      const response = await fetch('/api/reviews', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reviewData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create review');
-      }
-
-      const review = await response.json();
-      dispatch(addReview(review));
-      return review;
-    } catch (error) {
-      console.error('Error creating review:', error.message);
-      throw error;
-    }
-  };
 
 
   export const thunkEditEntry = (entryId, entry) => async (dispatch) => {
@@ -164,47 +121,7 @@ export const thunkCreateGame = (gameData) => async (dispatch) => {
     }
 };
 
-export const thunkEditGame = (gameId, game) => async (dispatch) => {
-    try {
-        const response = await fetch(`/api/games/${gameId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(game)
-        });
 
-        if (!response.ok) {
-            throw new Error('Failed to update game');
-        }
-
-        const gameToEdit = await response.json();
-        dispatch(editGame(gameToEdit));
-
-        return { payload: gameToEdit };
-    } catch (err) {
-        return { error: err.message };
-    }
-};
-
-export const thunkEditReview = (reviewId, review) => async (dispatch) => {
-    try {
-        const response = await fetch(`/api/reviews/${reviewId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(review)
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to update review');
-        }
-
-        const reviewToEdit = await response.json();
-        dispatch(editReview(reviewToEdit));
-
-        return { payload: reviewToEdit };
-    } catch (err) {
-        return { error: err.message };
-    }
-};
 
 export const thunkDeleteEntry = (entryId) => async (dispatch) => {
     try {
@@ -216,7 +133,6 @@ export const thunkDeleteEntry = (entryId) => async (dispatch) => {
         throw new Error('Failed to delete entry');
       }
 
-      // If the API is configured to cascade delete reviews, you don't need to dispatch deleteReview action separately.
       dispatch(deleteEntry(entryId));
 
       return { payload: entryId };

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { thunkEditEntry, thunkEditGame, thunkEditReview } from '../../store/entryReducer';
+import { thunkEditEntry} from '../../store/entryReducer';
 import { thunkAllEntries } from '../../store/entryReducer';
 import './EntryForm.css';
 
@@ -92,15 +92,7 @@ const EntryForm = ({initialFormData, onSubmit, onCancel}) => {
         try {
             await dispatch(thunkEditEntry(initialFormData.id, formData));
 
-            const gameDataChanged = initialFormData.name !== formData.name || initialFormData.system !== formData.system || initialFormData.region !== formData.region;
-            if (gameDataChanged) {
-              await dispatch(thunkEditGame(initialFormData.game_id, formData));
-            }
 
-            const reviewDataChanged = initialFormData.rating !== formData.rating || initialFormData.review_text !== formData.review_text;
-            if (reviewDataChanged) {
-              await dispatch(thunkEditReview(initialFormData.review_id, formData));
-            }
             await onSubmit(formData);
           } catch (error) {
             console.error("Error updating entry:", error);
@@ -116,12 +108,12 @@ const EntryForm = ({initialFormData, onSubmit, onCancel}) => {
       return (
         <form onSubmit={handleSubmit} className="entry-form">
           {/* Game Name */}
-          <label htmlFor="name">Game Name:</label>
+          <label htmlFor="game_name">Game Name:</label>
           <input
             type="text"
             id="entry-name"
-            name="name"
-            value={formData.name}
+            name="game_name"
+            value={formData.game_name}
             onChange={handleChange}
             required
           />
