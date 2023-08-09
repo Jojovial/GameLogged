@@ -6,7 +6,7 @@ import './Home.css';
 import EntryModal from '../EntryModal/EntryModal';
 import OpenModalButton from '../OpenModalButton';
 import DeleteEntryModal from '../DeleteEntryModal/DeleteEntryModal';
-import EditEntryModal from '../EditEntryModal';
+import EditEntryModal from '../EditEntryModal/EditEntryModal';
 
 const Home = () => {
   const dispatch = useDispatch();
