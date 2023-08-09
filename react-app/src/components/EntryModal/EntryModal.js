@@ -129,11 +129,8 @@ const PROGRESS_CHOICES = [
     try {
 
       await handleCreateEntry();
-      dispatch(thunkAllEntries()),
-
-
-
-      closeModal();
+      dispatch(thunkAllEntries());
+    closeModal();
     } catch (error) {
       console.error("Error creating entry:", error);
       console.log("Server Response:", error.response);
