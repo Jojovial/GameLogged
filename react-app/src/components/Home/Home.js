@@ -16,6 +16,7 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const entriesPerPage = 5;
   const [deletingEntryId, setDeletingEntryId] = useState(null);
+  const [editingEntryId, setEditingEntryId] = useState(null);
 
   useEffect(() => {
     dispatch(thunkAllEntries())
@@ -71,9 +72,17 @@ const Home = () => {
                   {entry.rating !== null ? <p>Rating: {entry.rating}</p> : <p>'No rating available.</p>}
                   {entry.review_text !== '' ? <p>Review: {entry.review_text}</p> : <p>No review available.</p>}
                   <OpenModalButton
-                    modalComponent={<EditEntryModal />}
+                    modalComponent={
+                      <EditEntryModal
+                        selectedEntryData={entry}
+                        onSubmit={async (updatedEntry) => {
+                          await dispatch(thunkEditEntry(updatedEntry));
+                          setEditingEntryId(null);
+                        }}
+                        onCancel={() => setEditingEntryId(null)}
+                      />
+                    }
                     buttonText="Edit"
-                    onButtonClick={() => handleEditEntry(entry.id)}
                   />
                    <OpenModalButton
                     modalComponent={
