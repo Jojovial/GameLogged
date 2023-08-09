@@ -17,7 +17,6 @@ class User(db.Model, UserMixin):
 
     #Relationships
     entries = db.relationship('Entry', back_populates='users')
-    reviews = db.relationship('Review', back_populates='users')
     logs = db.relationship('MemoryCard', back_populates='user_logs', cascade='all, delete-orphan')
     comments = db.relationship('Comment', back_populates='users')
     @property

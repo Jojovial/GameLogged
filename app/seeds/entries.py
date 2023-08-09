@@ -3,14 +3,14 @@ from sqlalchemy.sql import text
 
 def seed_entries():
     entry_one = Entry(
-        user_id = 1, game_id = 1,
+        user_id = 1,
         game_name="Tales of Symphonia", system="GameCube", region="NAM",progress = "Unplayed", progress_note = "I will play this!",
         rating=0, review_text="",
         is_now_playing=False, wishlist=True
     )
 
     entry_two = Entry(
-        user_id = 2, game_id = 2,
+        user_id = 2,
         game_name="Dragon Quest Monsters: Joker 3", system="Nintendo3DS", region="JP",
         progress="Unfinished", progress_note="Almost done!",
         rating=4, review_text="Almost done!",
@@ -18,7 +18,7 @@ def seed_entries():
     )
 
     entry_three = Entry(
-        user_id = 3, game_id = 3,
+        user_id = 3,
         game_name="Jelly Boy", system="SNES", region='PAL',
         progress="Beaten", progress_note="I beat it!",
         rating=5, review_text="I love Jelly Boy",
