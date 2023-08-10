@@ -177,7 +177,7 @@ const entryReducer = (state = initialState, action) => {
                     [action.entry.id]: action.entry
                 }
             };
-            case DELETE_ENTRY:
+        case DELETE_ENTRY:
                 const { [action.payload]: removedEntry, ...restEntries } = state.allEntries;
                 return {
                     ...state,
