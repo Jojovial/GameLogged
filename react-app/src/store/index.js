@@ -3,12 +3,14 @@ import thunk from 'redux-thunk';
 import session from './session';
 import entryReducer from './entryReducer';
 import commentReducer from './commentReducer';
+import memoryCardReducer from './memoryReducer';
 
 
 const rootReducer = combineReducers({
   session,
   entries: entryReducer,
   comments: commentReducer,
+  memoryCards: memoryCardReducer
 
 });
 
