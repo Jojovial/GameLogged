@@ -47,10 +47,10 @@ const Home = () => {
     <div className="home-container">
       <h2>Home</h2>
       <div className="home-wrapper">
-        <div className="home-entries">
         <div className="home-memory-card">
           <h2>Memory-Card Stuff Goes Here</h2>
         </div>
+        <div className="home-entries">
           <OpenModalButton
             modalComponent={<EntryModal onClose={() => console.log('Entry modal closed')} />}
             buttonText="New Entry!"
