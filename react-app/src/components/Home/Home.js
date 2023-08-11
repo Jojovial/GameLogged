@@ -48,6 +48,9 @@ const Home = () => {
       <h2>Home</h2>
       <div className="home-wrapper">
         <div className="home-entries">
+        <div className="home-memory-card">
+          <h2>Memory-Card Stuff Goes Here</h2>
+        </div>
           <OpenModalButton
             modalComponent={<EntryModal onClose={() => console.log('Entry modal closed')} />}
             buttonText="New Entry!"
@@ -116,9 +119,6 @@ const Home = () => {
               Next
             </button>
           </div>
-        </div>
-        <div className="home-memory-card">
-          <h2>Memory-Card Stuff Goes Here</h2>
         </div>
         <div className="home-dialogue-box">
           <h2>Dialogue Box Stuff Goes Here</h2>
