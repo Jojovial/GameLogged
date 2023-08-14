@@ -90,8 +90,10 @@ const EntryForm = ({initialFormData, onSubmit, onCancel}) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await dispatch(thunkEditEntry(initialFormData.id, formData));
-
+            console.log('formData.id before calling thunk:', formData.id);
+            console.log('formData before calling thunk:', formData);
+            console.log('formData.id after calling thunk:', formData.id);
+            console.log('formData after calling thunk:', formData);
 
             await onSubmit(formData);
           } catch (error) {

@@ -55,7 +55,7 @@ const PROGRESS_CHOICES = [
 ]
 
   const [formData, setFormData] = useState({
-    name: "",
+    game_name: "",
     system: SYSTEM_CHOICES[0],
     region: REGION_CHOICES[0],
     progress: PROGRESS_CHOICES[0],
@@ -100,24 +100,6 @@ const PROGRESS_CHOICES = [
       console.log('New entry created:', createdEntry);
       console.log("Entry data to be sent:", entryData);
 
-      const response = await fetch('/api/entries', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-
-        },
-        body: JSON.stringify(entryData),
-      });
-
-      console.log("Entry creation response:", response);
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-      }
-
-      const responseData = await response.json();
-      return responseData.entry.id;
     } catch (error) {
       console.error('Error creating entry:', error);
       throw error;
@@ -163,7 +145,7 @@ const PROGRESS_CHOICES = [
             <input
                 type="text"
                 id="entry-name-modal"
-                name="name"
+                name="game_name"
                 value={formData.name}
                 onChange={handleChange}
                 required

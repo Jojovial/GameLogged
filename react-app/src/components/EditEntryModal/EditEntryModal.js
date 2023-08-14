@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import EntryForm from '../EntryForm/EntryForm';
+import { thunkEditEntry, thunkAllEntries } from '../../store/entryReducer';
+import { useDispatch } from 'react-redux';
 
-const EditEntryModal = ({ selectedEntryData, onSubmit, onCancel}) => {
-if (!selectedEntryData) {
-    return null;
+const EditEntryModal = ({ selectedEntryData, onCancel}) => {
+  const dispatch = useDispatch();
+  const [isModalVisible, setIsModalVisible] = useState(true);
+  const onSubmit = async (updatedEntry) => {
+    try {
+      await dispatch(thunkEditEntry(updatedEntry.id, updatedEntry));
+      await dispatch(thunkAllEntries());
+      onCancel();
+    } catch(error) {
+      console.error("Error updating entry:", error)
+    } finally {
+      setIsModalVisible(false);
+    }
+
   }
+  if (!selectedEntryData) {
+      return null;
+    }
 
   return (
     <div className="edit-entry-modal">

@@ -101,6 +101,7 @@ export const thunkEntry = (entryId) => async (dispatch, getState) => {
 
 
   export const thunkEditEntry = (entryId, entry) => async (dispatch) => {
+      console.log('entryId', entryId)
     try {
         const response = await fetch(`/api/entries/${entryId}`, {
             method: 'PUT',
@@ -115,8 +116,9 @@ export const thunkEntry = (entryId) => async (dispatch, getState) => {
         const entryToEdit = await response.json();
         dispatch(editEntry(entryToEdit));
 
-        return { payload: entryToEdit };
+        return entryToEdit;
     } catch (err) {
+        console.log("Error response:", err.response);
         return { error: err.message };
     }
 };

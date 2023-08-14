@@ -79,7 +79,6 @@ const Home = () => {
                       <EditEntryModal
                         selectedEntryData={entry}
                         onSubmit={async (updatedEntry) => {
-                          await dispatch(thunkEditEntry(updatedEntry));
                           setEditingEntryId(null);
                         }}
                         onCancel={() => setEditingEntryId(null)}
