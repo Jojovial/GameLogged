@@ -16,6 +16,9 @@
  justify-content:space-between;
  align-items:normal;
  background-color:rgba(96,63,239,0.72);
+ background-image: url('../../assests/ysohisilandbanner.png');
+ background-size: cover;
+ background-position: center top 195%;
  overflow:hidden;
  margin-bottom:0px;
  margin-top:5px;

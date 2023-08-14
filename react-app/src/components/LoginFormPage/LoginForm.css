@@ -6,6 +6,9 @@
     background-color:#603fef;
     height:90vh;
     transform:translatex(0px) translatey(0px);
+    background-image: url('../../assests/login-page-background.png');
+    background-size: cover;
+    background-position: center top 70%;
    }
 
    .form-wrapper{

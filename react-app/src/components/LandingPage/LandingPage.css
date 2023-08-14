@@ -10,6 +10,11 @@
     background-color:#603fef;
     height:90vh;
     transform:translatex(0px) translatey(0px);
+    background-image: url('../../assests/yoshiislandbackground.png');
+    background-size: cover;
+    background-position: center top 100%;
+    background-repeat: no-repeat;
+
    }
 
 
@@ -196,3 +201,105 @@
    .landing-nav .landing-signup .landing-signup-text{
     transform:translatex(310px) translatey(-386px);
    }
+
+   /* Landing header */
+.landing-wrapper .landing-body .landing-header{
+    transform:translatex(46px) translatey(98px);
+   }
+
+   /* Landing logo */
+   .landing-wrapper .landing-logo{
+    display:inline-block;
+    transform:translatex(6px) translatey(-217px);
+   }
+
+   /* Landing signup text */
+   .landing-nav .landing-signup .landing-signup-text{
+    transform:translatex(341px) translatey(-320px);
+   }
+
+   /* Landing pitch */
+   .landing-nav .landing-wrapper .landing-pitch{
+    padding-top:7px;
+    transform:translatex(0px) translatey(-306px);
+   }
+
+   /* Landing login text */
+   .landing-nav .landing-login .landing-login-text{
+    transform:translatex(441px) translatey(-150px);
+   }
+/* Import Google Fonts */
+@import url("//fonts.googleapis.com/css2?family=Lexend:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
+
+/* Image */
+.landing-page .developer a img{
+ width:10% !important;
+}
+
+/* Image */
+.developer a img{
+ display:block;
+ clear:none;
+}
+
+/* Heading */
+.landing-page .developer h3{
+ color:#ffffff;
+ font-family:'Lexend', sans-serif;
+}
+
+/* Developer */
+.landing-page .developer{
+ display:flex;
+ flex-direction:row;
+ justify-content:normal;
+ align-items:center;
+ transform:translatex(-374px) translatey(170px);
+}
+
+/* Link iconss */
+.developer a .link-iconss{
+ transform:translatex(-461px) translatey(0px);
+}
+
+/* Heading */
+.landing-page .landing-nav .credentials .landing-signup h2{
+ background-color:#6d06fd !important;
+ border-style:solid !important;
+}
+
+/* Heading */
+.landing-nav .landing-signup h2{
+ border-width:3px !important;
+}
+
+/* Heading */
+.landing-page .landing-nav .credentials .landing-login h2{
+ border-style:solid !important;
+ color:#1e04cc !important;
+ background-color:#dbd1ff !important;
+}
+
+/* Image */
+.landing-wrapper img{
+ transform:translatex(0px) translatey(-209px) !important;
+}
+
+/* Heading */
+.landing-nav .landing-login h2{
+ border-width:3px !important;
+}
+
+
+
+  .landing-nav .landing-login .landing-login-text:hover {
+    background-color: #f7c137;
+    border-color: cyan;
+
+  }
+
+  /* Landing signup text */
+  .landing-nav .landing-signup .landing-signup-text:hover {
+    background-color: #f7c137;
+    border-color: #f7c137;
+  }
