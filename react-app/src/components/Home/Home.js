@@ -91,7 +91,6 @@ const Home = () => {
                       <DeleteEntryModal
                         entryId={entry.id}
                         onDelete={async (entryId) => {
-                          await dispatch(thunkDeleteEntry(entryId));
                           setDeletingEntryId(null);
                         }}
                         onCancel={() => setDeletingEntryId(null)}

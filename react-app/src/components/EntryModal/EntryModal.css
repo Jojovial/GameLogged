@@ -40,6 +40,9 @@
  background-color:#603fef;
  color:#ffffff;
  flex-wrap:nowrap;
+ background-image: url('../../assests/modaltest.png');
+ background-size: cover;
+ 
 }
 
 /* Modal content */
