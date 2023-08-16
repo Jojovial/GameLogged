@@ -1,118 +1,194 @@
+/* Home.css */
+
+
+.home-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-image: url('../../assests/homepagestyle.png');
+    background-size: cover;
+    background-position: center top 70%;
+    font-family: Lex;
+  }
+
+  .home-wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .home-memory-card,
+  .home-dialogue-box {
+    flex-basis: 20%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+  }
+
+  .home-entries {
+    flex-basis: 55%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+  }
+
+  .entry-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .entries-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    background-color: #fff;
+    background-image: url('../../assests/testentry.png');
+    background-size: cover;
+    display: flex;
+  }
+
+  .pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+
+  .pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
 .home-container{
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    background-color:#603fef;
+    max-width:100%;
     transform:translatex(0px) translatey(0px);
-    min-height: 70vh
    }
 
-   /* Home entries */
-   .home-wrapper .home-entries{
+.home-wrapper .home-entries{
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    min-height: 70vh;
+   }
+ .home-container .home-wrapper .home-entries > button:nth-child(1){
+    width:20% !important;
+   }
+   .home-wrapper .home-entries > button:nth-child(1){
+    overflow:hidden;
+   }
+    .home-container .home-wrapper .home-entries .upper-entry{
+    padding-bottom:2% !important;
    }
 
-   /* Entries item */
-   .home-wrapper .home-entries .entries-item{
-    display:flex;
-    flex-direction:column;
-    background-color:#bcaef8;
-    border-style:solid;
-    border-width:5px;
-    transform:scale(.9);
-    width:454px;
-    text-align:center;
-    color:#63008e;
-   }
-
-
-   .entries-item-placeholder{
-    display:flex;
-    flex-direction:column;
-    background-color:#bcaef8;
-    border-style:solid;
-    border-width:5px;
-    transform:scale(.9);
-    width:454px;
-    text-align:center;
-    color:#63008e;
-   }
-
-   /* Button */
-   .home-entries .entries-item button{
-    color:#ffffff;
-    background-color:#ab00f4;
-    width:25%;
-    transform: translatex(170px);
-    display:flex;
-    flex-direction:row;
-    justify-content:center;
-    align-items:center;
-   }
-
-   /* Paragraph */
-   .home-entries .entries-item p{
-    display:flex;
-    flex-direction:column;
-    flex:0 1 auto;
+   .home-wrapper .home-entries .entry-grid{
     justify-content:normal;
-    flex-wrap:wrap;
-    overflow:visible;
+    display:grid;
+    align-content:normal;
    }
 
-   /* Button */
-   .home-wrapper .home-entries button{
-    color:#ffffff;
-    background-color:#ab00f4;
-   }
-
-   /* Heading */
-   h2{
-    color:#ffffff;
-   }
-
-   .home-wrapper .home-memory-card h2{
-    transform:translatex(-449px) translatey(-2777px);
-   }
-
-   /* Heading */
-   .home-wrapper .home-dialogue-box h2{
-    transform:translatex(503px) translatey(-2825px);
-   }
-
-
-   .delete-modal{
-    background-color:#d1cbf5;
-    display:flex;
+   .home-entries .entry-grid > .entries-item{
     flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    transform:translatex(-509px) translatey(-662px);
-    text-align:center;
-    width:514px;
-    height:154px;
-    color:#ab00f4;
-    border-style:dotted;
-    border-width:5px;
+    flex-wrap:nowrap;
+    justify-content:normal;
    }
 
-   /* Button */
-   .delete-modal button:nth-child(2){
-    color:#ffffff;
-    background-color:#ab00f4;
-    width:140px;
-    transform:translatex(-85px) translatey(-18px);
+   .home-entries .entry-grid .pagination{
+    transform: translatex(184px);
    }
 
-   /* Button */
-   .delete-modal button:nth-child(3){
+   .home-entries .entry-grid .pagination{
+    transform: translatex(115px);
+   }
+   .entry-card {
+    position: relative;
+  }
+
+  .entry-cover {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    background-color: #603fef;
+    border: 1px solid #aaa;
+    color: white;
+    cursor: pointer;
+    width: 250px;
+    height: 100px;
+
+  }
+
+  .entry-details {
+    display: none;
+    position: absolute;
+    bottom: 20%;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: #4125ba;
+    border: 5px solid white;
+    color: white;
+    z-index: 1;
+    box-sizing: border-box;
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.5;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .entry-card:hover .entry-details {
+    display: block;
+  }
+
+.home-container{
+    transform:translatex(0px) translatey(0px);
+    display:block;
+    min-height:86vh;
+   }
+
+
+  .home-wrapper .home-memory-card{
+    background-color:rgba(96,63,239,0.67);
+   }
+
+
+ .home-wrapper .home-entries{
+    transform:translatex(0px) translatey(0px);
+    background-color:rgba(206,120,246,0.59);
+   }
+
+.home-wrapper .home-dialogue-box{
+    background-color:rgba(96,63,239,0.71);
+   }
+
+
+   .home-entries .upper-entry button{
     color:#ffffff;
-    background-color:#603fef;
-    width:140px;
-    transform:translatex(75px) translatey(-39px);
+    background-color:#7d00c1;
+   }
+
+
+   .home-wrapper .home-entries .upper-entry{
+    transform:translatex(0px) translatey(0px);
+   }
+
+   .entry-grid .pagination button:nth-child(3){
+    background-color:#7d00c1;
+   }
+
+
+   .home-entries .entry-grid .pagination{
+    transform: translatex(155px);
+   }
+
+
+   .entry-grid .pagination span{
+    color:#ffffff;
    }

@@ -14,7 +14,7 @@ const Home = () => {
   const [error, setError] = useState(null);
   const allEntries = useSelector((state) => state.entries.allEntries.entries);
   const [currentPage, setCurrentPage] = useState(1);
-  const entriesPerPage = 5;
+  const entriesPerPage = 4;
   const [deletingEntryId, setDeletingEntryId] = useState(null);
   const [editingEntryId, setEditingEntryId] = useState(null);
 
@@ -51,11 +51,16 @@ const Home = () => {
           <h2>Memory-Card Stuff Goes Here</h2>
         </div>
         <div className="home-entries">
+          <div className="upper-entry">
+
+          <h2>Entries</h2>
           <OpenModalButton
             modalComponent={<EntryModal onClose={() => console.log('Entry modal closed')} />}
             buttonText="New Entry!"
           />
-          <h2>Entry Stuff Goes Here</h2>
+          </div>
+          <div className="entry-grid">
+
           {currentEntries.length === 0 ? (
             <div className="entries-item-placeholder">
               <p>No entries found.</p>
@@ -63,9 +68,12 @@ const Home = () => {
           ) : (
             currentEntries.map((entry) => (
               <div key={entry.id} className="entries-item">
-                <div>
+                <div className="entry-card">
                   {/* Entry details */}
-                  <h3>{entry.game_name || 'No Game Name'}</h3>
+                  <div className="entry-cover">
+                      <h3>{entry.game_name || 'No Game Name'}</h3>
+                    </div>
+                  <div className="entry-details">
                   <p>System: {entry.system || 'No System Available'}</p>
                   <p>Region: {entry.region || 'No Region Available'}</p>
                   <p>Progress: {entry.progress}</p>
@@ -102,6 +110,7 @@ const Home = () => {
                   {/* ... (entry details rendering) */}
                 </div>
               </div>
+          </div>
             ))
           )}
           {/* Pagination controls */}
@@ -116,6 +125,7 @@ const Home = () => {
             >
               Next
             </button>
+          </div>
           </div>
         </div>
         <div className="home-dialogue-box">

@@ -1,8 +1,54 @@
-.home-entries div .entry-form{
+
+ .edit-entry-modal{
+    flex-direction:column;
+    justify-content:flex-end;
+    align-items:center;
+   }
+
+
+ .edit-entry-modal .entry-form{
     display:flex;
     flex-direction:column;
-    flex-wrap:nowrap;
     justify-content:center;
-    align-items:normal;
-    color:#ffffff;
+    align-items:center;
+    width:450px;
+   }
+
+
+   #entry-name{
+    width:80%;
+    height:30px;
+   }
+
+
+   #entry-system{
+    width:80%;
+    height:30px;
+   }
+
+   #entry-region{
+    width:80%;
+    height:30px;
+   }
+
+   #entry-progress{
+    width:80%;
+    height:30px;
+   }
+
+   #entry-progress-note{
+    width:80%;
+    height:30px;
+   }
+
+
+   #entry-review{
+    width:80%;
+    height:40px;
+   }
+
+
+   .edit-entry-modal .entry-form > button{
+    width:54%;
+    position:static;
    }

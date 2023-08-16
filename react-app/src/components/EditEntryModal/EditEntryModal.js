@@ -27,7 +27,6 @@ const EditEntryModal = ({ selectedEntryData, onCancel}) => {
 
   return (
     <div className="edit-entry-modal">
-      <h2>Edit Entry</h2>
       <EntryForm
         initialFormData={selectedEntryData}
         onSubmit={onSubmit}
