@@ -52,7 +52,6 @@ class CommentForm(FlaskForm):
     """
     Form for creating a comment
     """
-    user_id = IntegerField('user_id', validators=[DataRequired()])
     comment_text = StringField('comment_text', validators=[DataRequired(), Length(max=500)])
 
 
@@ -74,8 +73,6 @@ class EntryForm(FlaskForm):
 
 
 class MemoryCardForm(FlaskForm):
-    user_id = IntegerField('user_id', validators=[DataRequired()])
-    entry_id = IntegerField('entry_id', validators=[DataRequired()])
     log_info = StringField('log_info', validators=[DataRequired(), Length(max=200)])
 
 

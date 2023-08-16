@@ -44,20 +44,29 @@ def get_all_comments():
 @dialogue_routes.route('', methods=['POST'])
 @login_required
 def create_comment():
-    comment_form = CommentForm(request.form)
-    comment_form['csrf_token'].data = request.cookies['csrf_token']
+    try:
+        data = request.json
+        print('Received JSON data:', data)
 
-    if comment_form.validate_on_submit():
-        new_comment = Comment(
-            user_id=current_user.id,
-            comment_text = comment_form.comment_text.data
-        )
-        db.session.add(new_comment)
-        db.session.commit()
+        comment_form = CommentForm(data=data)
+        comment_form['csrf_token'].data = request.cookies['csrf_token']
 
-        return generate_success_response('Comment created!')
-    else:
-        return generate_error_response('Invalid form data.')
+
+        if comment_form.validate_on_submit():
+            new_comment = Comment(
+                user_id=current_user.id,
+                comment_text=data['comment_text']
+            )
+            db.session.add(new_comment)
+            db.session.commit()
+
+            return generate_success_response('Comment created!')
+        else:
+            return generate_error_response('Invalid form data.', 400)
+
+    except Exception as e:
+        print('Error processing JSON:', e)
+        return generate_error_response('Invalid request data.', 400)
 
 
 #Update comment
@@ -72,15 +81,18 @@ def update_comment(comment_id):
     if comment.user_id != current_user.id:
         return generate_error_response('Unauthorized to update comment', 403)
 
-    comment_form = CommentForm(request.form)
+    data = request.json
+
+
+    comment_form = CommentForm(data=data)
     comment_form['csrf_token'].data = request.cookies['csrf_token']
 
     if comment_form.validate_on_submit():
-        comment.comment_text = comment_form.comment_text.data
+        comment.comment_text = data['comment_text']
         db.session.commit()
         return generate_success_response('Comment updated!')
     else:
-        return generate_error_response('Invalid form data.')
+        return generate_error_response('Invalid form data.', 400)
 
 
 #Delete comment

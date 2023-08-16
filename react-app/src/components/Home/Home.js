@@ -8,7 +8,10 @@ import EntryModal from '../EntryModal/EntryModal';
 import OpenModalButton from '../OpenModalButton';
 import DeleteEntryModal from '../DeleteEntryModal/DeleteEntryModal';
 import EditEntryModal from '../EditEntryModal/EditEntryModal';
-
+import CommentModal from '../CommentsModal/CommentModal';
+import EditCommentModal from '../CommentInfoModal/CommentInfoModal';
+import DeleteCommentModal from '../DeleteCommentModal/DeleteCommentModal';
+import MemoryCardModal from '../MemoryCardModal/MemoryCardModal';
 const Home = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
@@ -54,6 +57,17 @@ const Home = () => {
       })
   }, [dispatch]);
 
+
+  const [selectedComment, setSelectedComment] = useState(null);
+
+  const handleCommentClick = (comment) => {
+      setSelectedComment(comment);
+  };
+
+  const closeCommentInfoModal = () => {
+      setSelectedComment(null);
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -76,6 +90,10 @@ const Home = () => {
       <div className="home-wrapper">
         <div className="home-memory-card">
           <h2>Memory-Cards</h2>
+          <OpenModalButton
+            modalComponent={<MemoryCardModal onClose={() => console.log('Modal closed')} /> }
+            buttonText="New Memory Card!"
+            />
           {loadingMemoryCards ? (
             <p>Loading memory cards...</p>
           ) : errorMemoryCards ? (
@@ -172,20 +190,33 @@ const Home = () => {
         </div>
         <div className="home-dialogue-box">
           <h2>Dialogue </h2>
+          <OpenModalButton
+          modalComponent={<CommentModal />}
+          buttonText={"Add Comment"}
+          />
           {loadingComments ? (
             <p>Loading comments...</p>
           ) :errorComments ? (
             <p>Error loading comments: {errorComments}</p>
           ) : (
             <div className="comments">
-              {allComments.map((comment) => (
+            {allComments.map((comment) => (
                 <div key={comment.id}>
-                  <p>Comment: {comment.comment_text}</p>
+                    <p>Comment: {comment.comment_text}</p>
+                    <OpenModalButton
+                        modalComponent={<EditCommentModal comment={comment} onClose={() => {}} />}
+                        buttonText={"Edit"}
+                    />
+                    <OpenModalButton
+                      modalComponent={<DeleteCommentModal comment={comment} onDelete={() => {}} />}
+                      buttonText={"Delete"}
+                    />
                 </div>
-              ))}
-            </div>
-          )}
+            ))}
         </div>
+    )}
+</div>
+
       </div>
     </div>
   );

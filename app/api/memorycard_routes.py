@@ -40,32 +40,24 @@ def create_memory_card():
     data = request.json
     print('Received data for memory card', data)
 
+    entry_id = data.get('entry_id')
+    log_info = data.get('log_info')
     memory_card_form = MemoryCardForm(data=data)
     memory_card_form['csrf_token'].data = request.cookies['csrf_token']
 
-    if memory_card_form.validate():
-        entry_id = data.get('entry_id')
-        log_info = data.get('log_info')
+    if memory_card_form.validate() and entry_id is not None:
+        new_memory_card = MemoryCard(
+            user_id=current_user.id,
+            entry_id=entry_id,
+            log_info=log_info
+        )
 
-        if entry_id is not None:
-            entry = Entry.query.get(entry_id)
-            if not entry:
-                return generate_error_response('Invalid entry_id', 400)
+        db.session.add(new_memory_card)
+        db.session.commit()
 
-            new_memory_card = MemoryCard(
-                user_id=current_user.id,
-                entry_id=entry_id,
-                log_info=log_info
-            )
+        return generate_success_response({'message': 'Log created!', 'memory_card': new_memory_card.to_dict()})
 
-            db.session.add(new_memory_card)
-            db.session.commit()
-
-            return generate_success_response({'message': 'Log created!', 'memory_card': new_memory_card.to_dict()})
-        else:
-            return generate_error_response('Missing entry_id', 400)
-
-    return generate_error_response('Invalid form data', 400)
+    return generate_error_response('Invalid form data or missing entry_id', 400)
 #Edit memory log
 @memory_routes.route('/<int:memory_card_id>', methods=['PUT'])
 @login_required
