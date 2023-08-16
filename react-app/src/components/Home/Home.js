@@ -20,7 +20,7 @@ const Home = () => {
   const allEntries = useSelector((state) => state.entries.allEntries.entries);
   const allComments = useSelector((state) => state.comments.allComments.comments);
   console.log('allComments', allComments);
-  const allMemoryCards = useSelector((state) => Object.values(state.memoryCards.allMemoryCards.memory_cards));
+  const allMemoryCards = useSelector((state) => (state.memoryCards.allMemoryCards.memory_cards));
   console.log('allMemoryCards', allMemoryCards);
   const [currentPage, setCurrentPage] = useState(1);
   const entriesPerPage = 4;
@@ -171,7 +171,7 @@ const Home = () => {
           </div>
         </div>
         <div className="home-dialogue-box">
-          <h2>Dialogue Choices</h2>
+          <h2>Dialogue </h2>
           {loadingComments ? (
             <p>Loading comments...</p>
           ) :errorComments ? (
