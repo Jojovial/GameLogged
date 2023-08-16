@@ -192,3 +192,20 @@
    .entry-grid .pagination span{
     color:#ffffff;
    }
+
+
+
+.home-wrapper .home-dialogue-box .comments{
+  background-color:#2d01a6;
+  color:#ffffff;
+  border-top-left-radius:5px;
+  border-top-right-radius:5px;
+  border-bottom-left-radius:5px;
+  border-bottom-right-radius:5px;
+  justify-content:center;
+ }
+
+
+.home-container .home-wrapper .home-dialogue-box .comments{
+  height:5% !important;
+ }

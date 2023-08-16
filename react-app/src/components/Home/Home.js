@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { thunkAllEntries, thunkDeleteEntry, thunkEditEntry} from '../../store/entryReducer';
-
+import { thunkAllComments } from '../../store/commentReducer';
+import { thunkAllMemoryCards } from '../../store/memoryReducer';
 import './Home.css';
 import EntryModal from '../EntryModal/EntryModal';
 import OpenModalButton from '../OpenModalButton';
@@ -11,8 +12,16 @@ import EditEntryModal from '../EditEntryModal/EditEntryModal';
 const Home = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const [loadingComments, setLoadingComments] = useState(true);
+  const [loadingMemoryCards, setLoadingMemoryCards] = useState(true);
   const [error, setError] = useState(null);
+  const [errorComments, setErrorComments] = useState(null);
+  const [errorMemoryCards, setErrorMemoryCards] = useState(null);
   const allEntries = useSelector((state) => state.entries.allEntries.entries);
+  const allComments = useSelector((state) => state.comments.allComments.comments);
+  console.log('allComments', allComments);
+  const allMemoryCards = useSelector((state) => Object.values(state.memoryCards.allMemoryCards.memory_cards));
+  console.log('allMemoryCards', allMemoryCards);
   const [currentPage, setCurrentPage] = useState(1);
   const entriesPerPage = 4;
   const [deletingEntryId, setDeletingEntryId] = useState(null);
@@ -26,6 +35,24 @@ const Home = () => {
         setError(err.message);
       });
   }, [dispatch, currentPage]);
+
+  useEffect(() => {
+    dispatch(thunkAllComments())
+      .then(() => setLoadingComments(false))
+      .catch((err) => {
+        setLoadingComments(false);
+        setErrorComments(err.message);
+      })
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(thunkAllMemoryCards())
+      .then(() => setLoadingMemoryCards(false))
+      .catch((err) => {
+        setLoadingMemoryCards(false);
+        setErrorMemoryCards(err.message);
+      })
+  }, [dispatch]);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -48,7 +75,22 @@ const Home = () => {
       <h2>Home</h2>
       <div className="home-wrapper">
         <div className="home-memory-card">
-          <h2>Memory-Card Stuff Goes Here</h2>
+          <h2>Memory-Cards</h2>
+          {loadingMemoryCards ? (
+            <p>Loading memory cards...</p>
+          ) : errorMemoryCards ? (
+            <p>Error loading memory cards : {errorMemoryCards}</p>
+          ) : (
+            <div className="memory-cards">
+              {console.log('allMemoryCards LOADING', allMemoryCards)}
+             {allMemoryCards.map((memoryCard) => (
+  <div key={memoryCard.id}>
+    {console.log('memorycard log info', memoryCard.log_info)}
+    <p>Memory Card: {memoryCard.log_info}</p>
+  </div>
+))}
+          </div>
+          )}
         </div>
         <div className="home-entries">
           <div className="upper-entry">
@@ -129,7 +171,20 @@ const Home = () => {
           </div>
         </div>
         <div className="home-dialogue-box">
-          <h2>Dialogue Box Stuff Goes Here</h2>
+          <h2>Dialogue Choices</h2>
+          {loadingComments ? (
+            <p>Loading comments...</p>
+          ) :errorComments ? (
+            <p>Error loading comments: {errorComments}</p>
+          ) : (
+            <div className="comments">
+              {allComments.map((comment) => (
+                <div key={comment.id}>
+                  <p>Comment: {comment.comment_text}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@ from app.forms.forms import CommentForm
 from app.ultis import generate_error_response, generate_success_response
 from sqlalchemy import asc
 
-dialogue_routes = Blueprint('comments', __name__, url_prefix='/comment')
+dialogue_routes = Blueprint('comments', __name__, url_prefix='/comments')
 
 
 #Get comment by id
