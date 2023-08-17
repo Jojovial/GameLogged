@@ -27,7 +27,7 @@ const EditCommentModal = ({comment}) => {
                     className="edit-comment-textarea"
                 />
             </div>
-            <div className="comments-buttons">
+            <div className="comments-edit-buttons">
                 <button className="comment-edit-button" onClick={handleEdit}>
                     Edit
                 </button>

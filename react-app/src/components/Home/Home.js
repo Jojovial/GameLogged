@@ -12,6 +12,8 @@ import CommentModal from '../CommentsModal/CommentModal';
 import EditCommentModal from '../CommentInfoModal/CommentInfoModal';
 import DeleteCommentModal from '../DeleteCommentModal/DeleteCommentModal';
 import MemoryCardModal from '../MemoryCardModal/MemoryCardModal';
+import EditMemoryCardModal from '../EditMemoryCardModal/EditMemoryCardModal';
+import DeleteMemorycardModal from '../DeleteMemoryCardModal/DeleteMemoryCardModal';
 const Home = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
@@ -105,6 +107,14 @@ const Home = () => {
   <div key={memoryCard.id}>
     {console.log('memorycard log info', memoryCard.log_info)}
     <p>Memory Card: {memoryCard.log_info}</p>
+    <OpenModalButton
+      modalComponent={<EditMemoryCardModal memoryCard={memoryCard} onClose={() => {}} />}
+      buttonText={"Edit"}
+      />
+      <OpenModalButton
+        modalComponent={<DeleteMemorycardModal memoryCard={memoryCard} onDelete={() => {}} />}
+        buttonText={"Delete"}
+        />
   </div>
 ))}
           </div>
