@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { useDispatch } from 'react-redux';
 import { thunkDeleteEntry, thunkAllEntries } from '../../store/entryReducer';
 import { useModal } from '../../context/Modal';
+import './DeleteEntryModal.css';
 const DeleteEntryModal = ({ entryId, onDelete, onCancel }) => {
   const dispatch = useDispatch();
   const [isModalVisible, setIsModalVisible] = useState(true);

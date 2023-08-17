@@ -32,6 +32,7 @@ const CommentModal = () => {
         <div className="comments-modal">
             <div className="comment-info">
                 <textarea
+                    className="create-comment-textarea"
                     value={commentText}
                     onChange={handleCommentChange}
                     placeholder='Enter your comment'

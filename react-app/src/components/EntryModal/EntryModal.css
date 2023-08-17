@@ -6,7 +6,7 @@
 
   .stars {
     font-size: 24px;
-    color: #ffd700; /* gold color */
+    color: #808512; /* gold color */
     cursor: pointer;
   }
 
@@ -15,7 +15,7 @@
   }
 
   .star.active {
-    color: #ffac33; /* darker gold color */
+    color: #ffff00; /* darker gold color */
   }
 
 
@@ -42,7 +42,7 @@
  flex-wrap:nowrap;
  background-image: url('../../assests/modaltest.png');
  background-size: cover;
- 
+
 }
 
 /* Modal content */
@@ -112,3 +112,69 @@
  color:#ffffff;
  background-color:#ab00f4;
 }
+
+/* Button */
+.entry-modal .entry-modal-form button:nth-child(19){
+  background-color:#cbb4d8;
+ }
+
+ /* Label */
+ .entry-modal .entry-modal-form label:nth-child(1){
+  font-weight:700;
+  text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+ }
+
+ /* Label */
+ .entry-modal .entry-modal-form label:nth-child(3){
+  font-weight:700;
+  text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+ }
+
+ /* Label */
+ .entry-modal .entry-modal-form label:nth-child(5){
+  font-weight:700;
+  text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+ }
+
+ /* Label */
+ .entry-modal .entry-modal-form label:nth-child(7){
+  font-weight:700;
+  text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+ }
+
+ /* Label */
+ .entry-modal .entry-modal-form label:nth-child(9){
+  font-weight:700;
+  text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+ }
+
+ /* Paragraph */
+ .entry-modal-form .rating-slider p{
+  font-weight:700;
+  text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+ }
+
+ /* Rating slider */
+ .entry-modal .entry-modal-form .rating-slider{
+  font-weight:700;
+  text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+ }
+
+ /* Label */
+ .entry-modal .entry-modal-form label:nth-child(12){
+  font-weight:700;
+  text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+ }
+
+ /* Label */
+ .entry-modal .entry-modal-form label:nth-child(14){
+  font-weight:700;
+  text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+ }
+
+ /* Label */
+ .entry-modal .entry-modal-form label:nth-child(16){
+  font-weight:700;
+  text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+ }
+

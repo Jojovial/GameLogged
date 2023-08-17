@@ -14,6 +14,11 @@
     width:450px;
    }
 
+   .entry-form{
+      background-image: url('../../assests/editmodal.png');
+      background-size: cover;
+   }
+
 
    #entry-name{
     width:80%;
@@ -52,3 +57,90 @@
     width:54%;
     position:static;
    }
+
+
+   * Button */
+.edit-entry-modal .entry-form button:nth-child(18){
+ color:#ffffff;
+ background-color:#3b17ec;
+}
+
+/* Label */
+.edit-entry-modal .entry-form label:nth-child(14){
+ color:#ffffff;
+ font-weight:700;
+ text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+}
+
+/* Label */
+.edit-entry-modal .entry-form label:nth-child(16){
+ color:#ffffff;
+ text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+ font-weight:700;
+}
+
+/* Label */
+.edit-entry-modal .entry-form label:nth-child(12){
+ color:#ffffff;
+ text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+ font-weight:700;
+}
+
+/* Paragraph */
+.entry-form .rating-slider p{
+ color:#ffffff;
+ font-weight:700;
+ text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+}
+
+/* Label */
+.edit-entry-modal .entry-form label:nth-child(9){
+ color:#ffffff;
+ font-weight:700;
+ text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+}
+
+/* Label */
+.edit-entry-modal .entry-form label:nth-child(7){
+ color:#ffffff;
+ font-weight:700;
+ text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+}
+
+/* Label */
+.edit-entry-modal .entry-form label:nth-child(5){
+ color:#ffffff;
+ font-weight:700;
+ text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+}
+
+/* Label */
+.edit-entry-modal .entry-form label:nth-child(3){
+ color:#ffffff;
+ font-weight:700;
+ text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+}
+
+/* Label */
+.edit-entry-modal .entry-form label:nth-child(1){
+ color:#ffffff;
+ font-weight:700;
+ text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+}
+
+/* Button */
+.edit-entry-modal .entry-form button:nth-child(19){
+ background-color:#8179b3;
+ color:#ffffff;
+}
+
+.edit-entry-modal .entry-form .rating-slider{
+   text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+   font-weight:700;
+  }
+/* Button */
+.edit-entry-modal .entry-form button:nth-child(18){
+   background-color:#0007ea;
+   color:#ffffff;
+   margin-bottom:5px;
+  }

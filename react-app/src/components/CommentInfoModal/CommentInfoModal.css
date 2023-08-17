@@ -1,0 +1,29 @@
+
+.home-wrapper .home-dialogue-box button{
+ color:#ffffff;
+ background-color:#a115f9;
+}
+
+/* Edit comments modal */
+ .edit-comments-modal{
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ align-items:center;
+ width:350px;
+ height:200px;
+ overflow:visible;
+ background-image: url('../../assests/YIsunsetclouds.png');
+ background-size: cover;
+}
+
+.edit-comments-modal .comment-info textarea{
+ width:300px !important;
+}
+
+/* Text Area */
+.edit-comments-modal .comment-info textarea{
+ height:100px;
+ overflow:hidden;
+ resize: none;
+}

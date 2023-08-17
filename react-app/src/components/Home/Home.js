@@ -31,6 +31,10 @@ const Home = () => {
   const entriesPerPage = 4;
   const [deletingEntryId, setDeletingEntryId] = useState(null);
   const [editingEntryId, setEditingEntryId] = useState(null);
+  const [currentMemoryCardPage, setCurrentMemoryCardPage] = useState(1);
+  const memoryCardsPerPage = 2;
+  const [currentCommentPage, setCurrentCommentPage] = useState(1);
+  const commentsPerPage = 2;
 
   useEffect(() => {
     dispatch(thunkAllEntries())
@@ -81,6 +85,14 @@ const Home = () => {
   const indexOfLastEntry = currentPage * entriesPerPage;
   const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
   const currentEntries = allEntries.slice(indexOfFirstEntry, indexOfLastEntry);
+
+  // const indexOfLastMemoryCard = currentMemoryCardPage * memoryCardsPerPage;
+  // const indexOfFirstMemoryCard = indexOfLastMemoryCard - memoryCardsPerPage;
+  // const currentMemoryCards = allMemoryCards.slice(indexOfFirstMemoryCard, indexOfLastMemoryCard);
+
+  // const indexOfLastComment = currentCommentPage * commentsPerPage;
+  // const indexOfFirstComment = indexOfLastComment - commentsPerPage;
+  // const currentComments = allComments.slice(indexOfFirstComment, indexOfLastComment);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -211,7 +223,11 @@ const Home = () => {
           ) : (
             <div className="comments">
             {allComments.map((comment) => (
-                <div key={comment.id}>
+                <div key={comment.id} className='comment-item'>
+                  <div className="comment-background">
+
+                    <p>Comment: {comment.comment_text}</p>
+                    <div className="comments-details">
                     <p>Comment: {comment.comment_text}</p>
                     <OpenModalButton
                         modalComponent={<EditCommentModal comment={comment} onClose={() => {}} />}
@@ -222,8 +238,11 @@ const Home = () => {
                       buttonText={"Delete"}
                     />
                 </div>
+                </div>
+              </div>
             ))}
         </div>
+
     )}
 </div>
 
