@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import {useDispatch, useSelector} from 'react-redux';
 import { thunkAddMemoryCard, thunkAllMemoryCards } from "../../store/memoryReducer";
 import { useModal } from "../../context/Modal";
-
+import './MemoryCardModal.css';
 const MemoryCardModal = () => {
     const dispatch = useDispatch();
     const {closeModal} = useModal();
@@ -25,12 +25,14 @@ const MemoryCardModal = () => {
     }
 
     return (
-        <div>
+        <div className='memorycard-modal'>
           <h2>Create Memory Card</h2>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="memorycard-form">
+            <div className="memorycard-modal-info">
+
             <label>
               Select Entry:
-              <select value={selectedEntry} onChange={(e) => setSelectedEntry(e.target.value)}>
+              <select value={selectedEntry} onChange={(e) => setSelectedEntry(e.target.value)} className="memorycard-select">
                 <option value="">Select an entry</option>
                 {entries.map(entry => (
                   <option key={entry.id} value={entry.id}>
@@ -41,9 +43,10 @@ const MemoryCardModal = () => {
             </label>
             <label>
               Log Information:
-              <textarea value={logInfo} onChange={(e) => setLogInfo(e.target.value)} />
+              <textarea value={logInfo} onChange={(e) => setLogInfo(e.target.value)} className="memorycard-create-textarea" />
             </label>
             <button type="submit">Create</button>
+              </div>
           </form>
         </div>
       );

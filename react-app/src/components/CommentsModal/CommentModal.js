@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { useDispatch } from 'react-redux';
 import { thunkAddComment, thunkAllComments } from '../../store/commentReducer';
 import { useModal } from '../../context/Modal';
-
+import './CommentsModal.css';
 const CommentModal = () => {
     const dispatch = useDispatch();
     const { closeModal } = useModal();

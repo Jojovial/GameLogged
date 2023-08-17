@@ -1,0 +1,48 @@
+.comments-modal{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    width:350px;
+    height:200px;
+    overflow:visible;
+    background-image: url('../../assests/comments-add.png');
+    background-size: cover;
+}
+.comments-modal .create-comment-textarea textarea{
+    width:300px !important;
+   }
+
+   /* Text Area */
+   .comments-modal .create-comment-textarea textarea{
+    height:100px;
+    overflow:hidden;
+    resize: none;
+   }
+
+
+
+   /* Comment info */
+ .comments-modal .comment-info{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+   }
+
+   /* Create comment textarea */
+   .comments-modal .comment-info textarea.create-comment-textarea{
+    width:315px;
+    height:146px;
+    background-color:rgba(164,182,248,0.81);
+    color:#ffffff;
+    font-weight:700;
+    text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+   }
+
+   /* Button */
+   .comments-modal .comment-info button{
+    margin-top:9px;
+    color:#ffffff;
+    background-color:#9300ef;
+   }

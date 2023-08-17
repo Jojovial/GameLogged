@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { useDispatch } from 'react-redux';
 import { thunkDeleteComment, thunkAllComments } from '../../store/commentReducer';
 import { useModal } from '../../context/Modal';
+import './DeleteCommentModal.css';
 const DeleteCommentModal = ({comment, onDelete, onCancel}) => {
     const dispatch = useDispatch();
     const {closeModal } = useModal();

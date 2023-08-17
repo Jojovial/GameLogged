@@ -1,5 +1,4 @@
-/* Delete entry modal */
-.delete-entry-modal{
+.delete-comment-modal{
     display:flex;
     flex-direction:column;
     justify-content:center;
@@ -9,10 +8,9 @@
     background-image: url('../../assests/delete-modal.png');
     background-size: cover;
     background-position: center top 500%;
-   }
+}
 
-   /* Button */
-   .delete-entry-modal button:nth-child(3){
+.delete-comment-modal button:nth-child(3){
     color:#ffffff;
     background-color:#ff1414;
     margin-bottom:5px;
@@ -23,10 +21,10 @@
     border-style:solid;
     border-width:2px;
     width:20%;
-   }
+}
 
-   /* Button */
-   .delete-entry-modal button:nth-child(4){
+
+.delete-comment-modal button:nth-child(4){
     color:#ffffff;
     background-color:#960fd0;
     border-style:solid;
@@ -36,8 +34,9 @@
     border-bottom-left-radius:5px;
     border-bottom-right-radius:5px;
     width:20%;
-   }
-   .delete-entry-modal{
+}
+
+.delete-comment-modal{
     color:#ffffff;
     font-weight:700;
     text-shadow:rgb(0, 0, 0) 2px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;

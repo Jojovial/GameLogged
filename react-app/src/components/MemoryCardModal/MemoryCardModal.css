@@ -1,0 +1,20 @@
+/* Memorycard modal */
+.memorycard-modal{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+   }
+
+
+
+   /* Memorycard modal info */
+   .memorycard-modal form .memorycard-modal-info{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    width:505px;
+    height:163px;
+    flex-wrap:nowrap;
+   }

@@ -226,7 +226,7 @@ const Home = () => {
                 <div key={comment.id} className='comment-item'>
                   <div className="comment-background">
 
-                    <p>Comment: {comment.comment_text}</p>
+                    <p>{comment.comment_text}</p>
                     <div className="comments-details">
                     <p>Comment: {comment.comment_text}</p>
                     <OpenModalButton

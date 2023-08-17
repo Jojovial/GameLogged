@@ -13,7 +13,7 @@
  width:350px;
  height:200px;
  overflow:visible;
- background-image: url('../../assests/YIsunsetclouds.png');
+ background-image: url('../../assests/comments-edit.png');
  background-size: cover;
 }
 
@@ -27,3 +27,23 @@
  overflow:hidden;
  resize: none;
 }
+/* Edit comment textarea */
+.edit-comments-modal .comment-info textarea.edit-comment-textarea{
+    background-color:rgba(157,179,225,0.93);
+    color:#ffffff;
+    font-weight:700;
+    text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+   }
+
+   /* Comment edit button */
+   .edit-comments-modal .comments-edit-buttons .comment-edit-button{
+    color:#ffffff;
+    background-color:#00a749;
+   }
+
+   /* Comment cancel button */
+   .edit-comments-modal .comments-edit-buttons .comment-cancel-button{
+    color:#ffffff;
+    background-color:#706f99;
+   }
+
