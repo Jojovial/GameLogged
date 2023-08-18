@@ -1,0 +1,47 @@
+.edit-memorycard-modal{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    width:350px;
+    height:200px;
+    background-image: url('../../assests/memorycard-edit.png');
+    background-size: cover;
+   }
+
+   /* Memorycard info */
+.edit-memorycard-modal .memorycard-info{
+    display:flex;
+    flex-direction:row;
+   }
+
+   /* Edit memorycard textarea */
+   .edit-memorycard-modal .memorycard-info textarea.edit-memorycard-textarea{
+    width:330px;
+    height:150px;
+    background-color:#6a31f085;
+    color:#ffffff;
+    text-shadow:rgb(0, 0, 0) 0px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+    font-weight:700;
+   }
+
+   /* Memorycard edit buttons */
+  .edit-memorycard-modal .memorycard-edit-buttons{
+    margin-top:5px;
+   }
+
+   /* Memorycard edit button */
+   .edit-memorycard-modal .memorycard-edit-buttons .memorycard-edit-button{
+    color:#ffffff;
+    background-color:#059845;
+   }
+
+   /* Memorycard cancel button */
+   .edit-memorycard-modal .memorycard-edit-buttons .memorycard-cancel-button{
+    color:#ffffff;
+    background-color:#7cab94;
+   }
+
+  .edit-memorycard-textarea{
+    resize: none;
+  }

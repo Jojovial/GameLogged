@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { thunkMemoryCard, thunkAllMemoryCards, thunkEditMemoryCard } from '../../store/memoryReducer';
 import { useModal } from '../../context/Modal';
+import './EditMemoryCardModal.css';
 
 const EditMemoryCardModal = ({memoryCard}) => {
     const dispatch = useDispatch();

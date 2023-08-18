@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { thunkDeleteMemoryCard, thunkAllMemoryCards } from '../../store/memoryReducer';
 import { useModal } from '../../context/Modal';
+import './DeleteMemoryCardModal.css';
 
 const DeleteMemorycardModal = ({memoryCard, onCancel}) => {
     const dispatch = useDispatch();

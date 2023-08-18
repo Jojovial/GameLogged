@@ -116,8 +116,10 @@ const Home = () => {
             <div className="memory-cards">
               {console.log('allMemoryCards LOADING', allMemoryCards)}
              {allMemoryCards.map((memoryCard) => (
-  <div key={memoryCard.id}>
+  <div key={memoryCard.id} className="memorycards">
     {console.log('memorycard log info', memoryCard.log_info)}
+    <p>Memory Card: {memoryCard.log_info}</p>
+    <div className="memorycard-buttons">
     <p>Memory Card: {memoryCard.log_info}</p>
     <OpenModalButton
       modalComponent={<EditMemoryCardModal memoryCard={memoryCard} onClose={() => {}} />}
@@ -127,6 +129,7 @@ const Home = () => {
         modalComponent={<DeleteMemorycardModal memoryCard={memoryCard} onDelete={() => {}} />}
         buttonText={"Delete"}
         />
+        </div>
   </div>
 ))}
           </div>
