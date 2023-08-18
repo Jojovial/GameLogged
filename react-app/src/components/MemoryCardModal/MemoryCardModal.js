@@ -41,11 +41,10 @@ const MemoryCardModal = () => {
                 ))}
               </select>
             </label>
-            <label>
-              Log Information:
+
               <textarea value={logInfo} onChange={(e) => setLogInfo(e.target.value)} className="memorycard-create-textarea" />
-            </label>
-            <button type="submit">Create</button>
+
+            <button type="submit" className="memorycard-create-button">Create</button>
               </div>
           </form>
         </div>

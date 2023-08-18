@@ -4,6 +4,8 @@
     flex-direction:column;
     justify-content:center;
     align-items:center;
+    background-image: url('../../assests/memorycard-modal.png');
+    background-size: cover;
    }
 
 
@@ -17,4 +19,56 @@
     width:505px;
     height:163px;
     flex-wrap:nowrap;
+   }
+
+
+   /* Memorycard form */
+.memorycard-modal .memorycard-form{
+    flex-direction:row;
+   }
+
+   /* Memorycard modal info */
+   .memorycard-modal .memorycard-form .memorycard-modal-info{
+    width:500px;
+    height:300px;
+   }
+
+   /* Memorycard Unknown */
+   .memorycard-modal-info label select.memorycard-select{
+    width:274px;
+    margin-bottom:25px;
+   }
+
+   .memorycard-form .memorycard-modal-info > label{
+    width:385px;
+   }
+
+   /* Memorycard Unknown textarea */
+   .memorycard-form .memorycard-modal-info textarea.memorycard-create-textarea{
+    width:350px;
+    background-color:rgba(228,227,241,0.61);
+   }
+
+   /* Memorycard Unknown textarea */
+   .memorycard-modal .memorycard-form .memorycard-modal-info textarea.memorycard-create-textarea{
+    height:350px !important;
+   }
+
+   /* Memorycard Unknown button */
+   .memorycard-form .memorycard-modal-info .memorycard-create-button{
+    color:#ffffff;
+    background-color:#9731f0;
+    margin-bottom:12px;
+    margin-top:12px;
+   }
+
+
+   .memorycard-modal{
+    color:#ffffff;
+    font-weight:700;
+    text-shadow:rgb(0, 0, 0) 2px 1px 1px, rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) -1px 0px 1px;
+   }
+
+   .memorycard-create-textarea{
+    resize: none;
    }
