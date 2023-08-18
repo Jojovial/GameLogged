@@ -225,7 +225,7 @@ const Home = () => {
             <p>Error loading comments: {errorComments}</p>
           ) : (
             <div className="comments">
-            {allComments.map((comment) => (
+              {allComments.slice().reverse().map((comment) => (
                 <div key={comment.id} className='comment-item'>
                   <div className="comment-background">
 

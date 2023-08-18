@@ -391,3 +391,37 @@
   color:#ffffff;
   background-color:#a117f6;
  }
+
+
+
+ .entries-item .entry-card .entry-cover{
+  overflow:hidden;
+ }
+
+ /* Heading */
+ .entry-card .entry-cover h3{
+  overflow:visible;
+  height:60px;
+  width:213px;
+  display:flex;
+  justify-content:center;
+ }
+
+ /* Memory cards */
+ .home-wrapper .home-memory-card .memory-cards{
+
+  height:257px;
+ }
+
+ /* Memorycards */
+ .home-memory-card .memory-cards > .memorycards{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+ }
+
+
+ .memory-cards .memorycards > p{
+
+  max-width:500px;
+ }

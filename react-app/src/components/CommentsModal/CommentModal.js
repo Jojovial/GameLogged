@@ -7,9 +7,10 @@ const CommentModal = () => {
     const dispatch = useDispatch();
     const { closeModal } = useModal();
     const [commentText, setCommentText] = useState('');
-
+    const [errorMessage, setErrorMessage] = useState('');
     const handleCommentChange = (e) => {
         setCommentText(e.target.value);
+        setErrorMessage('')
     }
 
     const handleCommentSubmit = () => {
@@ -24,6 +25,8 @@ const CommentModal = () => {
                 .catch(error => {
                     console.error('Error submitting comment:', error); // Check if there's an error from the thunk
                 });
+        } else {
+            setErrorMessage('Comment cannot be empty.');
         }
     }
 
@@ -31,6 +34,7 @@ const CommentModal = () => {
     return (
         <div className="comments-modal">
             <div className="comment-info">
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
                 <textarea
                     className="create-comment-textarea"
                     value={commentText}
