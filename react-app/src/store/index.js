@@ -4,13 +4,15 @@ import session from './session';
 import entryReducer from './entryReducer';
 import commentReducer from './commentReducer';
 import memoryCardReducer from './memoryReducer';
+import statusReducer from './statusReducer';
 
 
 const rootReducer = combineReducers({
   session,
   entries: entryReducer,
   comments: commentReducer,
-  memoryCards: memoryCardReducer
+  memoryCards: memoryCardReducer,
+  status : statusReducer
 
 });
 

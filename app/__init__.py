@@ -10,6 +10,7 @@ from .api.auth_routes import auth_routes
 from .api.entry_routes import entry_routes
 from .api.dialogue_routes import dialogue_routes
 from .api.memorycard_routes import memory_routes
+from .api.status_routes import status_routes
 from app.forms.forms import SYSTEM_CHOICES, REGION_CHOICES, PROGRESS_CHOICES
 from .seeds import seed_commands
 from .config import Config
@@ -35,6 +36,7 @@ app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(entry_routes, url_prefix='/api/entries')
 app.register_blueprint(dialogue_routes, url_prefix='/api/comments')
 app.register_blueprint(memory_routes, url_prefix='/api/memory')
+app.register_blueprint(status_routes, url_prefix='/api/status')
 db.init_app(app)
 Migrate(app, db)
 
